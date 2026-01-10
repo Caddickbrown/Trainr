@@ -5,7 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
 # Default port (should match server.py)
-PORT=3000
+PORT=8080
 
 # Function to find processes using a port
 find_port_processes() {

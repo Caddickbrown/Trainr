@@ -147,8 +147,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(content)
         except Exception as e:
             self.log_error(f"Error serving {self.path}: {e}")
-            if not self.headers_sent:
-                self.send_error(500, f"Internal server error: {e}")
+            # Best-effort error response (may fail if headers/body already sent)
+            try:
+                if not self._headers_sent_by_us:
+                    self.send_error(500, f"Internal server error: {e}")
+            except Exception:
+                pass
 
 class Server:
     def __init__(self, port=PORT, host=HOST):

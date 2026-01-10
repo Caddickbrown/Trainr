@@ -3,6 +3,11 @@ REM SIOP Training Hub - Shutdown Script (Windows)
 
 cd /d "%~dp0"
 
+set PORT=8080
+if not "%~1"=="" (
+    set PORT=%~1
+)
+
 echo 🛑 Stopping SIOP Training Hub server...
 
 REM Find and kill Python processes running server.py
@@ -16,8 +21,8 @@ for /f "tokens=2" %%i in ('tasklist /FI "IMAGENAME eq python.exe" /FO LIST ^| fi
 )
 
 REM Also try to kill by port (if netstat is available)
-for /f "tokens=5" %%i in ('netstat -ano ^| findstr ":8080" ^| findstr "LISTENING"') do (
-    echo Stopping process on port 8080 (PID: %%i)...
+for /f "tokens=5" %%i in ('netstat -ano ^| findstr ":%PORT%" ^| findstr "LISTENING"') do (
+    echo Stopping process on port %PORT% (PID: %%i)...
     taskkill /PID %%i /F >nul 2>&1
 )
 

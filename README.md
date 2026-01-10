@@ -4,7 +4,7 @@ Welcome to your personal training center for your upcoming **Planning and Delive
 
 ## 📋 What's Inside
 
-This training hub contains **5 interactive HTML modules** and a **Templates Library** with ready-to-use, printable templates designed to help you build the workflows and habits you'll need to excel in your new role - all optimized for ADHD success.
+This training hub contains **11 interactive HTML modules** and a **Templates Library** with ready-to-use, printable templates designed to help you build the workflows and habits you'll need to excel in your new role - all optimized for ADHD success.
 
 ### 📁 Folder Structure
 
@@ -14,7 +14,7 @@ This training hub contains **5 interactive HTML modules** and a **Templates Libr
 ### Training Modules
 
 1. **📧 Email Triage Training** (`01-email-triage-training.html`)
-   - Practice rapid email prioritization with 10 realistic scenarios
+   - Practice rapid email prioritization with 18 realistic scenarios
    - Learn the 4-category system: Urgent, Important, Routine, Delegate
    - ~10-15 minutes
 
@@ -42,6 +42,30 @@ This training hub contains **5 interactive HTML modules** and a **Templates Libr
    - Build sustainable habits
    - ~15 minutes per routine
 
+6. **💬 Stakeholder Communication** (`06-stakeholder-communication-training.html`)
+   - Practice executive-ready stakeholder emails and status updates
+   - ~20-25 minutes
+
+7. **🔄 Context Switching Management** (`07-context-switching-management.html`)
+   - Interruption handling + getting back into deep work quickly
+   - ~15-20 minutes
+
+8. **📊 Presentation Deck Prep** (`08-presentation-deck-prep-training.html`)
+   - Build crisp executive narratives (Situation → Impact → Ask)
+   - ~20-25 minutes
+
+9. **🚨 Issue/Crisis Management** (`09-issue-crisis-management-training.html`)
+   - Escalation decisions + crisis comms under time pressure
+   - ~20-25 minutes
+
+10. **🗺️ Process Mapping Basics** (`10-process-mapping-basics.html`)
+    - Map workflows, find bottlenecks, communicate “as-is” clearly
+    - ~25-30 minutes
+
+11. **💬 Difficult Conversation Practice** (`11-difficult-conversation-practice.html`)
+    - Practice pushback, feedback, and conflict handling professionally
+    - ~25-30 minutes
+
 ## 🚀 Getting Started
 
 ### Option 1: Open the Main Hub
@@ -50,7 +74,7 @@ Simply open `index.html` in your web browser to access the main training hub wit
 ### Option 2: Open Individual Modules
 Navigate directly to any training module by opening its HTML file in your browser.
 
-All modules work completely **offline** - no internet required!
+All modules work **offline**. If you’re offline, the UI will fall back to system fonts (the optional Google Fonts won’t load).
 
 ## 💡 How to Use This Training
 
@@ -106,10 +130,16 @@ In addition to the training modules, you have access to **printable, fill-in tem
 
 ### Available Templates:
 
-1. **Meeting Preparation Template** - 5-step meeting prep with stakeholder mapping
-2. **Daily Planning Template** - Morning and evening routines in one printable page
-3. **Data Analysis Workflow Template** - 6-step structured analysis framework
-4. **Quick Reference Guide** - One-page cheat sheet with all key frameworks
+The `Templates/` folder includes:
+
+1. **Action Item Tracker**
+2. **Daily Planning**
+3. **Data Analysis**
+4. **Meeting Prep**
+5. **One-on-One Meeting**
+6. **Quick Reference Guide**
+7. **Stakeholder Email Template**
+8. **Weekly Status Report**
 
 ### How to Use Templates:
 

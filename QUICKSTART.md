@@ -82,7 +82,10 @@ python3 server.py --port 9000
 ```
 
 **Windows:**
-Edit `start.bat` and change the port in the `python server.py` command.
+Run with a custom port:
+```cmd
+start.bat 9000
+```
 
 ### Change Host Binding
 

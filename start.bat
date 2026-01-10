@@ -3,6 +3,11 @@ REM SIOP Training Hub - Startup Script (Windows)
 
 cd /d "%~dp0"
 
+set PORT=8080
+if not "%~1"=="" (
+    set PORT=%~1
+)
+
 REM Check if Python is available
 python --version >nul 2>&1
 if errorlevel 1 (
@@ -28,21 +33,21 @@ if exist "server.pid" (
 )
 
 echo 🚀 Starting SIOP Training Hub server...
-start /B python server.py --no-browser > server.log 2>&1
+start /B python server.py --no-browser --port %PORT% > server.log 2>&1
 
 REM Wait a moment
 timeout /t 2 /nobreak >nul
 
 REM Try to get the PID (Windows doesn't easily capture background process PID)
 REM We'll use a simpler approach - just check if port is in use
-netstat -ano | findstr ":8080" >nul
+netstat -ano | findstr ":%PORT%" >nul
 if errorlevel 1 (
     echo ❌ Server may have failed to start. Check server.log for details.
     pause
     exit /b 1
 ) else (
     echo ✅ Server started successfully
-    echo 📋 Access the training hub at: http://localhost:8080/index.html
+    echo 📋 Access the training hub at: http://localhost:%PORT%/index.html
     echo 📋 Logs are being written to: server.log
     echo.
     echo 💡 To stop the server, run: stop.bat
@@ -50,5 +55,5 @@ if errorlevel 1 (
     echo.
     echo Press any key to open the training hub in your browser...
     pause >nul
-    start http://localhost:8080/index.html
+    start http://localhost:%PORT%/index.html
 )

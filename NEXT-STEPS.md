@@ -13,7 +13,7 @@
 ## 🎓 Training Modules Status
 
 ### ✅ Completed Modules
-1. ✅ **Email Triage Training** - 10 realistic scenarios with interactive feedback
+1. ✅ **Email Triage Training** - 18 realistic scenarios with interactive feedback
 2. ✅ **Data Analysis Workflow** - 6-step structured process
 3. ✅ **Meeting Preparation** - 5-step preparation system
 4. ✅ **Priority Management** - Task board with DO/SCHEDULE/DELEGATE/ELIMINATE framework
@@ -22,6 +22,8 @@
 7. ✅ **Context Switching Management** - ADHD-focused interruption handling
 8. ✅ **Presentation Deck Prep** - SITUATION → IMPACT → ASK framework
 9. ✅ **Issue/Crisis Management** - Quick decision-making under pressure
+10. ✅ **Process Mapping Basics** - Visual process documentation and bottleneck identification
+11. ✅ **Difficult Conversation Practice** - Feedback, pushback, and conflict handling
 
 ### 📋 Completed Templates
 1. ✅ Weekly Status Report Template
@@ -39,19 +41,7 @@
 
 ### Medium Priority Training Modules
 
-#### 1. **Process Mapping Basics**
-**Why it's useful:** Mentioned specifically in your job description
-- Visual process documentation
-- Identifying bottlenecks
-- SIOP workflow mapping
-
-#### 2. **Difficult Conversation Practice**
-**Why it's useful:** Giving feedback, pushing back on unrealistic timelines
-- Practice scenarios for tough conversations
-- Frameworks for delivering difficult feedback
-- Escalation communication
-
-#### 3. **Data Validation & Cleanup**
+#### 1. **Data Validation & Cleanup**
 **Why it's useful:** Core part of SIOP data quality work
 - Data quality assessment
 - Cleanup workflows
@@ -141,8 +131,8 @@ Based on the Rolls-Royce job description, here's what you need to be ready for:
 
 ### Month 3+ (Leading)
 - ✅ Presentation deck prep training
-- ⏳ Process mapping (potential future)
-- ⏳ Difficult conversations (potential future)
+- ✅ Process mapping basics training
+- ✅ Difficult conversation practice training
 - ⏳ Change management (potential future)
 
 ---
