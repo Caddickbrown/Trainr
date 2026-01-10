@@ -1,0 +1,12 @@
+server.log
+server.pid
+
+# Python
+__pycache__/
+*.py[cod]
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

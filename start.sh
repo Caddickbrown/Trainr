@@ -19,7 +19,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
 # Parse command line arguments for port
-PORT=3000  # Default port
+PORT=8080  # Default port
 while [[ $# -gt 0 ]]; do
     case $1 in
         -p|--port)
@@ -30,12 +30,12 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  -p, --port PORT    Port to run server on (default: 3000)"
+            echo "  -p, --port PORT    Port to run server on (default: 8080)"
             echo "  -h, --help         Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0                 # Start server on port 3000"
-            echo "  $0 --port 3000     # Start server on port 3000"
+            echo "  $0                 # Start server on port 8080"
+            echo "  $0 --port 8080     # Start server on port 8080"
             echo "  $0 -p 9000         # Start server on port 9000"
             exit 0
             ;;

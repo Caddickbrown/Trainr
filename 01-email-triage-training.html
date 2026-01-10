@@ -122,9 +122,12 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-secondary);
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent;
+            /* Avoid scroll chaining to the page */
+            overscroll-behavior: none;
         }
         
         /* Prevent horizontal scroll on mobile */
@@ -138,6 +141,7 @@
             display: grid;
             grid-template-columns: 260px 1fr;
             height: 100vh;
+            height: 100dvh;
             background: var(--bg-primary);
         }
         
@@ -230,7 +234,7 @@
             color: var(--text-primary);
         }
         
-        .stat-value.green {
+        .stat-green {
             color: var(--accent-green);
         }
         
@@ -239,7 +243,10 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
+            /* Allow children with overflow to shrink + scroll */
+            min-height: 0;
         }
         
         /* Top Bar */
@@ -340,6 +347,11 @@
             flex: 1;
             overflow-y: auto;
             background: var(--bg-secondary);
+            /* Fix flexbox overflow scrolling in some browsers */
+            min-height: 0;
+            /* Prevent scroll bleed when nested scrolling */
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
         }
         
         .email-item {
@@ -433,12 +445,15 @@
             right: -100%;
             width: 600px;
             height: 100vh;
+            height: 100dvh;
             background: var(--bg-primary);
             box-shadow: -4px 0 24px rgba(0,0,0,0.1);
             transition: right 0.3s ease;
             z-index: 1000;
             display: flex;
             flex-direction: column;
+            /* Allow .email-detail-body to scroll correctly */
+            min-height: 0;
         }
         
         .email-detail.active {
@@ -477,6 +492,11 @@
             flex: 1;
             overflow-y: auto;
             padding: 24px;
+            /* Fix flexbox overflow scrolling in some browsers */
+            min-height: 0;
+            /* Prevent scrolling from affecting the inbox underneath */
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
         }
         
         .email-meta {

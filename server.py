@@ -16,7 +16,7 @@ from pathlib import Path
 from io import BytesIO
 
 # Configuration
-PORT = 3000
+PORT = 8080
 HOST = '0.0.0.0'  # Listen on all interfaces (accessible from network)
 DIRECTORY = Path(__file__).parent
 
@@ -66,8 +66,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 # Cache static assets for 1 hour
                 self.send_header('Cache-Control', 'public, max-age=3600')
             else:
-                # Cache HTML files for 60 seconds (fast page switching while allowing updates)
-                self.send_header('Cache-Control', 'public, max-age=60')
+                # Don't cache HTML/content pages so updates are visible immediately.
+                # (Browsers may still revalidate, but will not serve stale content.)
+                self.send_header('Cache-Control', 'no-cache')
             
             # Add CORS headers for local development
             self.send_header('Access-Control-Allow-Origin', '*')
@@ -146,8 +147,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(content)
         except Exception as e:
             self.log_error(f"Error serving {self.path}: {e}")
-            if not self.headers_sent:
-                self.send_error(500, f"Internal server error: {e}")
+            # Best-effort error response (may fail if headers/body already sent)
+            try:
+                if not self._headers_sent_by_us:
+                    self.send_error(500, f"Internal server error: {e}")
+            except Exception:
+                pass
 
 class Server:
     def __init__(self, port=PORT, host=HOST):
@@ -214,7 +219,7 @@ class Server:
             self.httpd.serve_forever()
             
         except OSError as e:
-            if e.errno == 48:  # Address already in use
+            if e.errno in (48, 98):  # Address already in use (macOS=48, Linux=98)
                 print(f"\n❌ Error: Port {self.port} is already in use!")
                 print(f"   Try a different port or stop the process using port {self.port}")
                 print(f"   To use a different port: python server.py --port 8081\n")
