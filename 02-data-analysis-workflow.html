@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIOP Analytics Dashboard - Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-card: #ffffff;
+            --bg-elevated: #f3f4f6;
+            --border-subtle: #e5e7eb;
+            --border-accent: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #60a5fa;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f0f12;
+            --bg-secondary: #18181c;
+            --bg-card: #1e1e24;
+            --bg-elevated: #26262e;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(255, 255, 255, 0.1);
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+        }
+        
+        /* Print mode - minimal ink usage */
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-card: #ffffff !important;
+                --bg-elevated: #ffffff !important;
+                --border-subtle: #000000 !important;
+                --border-accent: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+            }
+            
+            /* Remove all backgrounds and shadows */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            /* Hide non-essential elements */
+            .sidebar, .btn, button, .progress-panel {
+                display: none !important;
+            }
+            
+            /* Simplify content */
+            .main-content {
+                width: 100% !important;
+                padding: 20px !important;
+            }
+            
+            .alert-box, .checklist, .data-table {
+                border: 1px solid #000 !important;
+                margin: 10px 0 !important;
+                padding: 10px !important;
+            }
+            
+            /* Black text only */
+            h1, h2, h3, h4, h5, h6, p, span, div, label, li {
+                color: black !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Top Nav */
+        .top-nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-tab.active {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-success);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Main Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: calc(100vh - 57px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-subtle);
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+        
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            padding: 0 12px;
+        }
+        
+        .step-item {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .step-item:hover {
+            background: var(--bg-elevated);
+        }
+        
+        .step-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .step-item.active {
+            background: var(--bg-elevated);
+            border-left: 3px solid var(--accent-primary);
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .step-item.completed .step-icon {
+            background: var(--accent-success);
+            color: white;
+        }
+        
+        .step-item.active .step-icon {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .step-info {
+            flex: 1;
+        }
+        
+        .step-number {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        
+        .step-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .step-item.active .step-name {
+            color: var(--text-primary);
+        }
+        
+        .progress-panel {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .progress-panel h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .progress-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .progress-stat:last-child {
+            margin-bottom: 0;
+        }
+        
+        .progress-label {
+            color: var(--text-secondary);
+        }
+        
+        .progress-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .content-header {
+            margin-bottom: 32px;
+        }
+        
+        .content-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .content-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+        
+        .time-estimate {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-warning);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .card-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        .data-table th {
+            background: var(--bg-elevated);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .data-table tr:hover td {
+            background: var(--bg-elevated);
+        }
+        
+        .gap-positive {
+            color: var(--accent-success);
+            font-weight: 600;
+        }
+        
+        .gap-negative {
+            color: var(--accent-danger);
+            font-weight: 600;
+        }
+        
+        .risk-low { color: var(--accent-success); }
+        .risk-medium { color: var(--accent-warning); }
+        .risk-high { color: var(--accent-danger); }
+        
+        /* Checklist */
+        .checklist {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checklist-item:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .checklist-item.checked {
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-accent);
+            border-radius: 6px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .checklist-item.checked .checkbox {
+            background: var(--accent-success);
+            border-color: var(--accent-success);
+        }
+        
+        .checklist-item.checked .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .checklist-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* Input */
+        .text-input, .textarea-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-primary);
+            margin: 12px 0;
+            transition: all 0.2s;
+        }
+        
+        .text-input:focus, .textarea-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .textarea-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Alert Box */
+        .alert-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--accent-warning);
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+        
+        .alert-box strong {
+            color: var(--accent-warning);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .alert-box p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Insight Box */
+        .insight-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+        
+        .insight-box h4 {
+            color: var(--accent-success);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .insight-box p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .btn-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        /* Completion */
+        .completion-screen {
+            display: none;
+            text-align: center;
+            max-width: 600px;
+            margin: 80px auto;
+        }
+        
+        .completion-screen.show {
+            display: block;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .completion-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        
+        .completion-tips {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+        
+        .completion-tips h4 {
+            color: var(--accent-success);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .completion-tips ul {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-left: 20px;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top nav */
+            .top-nav {
+                flex-wrap: wrap;
+                padding: 12px 16px;
+                gap: 8px;
+            }
+            
+            .nav-left {
+                flex: 1 1 100%;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            
+            .nav-tab {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            
+            /* Ensure theme toggle button is accessible */
+            button[onclick="toggleTheme()"] {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            /* Mobile-friendly main content */
+            .main-content {
+                padding: 20px 16px;
+            }
+            
+            .content-title {
+                font-size: 24px;
+            }
+            
+            /* Mobile-friendly cards */
+            .card {
+                padding: 16px;
+            }
+            
+            /* Mobile-friendly data table */
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly buttons */
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 16px;
+            }
+            
+            .btn-actions {
+                flex-direction: column;
+            }
+            
+            .btn-actions .btn {
+                width: 100%;
+            }
+            
+            /* Mobile-friendly cards and content */
+            .card h3 {
+                font-size: 18px;
+            }
+            
+            .card p {
+                font-size: 14px;
+            }
+            
+            .checklist-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .alert-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            /* Ensure inputs are readable */
+            input[type="text"],
+            input[type="number"],
+            textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+            }
+            
+            /* Mobile-friendly step navigation */
+            .step-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .step-nav .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Nav -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <div class="logo">📊 SIOP Analytics</div>
+            <div class="nav-tabs">
+                <div class="nav-tab active">Analysis Workflow</div>
+                <div class="nav-tab">Reports</div>
+                <div class="nav-tab">Dashboards</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="status-badge">● Training Mode</div>
+        </div>
+    </div>
+    
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Analysis Steps</div>
+                <div class="step-item" data-step="1">
+                    <div class="step-icon">1</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 1</div>
+                        <div class="step-name">Define Question</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-icon">2</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 2</div>
+                        <div class="step-name">Gather Data</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-icon">3</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 3</div>
+                        <div class="step-name">Explore Data</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="4">
+                    <div class="step-icon">4</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 4</div>
+                        <div class="step-name">Deep Dive</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="5">
+                    <div class="step-icon">5</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 5</div>
+                        <div class="step-name">Synthesize</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="6">
+                    <div class="step-icon">6</div>
+                    <div class="step-info">
+                        <div class="step-number">Step 6</div>
+                        <div class="step-name">Present</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Progress</div>
+                <div class="progress-panel">
+                    <h4>Workflow Progress</h4>
+                    <div class="progress-stat">
+                        <span class="progress-label">Steps Complete</span>
+                        <span class="progress-value" id="stepsComplete">0/6</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="progress-label">Time Elapsed</span>
+                        <span class="progress-value" id="timeElapsed">0:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <button onclick="toggleTheme()" id="themeToggle" style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; margin-bottom: 12px;" title="Toggle light/dark mode">
+                    🌙
+                </button>
+                <button onclick="location.href='index.html'" style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                    ← Back to Hub
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Content will be inserted here -->
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        let completedSteps = new Set();
+        let startTime = Date.now();
+        let timerInterval;
+        
+        const steps = {
+            1: {
+                title: "Define the Analysis Question",
+                subtitle: "Clarify what decision needs to be made",
+                time: "3-5 minutes",
+                content: `
+                    <div class="alert-box">
+                        <strong>⚠️ ADHD Trap Alert</strong>
+                        <p>Jumping straight into data without clarity leads to analysis paralysis!</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Scenario</div>
+                        <div class="card-text">
+                            You've been asked to analyze procurement supply data for the monthly SIOP review.
+                        </div>
+                    </div>
+                    
+                    <div class="insight-box">
+                        <h4>🎯 Start by clarifying the decision</h4>
+                        <p>Before touching data, define: What decision will this analysis inform? Who needs what by when?</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Complete these before starting:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Identify the decision maker (who will use this?)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Define the core question (what needs to be answered?)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Note the deadline (when is this needed?)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Identify 2-3 key metrics that matter most</div>
+                            </div>
+                        </div>
+                        
+                        <label style="display: block; margin-top: 20px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                            Write your analysis question:
+                        </label>
+                        <textarea class="textarea-input" placeholder="Example: Are there supply gaps that will impact next month's production schedule? Which suppliers are at risk?"></textarea>
+                    </div>
+                `
+            },
+            2: {
+                title: "Gather & Validate Data",
+                subtitle: "Time-box this phase to avoid rabbit holes",
+                time: "15 minutes",
+                content: `
+                    <div class="insight-box">
+                        <h4>🔍 Time-box this phase!</h4>
+                        <p>Set a 15-minute timer. Gather the obvious sources first. You can always come back.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Sample Data Sources for SIOP Analysis:</div>
+                        <div class="card-text">
+                            <ul style="margin-left: 20px; line-height: 1.8; color: var(--text-secondary);">
+                                <li>MRP System (Material Requirements Planning)</li>
+                                <li>APS Dashboard (Advanced Planning System)</li>
+                                <li>Supplier Performance Database</li>
+                                <li>Production Schedule (Shared Drive)</li>
+                                <li>Last Month's SIOP Report</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Data Collection Checklist:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Extract current supply commitments from MRP</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Pull demand forecast from APS</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Check supplier on-time delivery rates</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Verify data is current (last refresh date)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Note any missing or incomplete data</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-box">
+                        <strong>💡 ADHD Tip</strong>
+                        <p>Create a standard "Data Sources Checklist" template. Same sources = less decision fatigue each time.</p>
+                    </div>
+                `
+            },
+            3: {
+                title: "Initial Data Exploration",
+                subtitle: "Look for patterns and outliers",
+                time: "10-15 minutes",
+                content: `
+                    <div class="card">
+                        <div class="card-title">Sample SIOP Data - Supply vs Demand:</div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Demand (units)</th>
+                                    <th>Supply Committed</th>
+                                    <th>Gap</th>
+                                    <th>Supplier</th>
+                                    <th>Risk Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Turbine Blades</td>
+                                    <td>1,250</td>
+                                    <td>1,250</td>
+                                    <td class="gap-positive">0</td>
+                                    <td>MetalWorks Ltd</td>
+                                    <td class="risk-low">● Low</td>
+                                </tr>
+                                <tr>
+                                    <td>Titanium Casings</td>
+                                    <td>840</td>
+                                    <td>720</td>
+                                    <td class="gap-negative">-120</td>
+                                    <td>TitanSupply Co</td>
+                                    <td class="risk-medium">● Medium</td>
+                                </tr>
+                                <tr>
+                                    <td>Fuel Injectors</td>
+                                    <td>2,100</td>
+                                    <td>1,850</td>
+                                    <td class="gap-negative">-250</td>
+                                    <td>PrecisionTech</td>
+                                    <td class="risk-high">● High</td>
+                                </tr>
+                                <tr>
+                                    <td>Bearing Assemblies</td>
+                                    <td>1,680</td>
+                                    <td>1,700</td>
+                                    <td class="gap-positive">+20</td>
+                                    <td>BearingWorks</td>
+                                    <td class="risk-low">● Low</td>
+                                </tr>
+                                <tr>
+                                    <td>Control Systems</td>
+                                    <td>945</td>
+                                    <td>900</td>
+                                    <td class="gap-negative">-45</td>
+                                    <td>ElectroSystems</td>
+                                    <td class="risk-medium">● Medium</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="insight-box">
+                        <h4>👀 What patterns do you see?</h4>
+                        <p>Look for: outliers, trends, gaps, red flags. Jot down initial observations.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Quick Exploration Checklist:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Calculate total supply gap (sum of all negative gaps)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Identify highest risk components</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Check for patterns by supplier</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Note any data quality issues</div>
+                            </div>
+                        </div>
+                        
+                        <label style="display: block; margin-top: 20px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                            Quick observations (bullet points):
+                        </label>
+                        <textarea class="textarea-input" placeholder="• Fuel Injectors have largest gap (-250 units)&#10;• Two suppliers showing medium/high risk&#10;• Total shortfall: 415 units"></textarea>
+                    </div>
+                `
+            },
+            4: {
+                title: "Deep Dive Analysis",
+                subtitle: "Investigate root causes and impacts",
+                time: "20 minutes (time-boxed)",
+                content: `
+                    <div class="alert-box">
+                        <strong>⏰ Set a timer</strong>
+                        <p>20 minutes for deep dive. After time's up, move to synthesis even if you want to explore more.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Focus Areas for SIOP Analysis:</div>
+                        <ul style="color: var(--text-secondary); margin-left: 20px; line-height: 1.8;">
+                            <li>Root cause of supply gaps (supplier constraints, capacity, lead times)</li>
+                            <li>Impact on production schedule (which builds are at risk?)</li>
+                            <li>Potential mitigation actions (alternative suppliers, schedule changes)</li>
+                            <li>Financial implications (cost of gaps, expediting costs)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Deep Dive Checklist:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Investigate root causes of top 3 gaps</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Quantify production impact (units/builds at risk)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Identify 2-3 potential solutions per gap</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Calculate financial impact (rough estimate)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Check for dependencies/cascade effects</div>
+                            </div>
+                        </div>
+                        
+                        <label style="display: block; margin-top: 20px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                            Key findings from deep dive:
+                        </label>
+                        <textarea class="textarea-input" placeholder="Document your key findings here..."></textarea>
+                    </div>
+                `
+            },
+            5: {
+                title: "Synthesize Insights",
+                subtitle: "Transform data into actionable recommendations",
+                time: "15 minutes",
+                content: `
+                    <div class="insight-box">
+                        <h4>✨ Transform data into decisions</h4>
+                        <p>Your audience doesn't want data - they want actionable insights and recommendations.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Insight Framework:</div>
+                        <div style="background: var(--bg-elevated); padding: 20px; border-radius: 12px; margin-top: 16px;">
+                            <div style="margin-bottom: 16px;">
+                                <strong style="color: var(--accent-primary);">📊 WHAT:</strong> <span style="color: var(--text-secondary);">The data finding</span><br>
+                                <em style="color: var(--text-muted); margin-left: 20px; font-size: 13px;">Example: "250-unit gap in fuel injectors"</em>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <strong style="color: var(--accent-warning);">❓ SO WHAT:</strong> <span style="color: var(--text-secondary);">The business impact</span><br>
+                                <em style="color: var(--text-muted); margin-left: 20px; font-size: 13px;">Example: "Will delay 5 engine builds by 2 weeks"</em>
+                            </div>
+                            <div>
+                                <strong style="color: var(--accent-success);">💡 NOW WHAT:</strong> <span style="color: var(--text-secondary);">The recommended action</span><br>
+                                <em style="color: var(--text-muted); margin-left: 20px; font-size: 13px;">Example: "Engage backup supplier XYZ at 15% premium"</em>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Synthesis Checklist:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Write 3-5 key insights in WHAT/SO WHAT/NOW WHAT format</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Prioritize insights by business impact</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Prepare 1-2 recommendations per insight</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Identify who needs to take action</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Note any assumptions or caveats</div>
+                            </div>
+                        </div>
+                        
+                        <label style="display: block; margin-top: 20px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                            Your Top 3 Insights:
+                        </label>
+                        <textarea class="textarea-input" placeholder="1. WHAT: [Data finding]&#10;   SO WHAT: [Business impact]&#10;   NOW WHAT: [Recommended action]"></textarea>
+                    </div>
+                    
+                    <div class="alert-box">
+                        <strong>💡 ADHD Tip</strong>
+                        <p>Use the same insight template every time. Consistency = faster synthesis and clearer communication.</p>
+                    </div>
+                `
+            },
+            6: {
+                title: "Present & Communicate",
+                subtitle: "Executive summary first, details later",
+                time: "10 minutes",
+                content: `
+                    <div class="insight-box">
+                        <h4>🎯 Executive Summary First!</h4>
+                        <p>Start with the answer. Details come later. Busy stakeholders need the conclusion upfront.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Communication Structure for SIOP Insights:</div>
+                        <div style="display: grid; gap: 12px; margin-top: 16px;">
+                            <div style="background: rgba(245, 158, 11, 0.1); padding: 16px; border-radius: 10px; border-left: 4px solid var(--accent-warning);">
+                                <strong style="color: var(--accent-warning);">1. Executive Summary (3-4 sentences)</strong>
+                                <p style="color: var(--text-secondary); margin-top: 6px; font-size: 13px;">The answer, the impact, and the ask</p>
+                            </div>
+                            <div style="background: rgba(59, 130, 246, 0.1); padding: 16px; border-radius: 10px; border-left: 4px solid var(--accent-primary);">
+                                <strong style="color: var(--accent-primary);">2. Key Insights (3-5 bullets)</strong>
+                                <p style="color: var(--text-secondary); margin-top: 6px; font-size: 13px;">Prioritized findings with impact</p>
+                            </div>
+                            <div style="background: rgba(16, 185, 129, 0.1); padding: 16px; border-radius: 10px; border-left: 4px solid var(--accent-success);">
+                                <strong style="color: var(--accent-success);">3. Recommendations (Specific actions)</strong>
+                                <p style="color: var(--text-secondary); margin-top: 6px; font-size: 13px;">What to do, who should do it, when</p>
+                            </div>
+                            <div style="background: var(--bg-elevated); padding: 16px; border-radius: 10px; border-left: 4px solid var(--border-accent);">
+                                <strong style="color: var(--text-secondary);">4. Supporting Data (Appendix)</strong>
+                                <p style="color: var(--text-muted); margin-top: 6px; font-size: 13px;">Details, methodology, assumptions</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Communication Checklist:</div>
+                        <div class="checklist">
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Draft executive summary (3-4 sentences)</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Create visual (chart/table) for key insight</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">List clear action items with owners</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Prepare for 2-3 likely questions</div>
+                            </div>
+                            <div class="checklist-item" onclick="toggleCheck(this)">
+                                <div class="checkbox"></div>
+                                <div class="checklist-text">Save detailed analysis in appendix/shared drive</div>
+                            </div>
+                        </div>
+                        
+                        <label style="display: block; margin-top: 20px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                            Your Executive Summary:
+                        </label>
+                        <textarea class="textarea-input" placeholder="Write a 3-4 sentence executive summary of your analysis..."></textarea>
+                    </div>
+                    
+                    <div class="alert-box">
+                        <strong>💡 ADHD Tip</strong>
+                        <p>Present early drafts! Get feedback at 70% done rather than perfecting to 100%. It saves time and often improves the final result.</p>
+                    </div>
+                `
+            }
+        };
+        
+        function renderStep(stepNum) {
+            const step = steps[stepNum];
+            if (!step) {
+                console.error('Step not found:', stepNum);
+                return;
+            }
+            
+            const content = document.getElementById('mainContent');
+            
+            content.innerHTML = `
+                <div class="content-header">
+                    <div class="content-title">${step.title}</div>
+                    <div class="content-subtitle">${step.subtitle}</div>
+                    <div class="time-estimate">⏱️ ${step.time}</div>
+                </div>
+                
+                ${step.content}
+                
+                <div class="btn-actions">
+                    ${stepNum > 1 ? `<button class="btn btn-secondary" onclick="goToStep(${stepNum - 1})">← Previous</button>` : ''}
+                    <button class="btn btn-primary" onclick="completeStep(${stepNum})">
+                        ${stepNum < 6 ? 'Continue →' : 'Complete Analysis ✓'}
+                    </button>
+                </div>
+            `;
+            
+            // Update sidebar
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.classList.remove('active');
+                const step = parseInt(item.dataset.step);
+                if (step === stepNum) {
+                    item.classList.add('active');
+                }
+                if (completedSteps.has(step)) {
+                    item.classList.add('completed');
+                }
+            });
+            
+            content.scrollTop = 0;
+        }
+        
+        function completeStep(stepNum) {
+            // Mark current step as complete
+            completedSteps.add(stepNum);
+            updateProgress();
+            
+            // Advance to next step or show completion
+            if (stepNum >= 6) {
+                showCompletion();
+            } else {
+                // Move to next step
+                currentStep = stepNum + 1;
+                renderStep(currentStep);
+                
+                // Scroll to top of content
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function goToStep(stepNum) {
+            currentStep = stepNum;
+            renderStep(currentStep);
+        }
+        
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+        }
+        
+        function updateProgress() {
+            document.getElementById('stepsComplete').textContent = `${completedSteps.size}/6`;
+        }
+        
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timeElapsed').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function showCompletion() {
+            const content = document.getElementById('mainContent');
+            content.innerHTML = `
+                <div class="completion-screen show">
+                    <div class="completion-icon">🎉</div>
+                    <div class="completion-title">Analysis Complete!</div>
+                    <div class="completion-text">
+                        You've worked through a complete SIOP data analysis workflow. You now have a structured approach to prevent analysis paralysis and deliver actionable insights.
+                    </div>
+                    
+                    <div class="completion-tips">
+                        <h4>💡 Key Workflow Habits for ADHD Success</h4>
+                        <ul>
+                            <li><strong>Start with the question:</strong> Always clarify what decision needs to be made</li>
+                            <li><strong>Timebox exploration:</strong> Set 15-20 min limits for initial data review</li>
+                            <li><strong>Document as you go:</strong> Don't wait until the end to write insights</li>
+                            <li><strong>Use templates:</strong> Consistent structure reduces decision fatigue</li>
+                            <li><strong>Schedule synthesis time:</strong> Block 30 min to pull insights together</li>
+                            <li><strong>Present early drafts:</strong> Get feedback before perfecting everything</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="location.reload()">Practice Again</button>
+                </div>
+            `;
+            
+            clearInterval(timerInterval);
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update toggle button
+            document.getElementById('themeToggle').innerHTML = newTheme === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').innerHTML = savedTheme === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
+        }
+        
+        // Initialize
+        initTheme();
+        renderStep(1);
+        timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stakeholder Communication Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+            --accent-yellow: #f59e0b;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+            }
+            * { background: none !important; box-shadow: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .communication-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .scenario-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .scenario-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .scenario-item.completed {
+            border-color: var(--accent-green);
+            position: relative;
+        }
+        
+        .scenario-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .scenario-audience {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .scenario-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .scenario-header {
+            margin-bottom: 32px;
+        }
+        
+        .scenario-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .scenario-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .audience-info {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .audience-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .audience-info ul {
+            margin-left: 20px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .communication-framework {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .framework-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .framework-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .framework-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .template-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .template-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .template-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .template-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .template-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .template-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .message-editor {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .editor-field {
+            margin-bottom: 20px;
+        }
+        
+        .editor-field:last-child {
+            margin-bottom: 0;
+        }
+        
+        .editor-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--text-secondary);
+        }
+        
+        .editor-input, .editor-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .editor-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            padding: 14px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .communication-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .scenario-title-large {
+                font-size: 24px;
+            }
+            
+            .framework-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .template-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .template-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .template-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly message editor */
+            .message-editor {
+                padding: 16px;
+            }
+            
+            .editor-input,
+            .editor-textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+            }
+            
+            .submit-btn {
+                min-height: 44px;
+                padding: 12px 24px;
+                font-size: 16px;
+                width: 100%;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            /* Ensure text is readable */
+            .scenario-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .scenario-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .framework-step {
+                padding: 12px;
+            }
+            }
+            
+            .message-editor {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="communication-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>💬 Communication</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="scenario-list" id="scenarioList">
+                <!-- Scenarios will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/4</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Stakeholder Communication Training</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Select a scenario to begin</div>
+                        <h1 class="scenario-title-large">Practice Stakeholder Communication</h1>
+                        <p class="scenario-description">
+                            Master the art of communicating with different stakeholders. Each scenario presents a real-world situation where you need to craft an appropriate message.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/4</div>
+                    <div class="completion-stat-label">Scenarios</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've practiced communicating with executives, team members, and handling difficult situations. Keep practicing to build confidence!
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const scenarios = [
+            {
+                id: 1,
+                title: "Executive Status Update",
+                audience: "C-Suite Executive",
+                description: "You need to provide a status update on the SIOP transformation progress. The executive is busy and needs a concise, high-level overview with clear outcomes.",
+                audienceInfo: {
+                    title: "Executive Communication Style",
+                    points: [
+                        "Time-constrained - keep it brief (2-3 minutes read)",
+                        "Focus on outcomes and business impact, not process details",
+                        "Use data/metrics to support points",
+                        "Be direct - no fluff or unnecessary context",
+                        "Highlight risks/blockers early if they need attention"
+                    ]
+                },
+                framework: [
+                    {
+                        step: 1,
+                        title: "Opening - Context",
+                        content: "One sentence: What this update covers and why it matters"
+                    },
+                    {
+                        step: 2,
+                        title: "Progress - Key Wins",
+                        content: "2-3 bullet points: What's been accomplished, with metrics if possible"
+                    },
+                    {
+                        step: 3,
+                        title: "Status - Current State",
+                        content: "Where things stand now - on track, ahead, or behind schedule"
+                    },
+                    {
+                        step: 4,
+                        title: "Risks/Blockers",
+                        content: "Only if action needed - what's blocking progress or needs decision"
+                    },
+                    {
+                        step: 5,
+                        title: "Next Steps",
+                        content: "What happens next - timeline and key milestones"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "executive",
+                        title: "Executive Format",
+                        description: "Concise, outcome-focused, data-driven"
+                    },
+                    {
+                        id: "detailed",
+                        title: "Detailed Report",
+                        description: "Comprehensive with process details"
+                    },
+                    {
+                        id: "casual",
+                        title: "Casual Update",
+                        description: "Informal, conversational tone"
+                    }
+                ],
+                correctTemplate: "executive",
+                sampleResponse: {
+                    subject: "SIOP Transformation - Q1 Progress Update",
+                    body: `SIOP Transformation Progress - Q1 2025
+
+PROGRESS
+• Completed process mapping for procurement planning cycle (3 weeks ahead of schedule)
+• Integrated demand forecasting with production planning - reduced planning cycle time by 40%
+• Onboarded 2 new strategic suppliers to SIOP process
+
+STATUS
+On track for Q1 milestones. All critical path items green.
+
+RISK
+One supplier experiencing capacity constraints - monitoring closely. No impact expected this quarter.
+
+NEXT STEPS
+• Complete data validation phase by Feb 15
+• Executive review meeting scheduled Feb 20
+• Q2 planning cycle begins March 1`
+                }
+            },
+            {
+                id: 2,
+                title: "Delivering Difficult News",
+                audience: "Project Team",
+                description: "A critical deadline is slipping due to external dependencies. You need to inform your team without causing panic, while being transparent about the situation.",
+                audienceInfo: {
+                    title: "Team Communication Style",
+                    points: [
+                        "Be transparent - teams appreciate honesty",
+                        "Explain the 'why' behind decisions",
+                        "Provide clear next steps and ownership",
+                        "Acknowledge impact on their work",
+                        "Maintain confidence while being realistic"
+                    ]
+                },
+                framework: [
+                    {
+                        step: 1,
+                        title: "Situation",
+                        content: "What happened - be clear and factual"
+                    },
+                    {
+                        step: 2,
+                        title: "Impact",
+                        content: "How this affects the team and timeline"
+                    },
+                    {
+                        step: 3,
+                        title: "Root Cause",
+                        content: "Why this happened (if known) - builds understanding"
+                    },
+                    {
+                        step: 4,
+                        title: "Mitigation Plan",
+                        content: "What we're doing to address it"
+                    },
+                    {
+                        step: 5,
+                        title: "What's Needed",
+                        content: "Specific actions from team members"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "transparent",
+                        title: "Transparent & Structured",
+                        description: "Clear situation, impact, and plan"
+                    },
+                    {
+                        id: "minimal",
+                        title: "Minimal Details",
+                        description: "Brief update without context"
+                    },
+                    {
+                        id: "optimistic",
+                        title: "Positive Framing",
+                        description: "Focuses on solutions and maintains positive tone"
+                    }
+                ],
+                correctTemplate: "transparent",
+                sampleResponse: {
+                    subject: "Update: Q1 SIOP Review Timeline Adjustment",
+                    body: `Hi Team,
+
+SITUATION
+The Q1 SIOP review meeting needs to move from Feb 15 to Feb 22. This is due to procurement data validation delays from our external data provider (they're experiencing system issues).
+
+IMPACT
+• Our internal prep work timeline shifts by 1 week
+• Final data analysis due Feb 20 (was Feb 13)
+• No impact on Q2 planning cycle start date
+
+WHAT WE'RE DOING
+• Working with data provider to expedite resolution
+• Re-prioritizing analysis tasks to focus on critical items first
+• Setting up daily check-ins to track progress
+
+WHAT I NEED FROM YOU
+• Continue with your current analysis work
+• Flag any blockers immediately
+• Keep Feb 20 deadline in mind for final deliverables
+
+I know this is frustrating, but we've got this. Let me know if you have questions or concerns.
+
+Thanks,
+[Your Name]`
+                }
+            },
+            {
+                id: 3,
+                title: "Decision Request",
+                audience: "Cross-Functional Lead",
+                description: "You need a decision from a peer leader about resource allocation. They're busy and you need to make it easy for them to respond quickly.",
+                audienceInfo: {
+                    title: "Peer Communication Style",
+                    points: [
+                        "Respect their time - be concise",
+                        "Make the ask clear and specific",
+                        "Provide context but don't overwhelm",
+                        "Suggest options/recommendations",
+                        "Set a reasonable deadline"
+                    ]
+                },
+                framework: [
+                    {
+                        step: 1,
+                        title: "Context",
+                        content: "Brief background - why you're reaching out"
+                    },
+                    {
+                        step: 2,
+                        title: "The Ask",
+                        content: "What decision/action is needed - be specific"
+                    },
+                    {
+                        step: 3,
+                        title: "Options",
+                        content: "Present 2-3 options with your recommendation"
+                    },
+                    {
+                        step: 4,
+                        title: "Impact",
+                        content: "What happens if decision is delayed"
+                    },
+                    {
+                        step: 5,
+                        title: "Deadline",
+                        content: "When you need a response by"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "structured",
+                        title: "Structured Decision Request",
+                        description: "Clear ask with options and deadline"
+                    },
+                    {
+                        id: "vague",
+                        title: "Vague Request",
+                        description: "Unclear what's needed"
+                    },
+                    {
+                        id: "demanding",
+                        title: "Demanding Tone",
+                        description: "Urgent but lacks context"
+                    }
+                ],
+                correctTemplate: "structured",
+                sampleResponse: {
+                    subject: "Decision Needed: Resource Allocation for SIOP Data Validation",
+                    body: `Hi [Name],
+
+CONTEXT
+We're in the final phase of Q1 SIOP data validation. Our team is stretched thin with the current workload.
+
+THE ASK
+Can you allocate 1 analyst from your team for 2 weeks (Feb 10-24) to support data validation?
+
+OPTIONS
+1. Full-time allocation (preferred) - fastest path to completion
+2. Part-time (50%) - extends timeline by 1 week but less impact on your team
+3. Share workload - we provide templates, your team does validation in their own time
+
+RECOMMENDATION
+Option 1 - we can return the favor during your busy periods.
+
+IMPACT IF DELAYED
+Q1 review meeting may need to be pushed back, affecting Q2 planning cycle.
+
+DEADLINE
+Need decision by EOD Friday (Feb 7) to plan accordingly.
+
+Happy to discuss - let me know what works.
+
+Thanks,
+[Your Name]`
+                }
+            },
+            {
+                id: 4,
+                title: "FYI / Heads Up",
+                audience: "Stakeholder Group",
+                description: "You need to inform multiple stakeholders about a change that affects them, but doesn't require immediate action. This is informational only.",
+                audienceInfo: {
+                    title: "Informational Communication Style",
+                    points: [
+                        "Clear subject line indicating it's FYI",
+                        "Brief explanation of what changed",
+                        "Why it matters to them",
+                        "When it takes effect",
+                        "Who to contact with questions"
+                    ]
+                },
+                framework: [
+                    {
+                        step: 1,
+                        title: "Subject Line",
+                        content: "Use 'FYI' or 'Heads Up' prefix to set expectations"
+                    },
+                    {
+                        step: 2,
+                        title: "What Changed",
+                        content: "Brief description of the change"
+                    },
+                    {
+                        step: 3,
+                        title: "Why It Matters",
+                        content: "Relevance to the audience"
+                    },
+                    {
+                        step: 4,
+                        title: "Timeline",
+                        content: "When this takes effect"
+                    },
+                    {
+                        step: 5,
+                        title: "Next Steps",
+                        content: "What they need to do (if anything) or who to contact"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "informational",
+                        title: "Clear FYI Format",
+                        description: "Informative, no action required"
+                    },
+                    {
+                        id: "action",
+                        title: "Action Required",
+                        description: "Implies they need to do something"
+                    },
+                    {
+                        id: "urgent",
+                        title: "Urgent Tone",
+                        description: "Creates unnecessary urgency"
+                    }
+                ],
+                correctTemplate: "informational",
+                sampleResponse: {
+                    subject: "FYI: Updated SIOP Planning Calendar - Q2 2025",
+                    body: `Hi All,
+
+FYI - We've updated the Q2 SIOP planning calendar based on feedback from Q1.
+
+WHAT CHANGED
+• Planning cycle start moved to March 3 (was March 1) - gives teams 2 extra days after Q1 review
+• Data submission deadline extended to March 10 (was March 8)
+• Executive review meeting remains March 25
+
+WHY IT MATTERS
+This gives you more time to incorporate Q1 learnings into Q2 planning. The extended timeline shouldn't impact your other commitments.
+
+TIMELINE
+Changes take effect immediately. Updated calendar attached.
+
+QUESTIONS?
+Reach out to me or check the shared SIOP calendar.
+
+Thanks,
+[Your Name]`
+                }
+            },
+            {
+                id: 5,
+                title: "Project Delay Notification",
+                audience: "Cross-functional Team",
+                description: "Notify team that a deliverable will be delayed due to dependencies.",
+                scenario: "The SIOP data integration project is delayed by 1 week because IT hasn't provided the API access you need. The delay affects the team's planning cycle. You need to communicate this to the cross-functional team.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "What's happening? Be transparent. (e.g., 'Data integration project delayed by 1 week due to IT API access dependency')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "Who/what is affected? (e.g., 'Affects Q2 planning cycle - will start 1 week later than planned')"
+                    },
+                    {
+                        step: 3,
+                        title: "ROOT CAUSE",
+                        content: "Why is this happening? (e.g., 'IT API access requires security approval, process taking longer than expected')"
+                    },
+                    {
+                        step: 4,
+                        title: "MITIGATION",
+                        content: "What are you doing about it? (e.g., 'Working with IT to expedite approval', 'Preparing alternative data sources as backup')"
+                    },
+                    {
+                        step: 5,
+                        title: "NEW TIMELINE",
+                        content: "When will it be done? (e.g., 'New target: Week of March 15th')"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "transparent-update",
+                        title: "Transparent Update Template",
+                        description: "Honest communication about delay with impact and mitigation"
+                    },
+                    {
+                        id: "minimize",
+                        title: "Minimize the Issue",
+                        description: "Downplay the delay and hope no one notices"
+                    },
+                    {
+                        id: "blame",
+                        title: "Blame Others",
+                        description: "Focus on blaming IT for the delay"
+                    }
+                ],
+                correct: "transparent-update",
+                explanation: "Transparency builds trust. Teams need to know about delays early so they can adjust. Being honest about root cause and showing mitigation efforts demonstrates ownership. Blaming others destroys relationships."
+            },
+            {
+                id: 6,
+                title: "Resource Request",
+                audience: "Your Manager",
+                description: "Request additional resources or support for a project.",
+                scenario: "The SIOP transformation is taking more time than expected. You need an additional team member or contractor to help with supplier onboarding. You want to request this from your manager.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "Current state and workload. (e.g., 'SIOP transformation on track but supplier onboarding taking 2x longer than estimated')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "What happens without additional resources? (e.g., 'Will delay transformation by 2 months', 'Risk to Q2 milestones')"
+                    },
+                    {
+                        step: 3,
+                        title: "REQUEST",
+                        content: "What exactly do you need? Be specific. (e.g., 'Need 1 additional team member or contractor for 3 months to support supplier onboarding')"
+                    },
+                    {
+                        step: 4,
+                        title: "BENEFITS",
+                        content: "What will this enable? (e.g., 'Keeps transformation on schedule', 'Enables onboarding 8 suppliers vs 4')"
+                    },
+                    {
+                        step: 5,
+                        title: "OPTIONS",
+                        content: "Present alternatives if possible. (e.g., 'Option 1: Full-time contractor', 'Option 2: Part-time support from another team')"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "structured-request",
+                        title: "Structured Request Template",
+                        description: "Builds case for resources with situation, impact, and options"
+                    },
+                    {
+                        id: "demand",
+                        title: "Demand Resources",
+                        description: "Demands resources without explaining why or showing impact"
+                    },
+                    {
+                        id: "complain",
+                        title: "Complain About Workload",
+                        description: "Focuses on complaining rather than proposing solutions"
+                    }
+                ],
+                correct: "structured-request",
+                explanation: "Managers need to understand the business case for resources. Showing impact, benefits, and options helps them make decisions. Demanding or complaining doesn't build your case."
+            },
+            {
+                id: 7,
+                title: "Status Update - On Track",
+                audience: "Executive Sponsor",
+                description: "Provide a positive status update showing progress.",
+                scenario: "SIOP transformation is going well. You're ahead of schedule on supplier onboarding and have completed 2 key milestones early. You want to share this positive update with the executive sponsor.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "Current status. (e.g., 'SIOP transformation on track, ahead of schedule on key milestones')"
+                    },
+                    {
+                        step: 2,
+                        title: "PROGRESS",
+                        content: "What's been achieved? Quantify wins. (e.g., 'Completed supplier onboarding for 6 suppliers (target was 4)', '2 weeks ahead of schedule')"
+                    },
+                    {
+                        step: 3,
+                        title: "METRICS",
+                        content: "Key performance indicators. (e.g., 'Planning cycle time reduced by 35%', 'Supplier satisfaction: 95%')"
+                    },
+                    {
+                        step: 4,
+                        title: "NEXT MILESTONES",
+                        content: "What's coming up? (e.g., 'Onboarding 2 more suppliers next week', 'Starting Phase 2 data integration')"
+                    },
+                    {
+                        step: 5,
+                        title: "RISKS/BLOCKERS",
+                        content: "Any concerns? (e.g., 'No major blockers', 'Monitoring IT system capacity')"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "positive-update",
+                        title: "Positive Update Template",
+                        description: "Celebrates wins while staying realistic about next steps and risks"
+                    },
+                    {
+                        id: "overpromise",
+                        title: "Overpromise",
+                        description: "Makes everything sound perfect and promises unrealistic timelines"
+                    },
+                    {
+                        id: "downplay",
+                        title: "Downplay Success",
+                        description: "Minimizes achievements and focuses only on challenges"
+                    }
+                ],
+                correct: "positive-update",
+                explanation: "Executives want to see progress and wins. Celebrating achievements builds confidence. But staying realistic about risks and next steps maintains credibility. Overpromising sets you up for failure."
+            },
+            {
+                id: 8,
+                title: "Difficult Feedback Delivery",
+                audience: "Peer/Colleague",
+                description: "Provide constructive feedback to a colleague about their work.",
+                scenario: "A colleague on another team is providing incomplete data for SIOP planning, which is causing delays. You need to address this constructively without damaging the relationship.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "What's happening? Be specific and factual. (e.g., 'SIOP planning data from your team is missing key fields - inventory levels and lead times')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "How does this affect work? (e.g., 'Causes delays in planning cycle', 'Requires follow-up requests')"
+                    },
+                    {
+                        step: 3,
+                        title: "ASSUME POSITIVE INTENT",
+                        content: "Frame positively. (e.g., 'I know you're busy', 'I understand there might be system limitations')"
+                    },
+                    {
+                        step: 4,
+                        title: "REQUEST",
+                        content: "What do you need? Be specific. (e.g., 'Could you include inventory levels and lead times in future submissions?')"
+                    },
+                    {
+                        step: 5,
+                        title: "OFFER SUPPORT",
+                        content: "How can you help? (e.g., 'Happy to discuss if there are challenges', 'Can provide template if helpful')"
+                    }
+                ],
+                templates: [
+                    {
+                        id: "constructive-feedback",
+                        title: "Constructive Feedback Template",
+                        description: "Addresses issue directly but respectfully, assumes positive intent, offers support"
+                    },
+                    {
+                        id: "aggressive",
+                        title: "Aggressive Complaint",
+                        description: "Attacks the colleague and demands immediate fix"
+                    },
+                    {
+                        id: "avoid",
+                        title: "Avoid the Issue",
+                        description: "Doesn't address it directly, hopes it resolves itself"
+                    }
+                ],
+                correct: "constructive-feedback",
+                explanation: "Difficult conversations require balance: be direct about the issue but respectful. Assuming positive intent and offering support maintains relationships while solving the problem. Aggression destroys relationships."
+            }
+        ];
+        
+        let currentScenario = null;
+        let completedScenarios = [];
+        let correctAnswers = 0;
+        let selectedTemplate = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderScenarioList();
+            loadTheme();
+        }
+        
+        function renderScenarioList() {
+            const list = document.getElementById('scenarioList');
+            list.innerHTML = scenarios.map(scenario => {
+                const isCompleted = completedScenarios.includes(scenario.id);
+                return `
+                    <div class="scenario-item ${isCompleted ? 'completed' : ''} ${currentScenario?.id === scenario.id ? 'active' : ''}" 
+                         onclick="loadScenario(${scenario.id})">
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-audience">${scenario.audience}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadScenario(id) {
+            currentScenario = scenarios.find(s => s.id === id);
+            selectedTemplate = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Scenario ${id} of ${scenarios.length}</div>
+                        <h1 class="scenario-title-large">${currentScenario.title}</h1>
+                        <p class="scenario-description">${currentScenario.description}</p>
+                    </div>
+                    
+                    <div class="audience-info">
+                        <h3>${currentScenario.audienceInfo.title}</h3>
+                        <ul>
+                            ${currentScenario.audienceInfo.points.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="communication-framework">
+                        <div class="framework-title">📋 Communication Framework</div>
+                        <div class="framework-steps">
+                            ${currentScenario.framework.map(step => `
+                                <div class="framework-step">
+                                    <div class="step-number">${step.step}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: Choose the Right Template</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Select the communication template that best fits this scenario and audience:
+                        </p>
+                        <div class="template-options" id="templateOptions">
+                            ${shuffleArray(currentScenario.templates).map(template => `
+                                <div class="template-option" onclick="selectTemplate('${template.id}')" id="template-${template.id}">
+                                    <h4>${template.title}</h4>
+                                    <p>${template.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div id="messageEditor" style="display: none;">
+                            <div class="message-editor">
+                                <div class="editor-field">
+                                    <label class="editor-label">Subject Line</label>
+                                    <input type="text" class="editor-input" id="messageSubject" placeholder="Enter subject line...">
+                                </div>
+                                <div class="editor-field">
+                                    <label class="editor-label">Message Body</label>
+                                    <textarea class="editor-textarea" id="messageBody" placeholder="Write your message using the framework above..."></textarea>
+                                </div>
+                                <button class="submit-btn" onclick="submitResponse()">Submit Response</button>
+                            </div>
+                            
+                            <div class="feedback-panel" id="feedbackPanel"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            renderScenarioList();
+        }
+        
+        function selectTemplate(templateId) {
+            selectedTemplate = templateId;
+            
+            // Update UI
+            document.querySelectorAll('.template-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`template-${templateId}`).classList.add('selected');
+            
+            // Show message editor
+            document.getElementById('messageEditor').style.display = 'block';
+            
+            // Pre-fill with sample if available
+            if (currentScenario.sampleResponse) {
+                document.getElementById('messageSubject').value = currentScenario.sampleResponse.subject;
+                document.getElementById('messageBody').value = currentScenario.sampleResponse.body;
+            }
+        }
+        
+        function submitResponse() {
+            const subject = document.getElementById('messageSubject').value.trim();
+            const body = document.getElementById('messageBody').value.trim();
+            
+            if (!subject || !body) {
+                alert('Please fill in both subject and message body.');
+                return;
+            }
+            
+            const isCorrect = selectedTemplate === currentScenario.correctTemplate;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedScenarios.includes(currentScenario.id)) {
+                completedScenarios.push(currentScenario.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Excellent Choice!' : 'Consider This Approach'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Perfect!</strong> You selected the right template for this audience and situation.</p>
+                           <p style="margin-top: 12px;">Your message structure looks good. Remember: ${currentScenario.audienceInfo.points[0]}</p>`
+                        : `<p>The best choice for this scenario is <strong>${currentScenario.templates.find(t => t.id === currentScenario.correctTemplate).title}</strong>.</p>
+                           <p style="margin-top: 12px;">Why: ${currentScenario.templates.find(t => t.id === currentScenario.correctTemplate).description}</p>
+                           <p style="margin-top: 12px;">Key consideration: ${currentScenario.audienceInfo.points[0]}</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            renderScenarioList();
+            
+            // Check if all scenarios completed
+            if (completedScenarios.length === scenarios.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 2000);
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('statCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            const accuracy = completedScenarios.length > 0 
+                ? Math.round((correctAnswers / completedScenarios.length) * 100) 
+                : 0;
+            document.getElementById('statAccuracy').textContent = `${accuracy}%`;
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
+            document.getElementById('finalCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalScore').textContent = correctAnswers;
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        init();
+    </script>
+</body>
+</html>

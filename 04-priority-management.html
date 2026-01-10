@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Management Training</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --urgent-bg: #fef2f2;
+            --urgent-border: #fee2e2;
+            --urgent-text: #991b1b;
+            --important-bg: #fffbeb;
+            --important-border: #fef3c7;
+            --important-text: #92400e;
+            --routine-bg: #f0fdf4;
+            --routine-border: #dcfce7;
+            --routine-text: #166534;
+            --delegate-bg: #eff6ff;
+            --delegate-border: #dbeafe;
+            --delegate-text: #1e40af;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1d23;
+            --bg-secondary: #22262e;
+            --bg-tertiary: #2a2f3a;
+            --bg-hover: #323843;
+            --border: #3a404d;
+            --text-primary: #ffffff;
+            --text-secondary: #b8bcc6;
+            --text-muted: #858a94;
+        }
+        
+        /* Print mode - minimal ink usage */
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-tertiary: #ffffff !important;
+                --bg-hover: #ffffff !important;
+                --border: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+            }
+            
+            /* Remove all backgrounds and shadows */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            /* Hide non-essential elements */
+            .board-header, button, .btn, .guide-panel,
+            .results-overlay, .scenario-banner {
+                display: none !important;
+            }
+            
+            /* Simplify board */
+            .board-container {
+                padding: 10px !important;
+            }
+            
+            .board-column {
+                border: 2px solid #000 !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .task-card {
+                border: 1px solid #000 !important;
+                margin: 5px 0 !important;
+                padding: 8px !important;
+            }
+            
+            /* Black text only */
+            h1, h2, h3, h4, h5, h6, p, span, div {
+                color: black !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .board-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .board-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .board-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .board-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .board-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .board-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+        
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .scenario-banner {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+        }
+        
+        .scenario-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .scenario-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .scenario-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .board-container {
+            padding: 24px;
+            overflow-x: auto;
+            height: calc(100vh - 180px);
+        }
+        
+        .board-columns {
+            display: flex;
+            gap: 20px;
+            min-width: 1200px;
+            height: 100%;
+        }
+        
+        .board-column {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            height: fit-content;
+            max-height: 100%;
+        }
+        
+        .column-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .column-title {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .column-count {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .column-content {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 400px;
+        }
+        
+        .column-content.drag-over {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .task-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+        
+        .task-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .task-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .task-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        
+        .task-priority {
+            flex-shrink: 0;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .priority-critical {
+            background: var(--urgent-bg);
+            color: var(--urgent-text);
+            border: 1px solid var(--urgent-border);
+        }
+        
+        .priority-high {
+            background: var(--important-bg);
+            color: var(--important-text);
+            border: 1px solid var(--important-border);
+        }
+        
+        .priority-medium {
+            background: var(--routine-bg);
+            color: var(--routine-text);
+            border: 1px solid var(--routine-border);
+        }
+        
+        .priority-low {
+            background: var(--delegate-bg);
+            color: var(--delegate-text);
+            border: 1px solid var(--delegate-border);
+        }
+        
+        .task-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .task-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .inbox-column .column-content {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(59, 130, 246, 0.05));
+        }
+        
+        .do-now-column {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .do-now-column .column-header {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+        }
+        
+        .schedule-column {
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .schedule-column .column-header {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+        }
+        
+        .delegate-column {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .delegate-column .column-header {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+        }
+        
+        .eliminate-column {
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .eliminate-column .column-header {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+        }
+        
+        .guide-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+        }
+        
+        .guide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .guide-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .close-guide {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-guide:hover {
+            color: var(--text-primary);
+        }
+        
+        .guide-item {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .guide-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .guide-item-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .guide-item-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .results-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .results-overlay.show {
+            display: flex;
+        }
+        
+        .results-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .results-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .results-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .results-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .stat-number.optimal {
+            color: var(--accent-green);
+        }
+        
+        .stat-number.workable {
+            color: var(--accent-yellow);
+        }
+        
+        .stat-number.rethink {
+            color: var(--accent-red);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-list {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .feedback-item {
+            background: var(--bg-tertiary);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .feedback-item.optimal {
+            border-left-color: var(--accent-green);
+        }
+        
+        .feedback-item.workable {
+            border-left-color: var(--accent-yellow);
+        }
+        
+        .feedback-item.rethink {
+            border-left-color: var(--accent-red);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .feedback-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .feedback-badge.optimal {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .feedback-badge.workable {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-yellow);
+        }
+        
+        .feedback-badge.rethink {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+        
+        .feedback-task-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .feedback-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .feedback-choice {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 1024px) {
+            /* Mobile-friendly board header */
+            .board-header {
+                flex-wrap: wrap;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            
+            .board-title-section {
+                flex: 1 1 100%;
+            }
+            
+            .board-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+                flex: 1 1 auto;
+            }
+            
+            .btn-primary {
+                flex: 1 1 100%;
+            }
+            
+            /* Mobile-friendly board container */
+            .board-container {
+                padding: 12px;
+                height: calc(100vh - 200px);
+            }
+            
+            .board-columns {
+                min-width: auto;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .board-column {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .guide-panel {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                width: 100%;
+                margin: 20px 0;
+            }
+            
+            /* Mobile-friendly task cards */
+            .task-card {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .task-title {
+                font-size: 15px;
+            }
+            
+            .task-description {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly board columns */
+            .board-column {
+                min-width: 100%;
+            }
+            
+            .board-columns {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            /* Mobile-friendly buttons */
+            .board-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .board-actions .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly results overlay */
+            .results-overlay {
+                padding: 20px;
+            }
+            
+            .results-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            .results-title {
+                font-size: 24px;
+            }
+            
+            .results-message {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="board-header">
+        <div class="board-title-section">
+            <div class="board-icon">🎯</div>
+            <div>
+                <div class="board-title">Priority Management Training</div>
+                <div class="board-subtitle">Drag tasks to the right column</div>
+            </div>
+        </div>
+        <div class="board-actions">
+            <button class="btn btn-secondary" onclick="toggleTheme()" id="themeToggle" title="Toggle light/dark mode">☀️</button>
+            <button class="btn btn-secondary" onclick="resetBoard()">🔄 Reset</button>
+            <button class="btn btn-primary" onclick="checkAnswers()">Check My Work</button>
+            <button class="btn btn-secondary" onclick="location.href='index.html'">← Back to Hub</button>
+        </div>
+    </div>
+    
+    <div class="scenario-banner">
+        <div class="scenario-content">
+            <div class="scenario-title">
+                <span>📋</span>
+                <span>Today's Scenario</span>
+            </div>
+            <div class="scenario-text">
+                It's 9 AM Monday. You've just arrived and have 12 different tasks competing for your attention. Some are from last week, others are new. You have a meeting at 11 AM. Drag each task to the appropriate priority column based on urgency and impact.
+            </div>
+        </div>
+    </div>
+    
+    <div class="board-container">
+        <div class="board-columns">
+            <!-- Inbox Column -->
+            <div class="board-column inbox-column">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span>📥</span>
+                        <span>INBOX</span>
+                    </div>
+                    <span class="column-count" id="inboxCount">12</span>
+                </div>
+                <div class="column-content" id="inbox" data-column="inbox">
+                    <!-- Tasks will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Do Now Column -->
+            <div class="board-column do-now-column">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span>🔴</span>
+                        <span>DO NOW</span>
+                    </div>
+                    <span class="column-count" id="doNowCount">0</span>
+                </div>
+                <div class="column-content" id="do-now" data-column="do-now"></div>
+            </div>
+            
+            <!-- Schedule Column -->
+            <div class="board-column schedule-column">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span>🟡</span>
+                        <span>SCHEDULE</span>
+                    </div>
+                    <span class="column-count" id="scheduleCount">0</span>
+                </div>
+                <div class="column-content" id="schedule" data-column="schedule"></div>
+            </div>
+            
+            <!-- Delegate Column -->
+            <div class="board-column delegate-column">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span>🔵</span>
+                        <span>DELEGATE</span>
+                    </div>
+                    <span class="column-count" id="delegateCount">0</span>
+                </div>
+                <div class="column-content" id="delegate" data-column="delegate"></div>
+            </div>
+            
+            <!-- Eliminate Column -->
+            <div class="board-column eliminate-column">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span>⚪</span>
+                        <span>ELIMINATE</span>
+                    </div>
+                    <span class="column-count" id="eliminateCount">0</span>
+                </div>
+                <div class="column-content" id="eliminate" data-column="eliminate"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Guide Panel -->
+    <div class="guide-panel" id="guidePanel">
+        <div class="guide-header">
+            <div class="guide-title">💡 Quick Guide</div>
+            <button class="close-guide" onclick="document.getElementById('guidePanel').style.display='none'">✕</button>
+        </div>
+        
+        <div class="guide-item">
+            <div class="guide-item-title">🔴 DO NOW</div>
+            <div class="guide-item-text">Deadline today OR blocks someone else</div>
+        </div>
+        
+        <div class="guide-item">
+            <div class="guide-item-title">🟡 SCHEDULE</div>
+            <div class="guide-item-text">Important but can wait 1-2 days</div>
+        </div>
+        
+        <div class="guide-item">
+            <div class="guide-item-title">🔵 DELEGATE</div>
+            <div class="guide-item-text">Someone else can do it as well/better</div>
+        </div>
+        
+        <div class="guide-item">
+            <div class="guide-item-title">⚪ ELIMINATE</div>
+            <div class="guide-item-text">Minimal consequences if not done</div>
+        </div>
+    </div>
+    
+    <!-- Results Overlay -->
+    <div class="results-overlay" id="resultsOverlay">
+        <div class="results-card">
+            <div class="results-header">
+                <div class="results-icon">📊</div>
+                <div class="results-title">Your Prioritization Results</div>
+                <div class="results-subtitle">Here's how you did with the 12 tasks</div>
+            </div>
+            
+            <div class="results-stats">
+                <div class="stat-card">
+                    <div class="stat-number optimal" id="optimalCount">0</div>
+                    <div class="stat-label">Optimal Choices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number workable" id="workableCount">0</div>
+                    <div class="stat-label">Workable Choices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number rethink" id="rethinkCount">0</div>
+                    <div class="stat-label">Needs Rethinking</div>
+                </div>
+            </div>
+            
+            <div class="feedback-list" id="feedbackList">
+                <!-- Feedback items will be inserted here -->
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="location.reload()" style="font-size: 16px; padding: 14px 32px;">
+                    Practice Again
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const tasks = [
+            {
+                id: 1,
+                title: "Executive SIOP review prep",
+                details: "Tomorrow's exec review - need to finalize slides with supply status",
+                deadline: "Tomorrow 9 AM",
+                time: "2 hours",
+                from: "Your manager",
+                optimal: "do-now",
+                acceptable: [],
+                explanation: "Critical deadline tomorrow morning. Blocks the executive meeting. Must be done today."
+            },
+            {
+                id: 2,
+                title: "Respond to supplier inquiry",
+                details: "Standard request for next quarter's forecast template",
+                deadline: "End of week",
+                time: "10 minutes",
+                from: "Supplier",
+                optimal: "delegate",
+                acceptable: ["schedule"],
+                explanation: "Standard request your team can handle. Good delegation opportunity."
+            },
+            {
+                id: 3,
+                title: "SIOP training module completion",
+                details: "Online training on new planning system features",
+                deadline: "End of month",
+                time: "45 minutes",
+                from: "L&D",
+                optimal: "schedule",
+                acceptable: ["eliminate"],
+                explanation: "Useful but not urgent. Schedule for a quieter day this week or next."
+            },
+            {
+                id: 4,
+                title: "Coffee chat with colleague",
+                details: "Informal catch-up, no specific agenda mentioned",
+                deadline: "Flexible",
+                time: "30 minutes",
+                from: "Peer",
+                optimal: "eliminate",
+                acceptable: ["schedule"],
+                explanation: "Nice to have but not essential. Can be rescheduled or declined if overloaded."
+            },
+            {
+                id: 5,
+                title: "MRP data validation",
+                details: "Central planning flagged inconsistencies - blocking their analysis",
+                deadline: "Today by noon",
+                time: "30 minutes",
+                from: "Planning",
+                optimal: "do-now",
+                acceptable: [],
+                explanation: "Deadline today AND blocking someone else's work. Clear DO NOW candidate."
+            },
+            {
+                id: 6,
+                title: "Read industry report",
+                details: "50-page report on supply chain trends",
+                deadline: "None",
+                time: "1-2 hours",
+                from: "Self",
+                optimal: "eliminate",
+                acceptable: ["schedule"],
+                explanation: "Interesting but no immediate application or deadline. Eliminate or save for later."
+            },
+            {
+                id: 7,
+                title: "Update team on process changes",
+                details: "Brief team on new SIOP timeline - important for alignment",
+                deadline: "This week",
+                time: "15 minutes",
+                from: "You",
+                optimal: "schedule",
+                acceptable: ["do-now"],
+                explanation: "Important communication but can be scheduled for later today or tomorrow."
+            },
+            {
+                id: 8,
+                title: "Review supplier performance report",
+                details: "Monthly report analysis to identify trends",
+                deadline: "Next week",
+                time: "1 hour",
+                from: "Director",
+                optimal: "schedule",
+                acceptable: [],
+                explanation: "Important strategic work but deadline is next week. Schedule time later this week."
+            },
+            {
+                id: 9,
+                title: "Expense report submission",
+                details: "Submit last month's travel expenses",
+                deadline: "Today (final)",
+                time: "20 minutes",
+                from: "Finance",
+                optimal: "do-now",
+                acceptable: [],
+                explanation: "Final deadline today. Quick task. DO NOW to avoid compliance issues."
+            },
+            {
+                id: 10,
+                title: "Department newsletter contribution",
+                details: "Optional: Share a win or update for monthly newsletter",
+                deadline: "Tomorrow (opt)",
+                time: "15 minutes",
+                from: "Comms",
+                optimal: "eliminate",
+                acceptable: ["delegate"],
+                explanation: "Optional task with minimal impact if skipped. Can eliminate or delegate."
+            },
+            {
+                id: 11,
+                title: "Schedule quarterly planning meeting",
+                details: "Find time for Q2 planning with cross-functional team",
+                deadline: "This week",
+                time: "10 minutes",
+                from: "You",
+                optimal: "schedule",
+                acceptable: ["do-now", "delegate"],
+                explanation: "Important but quick. Can be done later today or delegated to admin support."
+            },
+            {
+                id: 12,
+                title: "Fix formatting on shared template",
+                details: "Team member mentioned formatting issues in planning template",
+                deadline: "None",
+                time: "15 minutes",
+                from: "Team",
+                optimal: "delegate",
+                acceptable: ["schedule", "eliminate"],
+                explanation: "Low priority maintenance task. Delegate to team member or handle during admin time."
+            }
+        ];
+        
+        let draggedTask = null;
+        let userChoices = {};
+        
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = 'task-card';
+            card.draggable = true;
+            card.dataset.taskId = task.id;
+            
+            card.innerHTML = `
+                <div class="task-header">
+                    <div class="task-title">${task.title}</div>
+                </div>
+                <div class="task-details">${task.details}</div>
+                <div class="task-meta">
+                    <div class="meta-item">⏰ ${task.deadline}</div>
+                    <div class="meta-item">⏱️ ${task.time}</div>
+                    <div class="meta-item">👤 ${task.from}</div>
+                </div>
+            `;
+            
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            
+            return card;
+        }
+        
+        function handleDragStart(e) {
+            draggedTask = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        
+        function handleDragEnter(e) {
+            if (e.target.classList.contains('column-content')) {
+                e.target.classList.add('drag-over');
+            }
+        }
+        
+        function handleDragLeave(e) {
+            if (e.target.classList.contains('column-content')) {
+                e.target.classList.remove('drag-over');
+            }
+        }
+        
+        function handleDrop(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            const column = e.target.closest('.column-content');
+            if (column && draggedTask) {
+                column.classList.remove('drag-over');
+                column.appendChild(draggedTask);
+                
+                const taskId = parseInt(draggedTask.dataset.taskId);
+                const columnName = column.dataset.column;
+                userChoices[taskId] = columnName;
+                
+                updateCounts();
+            }
+            
+            return false;
+        }
+        
+        function setupDragAndDrop() {
+            const columns = document.querySelectorAll('.column-content');
+            columns.forEach(column => {
+                column.addEventListener('dragover', handleDragOver);
+                column.addEventListener('dragenter', handleDragEnter);
+                column.addEventListener('dragleave', handleDragLeave);
+                column.addEventListener('drop', handleDrop);
+            });
+        }
+        
+        function updateCounts() {
+            document.getElementById('inboxCount').textContent = document.getElementById('inbox').children.length;
+            document.getElementById('doNowCount').textContent = document.getElementById('do-now').children.length;
+            document.getElementById('scheduleCount').textContent = document.getElementById('schedule').children.length;
+            document.getElementById('delegateCount').textContent = document.getElementById('delegate').children.length;
+            document.getElementById('eliminateCount').textContent = document.getElementById('eliminate').children.length;
+        }
+        
+        function renderTasks() {
+            const inbox = document.getElementById('inbox');
+            inbox.innerHTML = '';
+            
+            tasks.forEach(task => {
+                inbox.appendChild(createTaskCard(task));
+            });
+            
+            updateCounts();
+        }
+        
+        function checkAnswers() {
+            if (document.getElementById('inbox').children.length > 0) {
+                alert('Please move all tasks from the inbox before checking your work!');
+                return;
+            }
+            
+            let optimal = 0;
+            let workable = 0;
+            let rethink = 0;
+            
+            let feedbackHTML = '';
+            
+            tasks.forEach(task => {
+                const userChoice = userChoices[task.id];
+                let feedbackClass = '';
+                let feedbackBadge = '';
+                let feedbackText = '';
+                
+                if (userChoice === task.optimal) {
+                    optimal++;
+                    feedbackClass = 'optimal';
+                    feedbackBadge = '✅ Optimal';
+                    feedbackText = task.explanation;
+                } else if (task.acceptable.includes(userChoice)) {
+                    workable++;
+                    feedbackClass = 'workable';
+                    feedbackBadge = '🟡 Workable';
+                    feedbackText = `${task.explanation}`;
+                } else {
+                    rethink++;
+                    feedbackClass = 'rethink';
+                    feedbackBadge = '❌ Rethink This';
+                    feedbackText = `${task.explanation}`;
+                }
+                
+                const choiceMap = {
+                    'do-now': 'DO NOW',
+                    'schedule': 'SCHEDULE',
+                    'delegate': 'DELEGATE',
+                    'eliminate': 'ELIMINATE'
+                };
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${feedbackClass}">
+                        <div class="feedback-header">
+                            <span class="feedback-badge ${feedbackClass}">${feedbackBadge}</span>
+                            <span class="feedback-task-title">${task.title}</span>
+                        </div>
+                        <div class="feedback-text">${feedbackText}</div>
+                        ${userChoice !== task.optimal ? `
+                            <div class="feedback-choice">
+                                <strong>Your choice:</strong> ${choiceMap[userChoice]}<br>
+                                <strong>Optimal:</strong> ${choiceMap[task.optimal]}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            document.getElementById('optimalCount').textContent = optimal;
+            document.getElementById('workableCount').textContent = workable;
+            document.getElementById('rethinkCount').textContent = rethink;
+            document.getElementById('feedbackList').innerHTML = feedbackHTML;
+            document.getElementById('resultsOverlay').classList.add('show');
+        }
+        
+        function resetBoard() {
+            userChoices = {};
+            renderTasks();
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update toggle button
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (document.getElementById('themeToggle')) {
+                document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
+        // Initialize
+        initTheme();
+        renderTasks();
+        setupDragAndDrop();
+    </script>
+</body>
+</html>

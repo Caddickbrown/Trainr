@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Switching Management Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --text-primary: #000000 !important;
+            }
+            * { background: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .context-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .technique-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .technique-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .technique-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .technique-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .technique-item.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .technique-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .technique-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .technique-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .technique-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .technique-header {
+            margin-bottom: 32px;
+        }
+        
+        .technique-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .technique-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .technique-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .scenario-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-orange);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .scenario-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .strategy-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .strategy-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .strategy-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .strategy-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .action-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .action-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .action-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .action-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .action-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .context-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .technique-title-large {
+                font-size: 24px;
+            }
+            
+            .strategy-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .action-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .action-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .action-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            .completion-title {
+                font-size: 24px;
+            }
+            
+            .completion-message {
+                font-size: 14px;
+            }
+            
+            /* Ensure text is readable */
+            .technique-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .scenario-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .strategy-step {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="context-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>🔄 Context Switch</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="technique-list" id="techniqueList">
+                <!-- Techniques will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/4</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Context Switching Management</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="technique-container">
+                    <div class="technique-header">
+                        <div class="technique-badge">Select a technique to begin</div>
+                        <h1 class="technique-title-large">Master Context Switching</h1>
+                        <p class="technique-description">
+                            Learn strategies to handle interruptions, switch tasks efficiently, and get back into deep work quickly. Essential skills for ADHD success in fast-paced roles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/4</div>
+                    <div class="completion-stat-label">Techniques</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've learned key strategies for managing interruptions and context switching. Practice these techniques daily to build the habit!
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const techniques = [
+            {
+                id: 1,
+                title: "Handling Interruptions",
+                description: "Deal with unexpected interruptions without losing your place",
+                scenario: "You're deep in data analysis when your manager pings you: 'Can you join a quick call in 5 minutes? Need your input on supplier issue.'",
+                strategy: [
+                    {
+                        icon: "📝",
+                        title: "Capture Current State",
+                        content: "Write down exactly where you are: 'Analyzing Q1 demand variance - just finished checking Trent engine line, need to review aftermarket segment next.'"
+                    },
+                    {
+                        icon: "⏸️",
+                        title: "Pause Gracefully",
+                        content: "Save your work, close unnecessary tabs, leave a note in your document about what you were thinking."
+                    },
+                    {
+                        icon: "⏰",
+                        title: "Set Expectations",
+                        content: "Respond: 'I can join, but I'm mid-analysis. Can we keep it to 15 minutes, or should I finish this first?'"
+                    },
+                    {
+                        icon: "🔄",
+                        title: "Quick Recovery",
+                        content: "After the call, read your capture note, reopen the exact files/tabs, and pick up where you left off."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "capture",
+                        title: "Capture & Set Boundary",
+                        description: "Write down your current state, then negotiate timing"
+                    },
+                    {
+                        id: "drop",
+                        title: "Drop Everything Immediately",
+                        description: "Stop what you're doing and join the call right away"
+                    },
+                    {
+                        id: "ignore",
+                        title: "Defer the Response",
+                        description: "Continue with current work and respond after completing your task"
+                    }
+                ],
+                correct: "capture",
+                explanation: "Capturing your state and setting boundaries protects your focus while being responsive. This prevents losing your place and reduces recovery time."
+            },
+            {
+                id: 2,
+                title: "Brain Dump Technique",
+                description: "Quickly offload thoughts when switching tasks",
+                scenario: "You're preparing for a stakeholder meeting when an urgent email arrives about a supply gap. You need to switch tasks immediately.",
+                strategy: [
+                    {
+                        icon: "💭",
+                        title: "2-Minute Brain Dump",
+                        content: "Open a blank document and dump everything in your head: meeting prep thoughts, questions, concerns, next steps. Don't edit - just get it out."
+                    },
+                    {
+                        icon: "📋",
+                        title: "Create Quick List",
+                        content: "Make a bullet list of: what you've done, what's next, what's blocking you, what you need to remember."
+                    },
+                    {
+                        icon: "🔖",
+                        title: "Set a Return Reminder",
+                        content: "Set a calendar reminder or leave the brain dump doc open so you can return to it easily."
+                    },
+                    {
+                        icon: "🚀",
+                        title: "Switch Cleanly",
+                        content: "Close meeting prep tabs, open supply gap files. Your brain dump is safe - you can return to it."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "dump",
+                        title: "Brain Dump Then Switch",
+                        description: "Quickly capture your thoughts, then switch tasks"
+                    },
+                    {
+                        id: "multitask",
+                        title: "Try to Do Both",
+                        description: "Keep meeting prep open while handling the urgent issue"
+                    },
+                    {
+                        id: "forget",
+                        title: "Just Switch",
+                        description: "Close everything and start on the urgent task"
+                    }
+                ],
+                correct: "dump",
+                explanation: "The brain dump technique prevents losing important thoughts and reduces anxiety about forgetting things. It takes 2 minutes but saves hours of recovery time."
+            },
+            {
+                id: 3,
+                title: "Protecting Focus Time",
+                description: "Strategies to minimize interruptions during deep work",
+                scenario: "You've blocked 2 hours for data analysis, but you're getting constant Slack messages and meeting invites. Your focus keeps breaking.",
+                strategy: [
+                    {
+                        icon: "🔕",
+                        title: "Do Not Disturb Mode",
+                        content: "Turn on DND, close email/Slack, put phone away. Set an auto-reply: 'In deep work until 2 PM, will respond after.'"
+                    },
+                    {
+                        icon: "📅",
+                        title: "Block Calendar Visually",
+                        content: "Mark your calendar as 'Focus Time - No Meetings' so others see you're unavailable. This prevents invites."
+                    },
+                    {
+                        icon: "⏱️",
+                        title: "Time Blocking",
+                        content: "Schedule focus blocks BEFORE accepting meetings. Treat them as non-negotiable appointments with yourself."
+                    },
+                    {
+                        icon: "📝",
+                        title: "Interruption Log",
+                        content: "Keep a notepad nearby. When you think of something urgent, write it down instead of switching. Review after focus time."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "protect",
+                        title: "Enable DND & Block Calendar",
+                        description: "Set boundaries and communicate your focus time"
+                    },
+                    {
+                        id: "respond",
+                        title: "Respond to Everything",
+                        description: "Answer messages as they come in to stay responsive"
+                    },
+                    {
+                        id: "isolate",
+                        title: "Work Offline Completely",
+                        description: "Disconnect from internet entirely"
+                    }
+                ],
+                correct: "protect",
+                explanation: "Protecting focus time requires clear boundaries and communication. DND + calendar blocking signals to others while allowing you to stay connected (just not reactive)."
+            },
+            {
+                id: 4,
+                title: "Post-Meeting Recovery",
+                description: "Get back into deep work after meetings",
+                scenario: "You just finished a 1-hour stakeholder meeting. Your brain feels scattered, and you need to get back to your data analysis work.",
+                strategy: [
+                    {
+                        icon: "📝",
+                        title: "Meeting Debrief (5 min)",
+                        content: "Write down: key decisions, action items (who/what/when), questions that came up, follow-ups needed."
+                    },
+                    {
+                        icon: "🧠",
+                        title: "Mental Reset",
+                        content: "Take 2 minutes: stand up, stretch, get water. Let your brain process the meeting before diving into analysis."
+                    },
+                    {
+                        icon: "📂",
+                        title: "Reopen Context",
+                        content: "Open your analysis files, read your last 2-3 notes to remember where you were. Review your brain dump if you made one."
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Start Small",
+                        content: "Begin with a small, easy task (review a chart, check one number) to rebuild momentum. Don't jump into the hardest part immediately."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "recover",
+                        title: "Debrief, Reset, Reopen Context",
+                        description: "Capture meeting notes, take a break, then ease back into work"
+                    },
+                    {
+                        id: "immediate",
+                        title: "Jump Right Back In",
+                        description: "Go straight from meeting to analysis work"
+                    },
+                    {
+                        id: "delay",
+                        title: "Wait Until Tomorrow",
+                        description: "Schedule the analysis work for later"
+                    }
+                ],
+                correct: "recover",
+                explanation: "Post-meeting recovery is crucial for ADHD brains. The debrief captures important info, the reset helps transition, and easing back in prevents overwhelm."
+            },
+            {
+                id: 5,
+                title: "Email Interruption Management",
+                description: "Handle email interruptions without losing focus",
+                scenario: "You're working on a complex data analysis when an important email arrives. It's not urgent, but you feel the urge to respond immediately.",
+                strategy: [
+                    {
+                        icon: "📧",
+                        title: "Quick Scan Only",
+                        content: "Scan the subject and first line. If not urgent, mark as unread and return to it later. Don't open the full email."
+                    },
+                    {
+                        icon: "⏰",
+                        title: "Schedule Email Time",
+                        content: "Set specific times for email (e.g., 10 AM, 2 PM, 4 PM). Outside these times, don't check email."
+                    },
+                    {
+                        icon: "📝",
+                        title: "Quick Note if Needed",
+                        content: "If the email triggers a thought, write it down on your brain dump pad. Don't switch tasks."
+                    },
+                    {
+                        icon: "🔕",
+                        title: "Turn Off Notifications",
+                        content: "Disable email notifications during focus time. You'll check at scheduled times."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "scan-schedule",
+                        title: "Quick Scan, Schedule Response Time",
+                        description: "Check if urgent, if not mark unread and respond during scheduled email time"
+                    },
+                    {
+                        id: "respond-immediately",
+                        title: "Respond Immediately",
+                        description: "Stop analysis work and respond to the email right away"
+                    },
+                    {
+                        id: "ignore-completely",
+                        title: "Block All Email",
+                        description: "Disable email notifications and check only at scheduled times"
+                    }
+                ],
+                correct: "scan-schedule",
+                explanation: "Quick scanning prevents missing urgent items while maintaining focus. Scheduling email time creates boundaries and prevents constant context switching."
+            },
+            {
+                id: 6,
+                title: "Multi-Task Switching",
+                description: "Handle multiple urgent tasks without overwhelm",
+                scenario: "You have 3 urgent tasks: data analysis due today, stakeholder meeting prep for tomorrow, and a supplier issue to resolve. All feel equally important.",
+                strategy: [
+                    {
+                        icon: "📋",
+                        title: "List Everything",
+                        content: "Write down all 3 tasks. Break each into smallest possible steps. See the full picture."
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Pick ONE to Start",
+                        content: "Choose the one with the hardest deadline or biggest impact. Commit to finishing it before switching."
+                    },
+                    {
+                        icon: "⏱️",
+                        title: "Time Box Each Task",
+                        content: "Set a timer: 'I'll work on data analysis for 90 minutes, then switch.' This prevents endless switching."
+                    },
+                    {
+                        icon: "✅",
+                        title: "Complete Before Switching",
+                        content: "Finish the current task (or a clear milestone) before moving to the next. Don't leave things half-done."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "prioritize-sequence",
+                        title: "Prioritize & Sequence",
+                        description: "List all tasks, pick one to complete first, time-box it, finish before switching"
+                    },
+                    {
+                        id: "multitask",
+                        title: "Try to Do All at Once",
+                        description: "Work on all three tasks simultaneously, switching between them"
+                    },
+                    {
+                        id: "panic",
+                        title: "Panic and Do Random Tasks",
+                        description: "Start whichever task feels easiest in the moment"
+                    }
+                ],
+                correct: "prioritize-sequence",
+                explanation: "ADHD brains struggle with multitasking. Sequencing tasks and completing one before switching reduces overwhelm and improves quality. Time-boxing prevents endless switching."
+            },
+            {
+                id: 7,
+                title: "End-of-Day Transition",
+                description: "Close out workday and prepare for next day",
+                scenario: "It's 5 PM and you're finishing up. You have several incomplete tasks and tomorrow's schedule is packed. You feel anxious about leaving things unfinished.",
+                strategy: [
+                    {
+                        icon: "📝",
+                        title: "End-of-Day Brain Dump",
+                        content: "Write down everything: what you did, what's incomplete, what you're worried about, what's tomorrow's priority."
+                    },
+                    {
+                        icon: "📅",
+                        title: "Review Tomorrow's Calendar",
+                        content: "Look at tomorrow's meetings and deadlines. Identify your 3 must-do priorities. Block time for them."
+                    },
+                    {
+                        icon: "🔒",
+                        title: "Close All Work Tabs",
+                        content: "Close all work applications and tabs. Create physical separation from work. Your brain dump has everything you need."
+                    },
+                    {
+                        icon: "🧠",
+                        title: "Mental Shutdown Ritual",
+                        content: "Do something to signal 'work is done': go for a walk, change clothes, listen to music. Let your brain know it's time to rest."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "dump-close-ritual",
+                        title: "Brain Dump, Review Tomorrow, Close Work, Ritual",
+                        description: "Capture everything, plan tomorrow, physically close work, do shutdown ritual"
+                    },
+                    {
+                        id: "keep-working",
+                        title: "Keep Working Until Done",
+                        description: "Continue working until all tasks are complete"
+                    },
+                    {
+                        id: "just-leave",
+                        title: "Just Leave Everything",
+                        description: "Close laptop and leave without any transition"
+                    }
+                ],
+                correct: "dump-close-ritual",
+                explanation: "End-of-day transition is critical for ADHD. The brain dump captures everything so you don't worry about forgetting. Closing work creates boundaries. The ritual helps your brain transition to rest mode."
+            },
+            {
+                id: 8,
+                title: "Unexpected Urgent Request",
+                description: "Handle urgent requests that interrupt planned work",
+                scenario: "You've planned your day: 2 hours of data analysis, then meeting prep. At 9 AM, your manager asks you to drop everything for an urgent supplier negotiation call in 30 minutes.",
+                strategy: [
+                    {
+                        icon: "📋",
+                        title: "Capture Current State",
+                        content: "Quickly write down: where you are in data analysis, what you've completed, what's next, any important thoughts."
+                    },
+                    {
+                        icon: "💬",
+                        title: "Negotiate if Possible",
+                        content: "Ask: 'Can we do this in 2 hours? I'm mid-analysis and need 90 minutes to finish this section.' Sometimes urgency is flexible."
+                    },
+                    {
+                        icon: "⏰",
+                        title: "Set Return Time",
+                        content: "If you must switch, set a specific time to return: 'I'll return to analysis at 11:30 AM.' Put it in your calendar."
+                    },
+                    {
+                        icon: "🔄",
+                        title: "Quick Recovery Protocol",
+                        content: "After urgent task, read your capture note, reopen files, review last 2-3 things you did. Ease back in."
+                    }
+                ],
+                actions: [
+                    {
+                        id: "capture-negotiate-return",
+                        title: "Capture State, Negotiate Timing, Set Return Time",
+                        description: "Save your place, try to negotiate timing, set specific return time if you must switch"
+                    },
+                    {
+                        id: "drop-immediately",
+                        title: "Drop Everything Immediately",
+                        description: "Stop analysis and join the call right away"
+                    },
+                    {
+                        id: "refuse",
+                        title: "Refuse the Request",
+                        description: "Tell manager you can't interrupt your planned work"
+                    }
+                ],
+                correct: "capture-negotiate-return",
+                explanation: "Sometimes you must switch, but you can often negotiate timing. Capturing your state and setting a return time ensures you can recover quickly. Refusing might be appropriate if the request isn't truly urgent."
+            }
+        ];
+        
+        let currentTechnique = null;
+        let completedTechniques = [];
+        let correctAnswers = 0;
+        let selectedAction = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderTechniqueList();
+            loadTheme();
+        }
+        
+        function renderTechniqueList() {
+            const list = document.getElementById('techniqueList');
+            list.innerHTML = techniques.map(technique => {
+                const isCompleted = completedTechniques.includes(technique.id);
+                return `
+                    <div class="technique-item ${isCompleted ? 'completed' : ''} ${currentTechnique?.id === technique.id ? 'active' : ''}" 
+                         onclick="loadTechnique(${technique.id})">
+                        <div class="technique-title">${technique.title}</div>
+                        <div class="technique-desc">${technique.description}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadTechnique(id) {
+            currentTechnique = techniques.find(t => t.id === id);
+            selectedAction = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="technique-container">
+                    <div class="technique-header">
+                        <div class="technique-badge">Technique ${id} of ${techniques.length}</div>
+                        <h1 class="technique-title-large">${currentTechnique.title}</h1>
+                        <p class="technique-description">${currentTechnique.description}</p>
+                    </div>
+                    
+                    <div class="scenario-box">
+                        <h3>📋 Scenario</h3>
+                        <p>${currentTechnique.scenario}</p>
+                    </div>
+                    
+                    <div class="strategy-section">
+                        <div class="strategy-title">🛠️ Strategy</div>
+                        <div class="strategy-steps">
+                            ${currentTechnique.strategy.map(step => `
+                                <div class="strategy-step">
+                                    <div class="step-icon">${step.icon}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: What Would You Do?</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Based on the strategy above, choose the best approach for this scenario:
+                        </p>
+                        <div class="action-options" id="actionOptions">
+                            ${shuffleArray(currentTechnique.actions).map(action => `
+                                <div class="action-option" onclick="selectAction('${action.id}')" id="action-${action.id}">
+                                    <h4>${action.title}</h4>
+                                    <p>${action.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="feedback-panel" id="feedbackPanel"></div>
+                    </div>
+                </div>
+            `;
+            
+            renderTechniqueList();
+        }
+        
+        function selectAction(actionId) {
+            selectedAction = actionId;
+            
+            // Update UI
+            document.querySelectorAll('.action-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`action-${actionId}`).classList.add('selected');
+            
+            // Check answer
+            const isCorrect = actionId === currentTechnique.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedTechniques.includes(currentTechnique.id)) {
+                completedTechniques.push(currentTechnique.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Excellent Choice!' : 'Consider This Approach'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Perfect!</strong> You've chosen the right strategy for managing this context switch.</p>
+                           <p style="margin-top: 12px;">${currentTechnique.explanation}</p>`
+                        : `<p>The best approach is <strong>${currentTechnique.actions.find(a => a.id === currentTechnique.correct).title}</strong>.</p>
+                           <p style="margin-top: 12px;">${currentTechnique.explanation}</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            renderTechniqueList();
+            
+            // Check if all techniques completed
+            if (completedTechniques.length === techniques.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 2000);
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('statCompleted').textContent = `${completedTechniques.length}/${techniques.length}`;
+            const accuracy = completedTechniques.length > 0 
+                ? Math.round((correctAnswers / completedTechniques.length) * 100) 
+                : 0;
+            document.getElementById('statAccuracy').textContent = `${accuracy}%`;
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / techniques.length) * 100);
+            document.getElementById('finalCompleted').textContent = `${completedTechniques.length}/${techniques.length}`;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalScore').textContent = correctAnswers;
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Preparation Training</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        /* Print mode - minimal ink usage */
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-tertiary: #ffffff !important;
+                --bg-hover: #ffffff !important;
+                --border: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+            }
+            
+            /* Remove all backgrounds and shadows */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            /* Hide non-essential elements */
+            .sidebar, .detail-panel, button, .btn,
+            .view-actions, .completion-overlay,
+            .time-badge, .mini-calendar {
+                display: none !important;
+            }
+            
+            /* Full width for content */
+            .calendar-app {
+                display: block !important;
+            }
+            
+            .main-view {
+                padding: 20px !important;
+            }
+            
+            /* Simplify boxes */
+            .prep-step, .stakeholder-card {
+                border: 1px solid #000 !important;
+                margin: 10px 0 !important;
+                padding: 10px !important;
+            }
+            
+            /* Black text only */
+            h1, h2, h3, h4, h5, h6, p, span, div, label {
+                color: black !important;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .calendar-app {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .detail-panel {
+                display: none;
+            }
+            
+            /* Mobile-friendly view header */
+            .view-header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .view-title {
+                font-size: 22px;
+                flex: 1 1 100%;
+            }
+            
+            .view-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly main view */
+            .main-view {
+                padding: 16px;
+            }
+            
+            .upcoming-meeting-card {
+                padding: 16px;
+            }
+            
+            .meeting-title {
+                font-size: 18px;
+            }
+            
+            .meeting-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .prep-step {
+                padding: 16px;
+            }
+            
+            .step-content {
+                margin-left: 0;
+            }
+            
+            .step-actions {
+                margin-left: 0;
+            }
+            
+            .stakeholder-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Mobile-friendly inputs */
+            input[type="text"],
+            textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+            }
+            
+            /* Mobile-friendly prep steps */
+            .prep-step-content {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .prep-step-description {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            .completion-title {
+                font-size: 24px;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .summary-item {
+                padding: 16px;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .calendar-app {
+            display: grid;
+            grid-template-columns: 260px 1fr 380px;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .nav-section {
+            margin-bottom: 25px;
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .mini-calendar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .mini-calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .calendar-day {
+            padding: 6px 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .calendar-day.today {
+            background: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Main Calendar View */
+        .main-view {
+            background: var(--bg-primary);
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .view-title {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .view-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+        
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .upcoming-meeting-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .meeting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .meeting-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .meeting-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        
+        .time-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .meeting-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .meta-item {
+            background: var(--bg-tertiary);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .meta-icon {
+            font-size: 18px;
+        }
+        
+        .meta-content {
+            flex: 1;
+        }
+        
+        .meta-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .meta-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        .prep-progress {
+            margin-top: 24px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .progress-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .progress-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .prep-steps {
+            margin-top: 30px;
+        }
+        
+        .prep-step {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .prep-step.completed {
+            border-color: var(--accent-green);
+            background: var(--bg-tertiary);
+        }
+        
+        .prep-step.active {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .prep-step.completed .step-number {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .prep-step.completed .step-number::before {
+            content: '✓';
+        }
+        
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .step-content {
+            margin-left: 44px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .step-input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            margin-top: 12px;
+            resize: vertical;
+        }
+        
+        .step-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        
+        .stakeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .stakeholder-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+        
+        .stakeholder-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        
+        .stakeholder-role {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        
+        .stakeholder-input {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 6px 8px;
+            color: var(--text-primary);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+        
+        .stakeholder-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--bg-secondary);
+        }
+        
+        .step-actions {
+            margin-left: 44px;
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Detail Panel */
+        .detail-panel {
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            margin-bottom: 30px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        .tip-card {
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent-yellow);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .tip-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .tip-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .framework-card {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .framework-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .framework-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        /* Coming Soon Toast */
+        .coming-soon-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            z-index: 3000;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .coming-soon-toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .coming-soon-toast .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .coming-soon-toast .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .coming-soon-toast .message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .completion-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .completion-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .summary-grid {
+            display: grid;
+            gap: 16px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .summary-item {
+            background: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-green);
+        }
+        
+        .summary-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .summary-item-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="app-header">
+                <div class="app-icon">📅</div>
+                <div class="app-title">Calendar</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Views</div>
+                <div class="nav-item active">
+                    <span>📋</span>
+                    <span>Meeting Prep</span>
+                </div>
+                <div class="nav-item" onclick="showComingSoon('Week View')">
+                    <span>📅</span>
+                    <span>Week View</span>
+                </div>
+                <div class="nav-item" onclick="showComingSoon('Month View')">
+                    <span>📆</span>
+                    <span>Month View</span>
+                </div>
+            </div>
+            
+            <div class="mini-calendar">
+                <div class="mini-calendar-header">
+                    <span>◀</span>
+                    <span>December 2025</span>
+                    <span>▶</span>
+                </div>
+                <div class="calendar-grid">
+                    <div style="color: var(--text-muted); font-size: 10px;">S</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">M</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">T</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">W</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">T</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">F</div>
+                    <div style="color: var(--text-muted); font-size: 10px;">S</div>
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day">10</div>
+                    <div class="calendar-day">11</div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day">15</div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day today">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day">30</div>
+                    <div class="calendar-day">31</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main View -->
+        <div class="main-view">
+            <div class="view-header">
+                <div class="view-title">Meeting Preparation</div>
+                <div class="view-actions">
+                    <button class="btn btn-secondary" onclick="toggleTheme()" id="themeToggle" title="Toggle light/dark mode">☀️</button>
+                    <button class="btn btn-secondary" onclick="location.href='index.html'">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="upcoming-meeting-card">
+                <div class="meeting-header">
+                    <div>
+                        <div class="meeting-title">SIOP Cross-Functional Review</div>
+                        <div class="meeting-time">
+                            <span>📅</span>
+                            <span>Tomorrow, December 26 • 2:00 PM - 3:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="time-badge">⏰ 24h until meeting</div>
+                </div>
+                
+                <div class="meeting-meta">
+                    <div class="meta-item">
+                        <div class="meta-icon">⏱️</div>
+                        <div class="meta-content">
+                            <div class="meta-label">Duration</div>
+                            <div class="meta-value">60 minutes</div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-icon">👤</div>
+                        <div class="meta-content">
+                            <div class="meta-label">Your Role</div>
+                            <div class="meta-value">Present procurement update</div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-icon">👥</div>
+                        <div class="meta-content">
+                            <div class="meta-label">Attendees</div>
+                            <div class="meta-value">6 people</div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-icon">⏳</div>
+                        <div class="meta-content">
+                            <div class="meta-label">Prep Time</div>
+                            <div class="meta-value">30 minutes recommended</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prep-progress">
+                    <div class="progress-header">
+                        <div class="progress-title">Preparation Progress</div>
+                        <div class="progress-count"><span id="completedCount">0</span>/5 steps complete</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prep-steps">
+                <!-- Step 1: Clarify Objectives -->
+                <div class="prep-step active" id="step1">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Clarify Meeting Objectives</div>
+                    </div>
+                    <div class="step-content">
+                        <p style="margin-bottom: 12px;">Get crystal clear on what the meeting is trying to achieve and what YOU specifically need to deliver.</p>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            What is the meeting's main purpose?
+                        </label>
+                        <input type="text" class="step-input" placeholder="e.g., Review current supply status and identify risks to production schedule">
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            What decisions need to be made?
+                        </label>
+                        <textarea class="step-input" rows="3" placeholder="e.g., Approve use of alternative supplier for fuel injectors; Agree on revised timeline for Trent engine line"></textarea>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            What is YOUR specific contribution?
+                        </label>
+                        <textarea class="step-input" rows="3" placeholder="e.g., Present procurement supply status; Highlight gaps and risks; Recommend mitigation actions"></textarea>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeStep(1)">✓ Complete Step</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Know Your Stakeholders -->
+                <div class="prep-step" id="step2">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Know Your Stakeholders</div>
+                    </div>
+                    <div class="step-content">
+                        <p style="margin-bottom: 12px;">Each stakeholder cares about different things. Understanding their perspective helps you address concerns proactively.</p>
+                        
+                        <div class="stakeholder-grid">
+                            <div class="stakeholder-card">
+                                <div class="stakeholder-name">Sarah Chen</div>
+                                <div class="stakeholder-role">Central Planning Lead</div>
+                                <input type="text" class="stakeholder-input" placeholder="Their priority...">
+                                <input type="text" class="stakeholder-input" placeholder="Their concern...">
+                            </div>
+                            <div class="stakeholder-card">
+                                <div class="stakeholder-name">James Mitchell</div>
+                                <div class="stakeholder-role">Procurement Director</div>
+                                <input type="text" class="stakeholder-input" placeholder="Their priority...">
+                                <input type="text" class="stakeholder-input" placeholder="Their concern...">
+                            </div>
+                            <div class="stakeholder-card">
+                                <div class="stakeholder-name">Michael Brown</div>
+                                <div class="stakeholder-role">Production Planning</div>
+                                <input type="text" class="stakeholder-input" placeholder="Their priority...">
+                                <input type="text" class="stakeholder-input" placeholder="Their concern...">
+                            </div>
+                            <div class="stakeholder-card">
+                                <div class="stakeholder-name">Emma Rodriguez</div>
+                                <div class="stakeholder-role">Finance</div>
+                                <input type="text" class="stakeholder-input" placeholder="Their priority...">
+                                <input type="text" class="stakeholder-input" placeholder="Their concern...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeStep(2)">✓ Complete Step</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Prepare Key Messages -->
+                <div class="prep-step" id="step3">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Prepare Key Messages (Max 3)</div>
+                    </div>
+                    <div class="step-content">
+                        <p style="margin-bottom: 12px;">Use the SITUATION → IMPACT → ASK framework for each message.</p>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Message #1
+                        </label>
+                        <textarea class="step-input" rows="4" placeholder="SITUATION: [Current state]&#10;IMPACT: [Why it matters/consequences]&#10;ASK: [What you need from them]"></textarea>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Message #2
+                        </label>
+                        <textarea class="step-input" rows="4" placeholder="SITUATION: [Current state]&#10;IMPACT: [Why it matters/consequences]&#10;ASK: [What you need from them]"></textarea>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Message #3
+                        </label>
+                        <textarea class="step-input" rows="4" placeholder="SITUATION: [Current state]&#10;IMPACT: [Why it matters/consequences]&#10;ASK: [What you need from them]"></textarea>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeStep(3)">✓ Complete Step</button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Anticipate Questions -->
+                <div class="prep-step" id="step4">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Anticipate Tough Questions</div>
+                    </div>
+                    <div class="step-content">
+                        <p style="margin-bottom: 12px;">Prepare for 3-5 predictable questions. Having answers ready reduces anxiety and keeps you focused.</p>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Question 1
+                        </label>
+                        <input type="text" class="step-input" placeholder="e.g., Why didn't we catch this supply gap earlier?">
+                        <textarea class="step-input" rows="2" placeholder="Your prepared answer..."></textarea>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Question 2
+                        </label>
+                        <input type="text" class="step-input" placeholder="e.g., What's the cost impact?">
+                        <textarea class="step-input" rows="2" placeholder="Your prepared answer..."></textarea>
+                        
+                        <label style="display: block; margin-top: 16px; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">
+                            Question 3
+                        </label>
+                        <input type="text" class="step-input" placeholder="e.g., How do we prevent this in future?">
+                        <textarea class="step-input" rows="2" placeholder="Your prepared answer..."></textarea>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeStep(4)">✓ Complete Step</button>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Final Checklist -->
+                <div class="prep-step" id="step5">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Pre-Meeting Checklist</div>
+                    </div>
+                    <div class="step-content">
+                        <p style="margin-bottom: 12px;">A quick visual checklist right before the meeting calms the "did I forget something?" anxiety.</p>
+                        
+                        <div style="display: grid; gap: 8px; margin-top: 16px;">
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Materials prepared (slides, handouts ready)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Key messages memorized (can state all 3 without notes)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Supporting data accessible</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Calendar reviewed (no conflicts)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Tech check done (camera/mic tested if virtual)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Notepad ready for actions/decisions</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-primary); border-radius: 6px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span style="color: var(--text-secondary); font-size: 14px;">Energy managed (have water, not rushed)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeStep(5)">✓ Prep Complete!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detail Panel -->
+        <div class="detail-panel">
+            <div class="panel-section">
+                <div class="panel-title">💡 ADHD Strategies</div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <div class="tip-title">Start with "Why am I here?"</div>
+                    <div class="tip-content">Before diving into prep, get crystal clear on what the meeting is trying to achieve and what YOU specifically need to deliver.</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">👥</div>
+                    <div class="tip-title">Map interests & concerns</div>
+                    <div class="tip-content">Each stakeholder cares about different things. Understanding their perspective helps you address concerns proactively.</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">💬</div>
+                    <div class="tip-title">3 Key Messages Max</div>
+                    <div class="tip-content">Don't try to cover everything. Pick 3 critical messages. More than that and people tune out.</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">❓</div>
+                    <div class="tip-title">Prepare for predictable questions</div>
+                    <div class="tip-content">You can't prepare for every question, but most are predictable. Having answers ready reduces anxiety.</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">✅</div>
+                    <div class="tip-title">Visual checklist = confidence</div>
+                    <div class="tip-content">A quick visual checklist right before the meeting calms the "did I forget something?" anxiety.</div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <div class="panel-title">📊 Message Framework</div>
+                
+                <div class="framework-card">
+                    <div class="framework-title">📊 THE SITUATION</div>
+                    <div class="framework-description">Current state in one clear sentence</div>
+                </div>
+                
+                <div class="framework-card">
+                    <div class="framework-title">⚠️ THE IMPACT</div>
+                    <div class="framework-description">Why it matters & what the consequences are</div>
+                </div>
+                
+                <div class="framework-card">
+                    <div class="framework-title">✅ THE ASK</div>
+                    <div class="framework-description">What you need from them (decision, approval, input)</div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <div class="panel-title">🧘 Before You Join</div>
+                <div class="tip-card" style="border-left-color: var(--accent-blue);">
+                    <div class="tip-title">60-Second Grounding</div>
+                    <div class="tip-content">
+                        • Take 3 deep breaths (4 counts in, 4 counts out)<br>
+                        • Recall your 3 key messages<br>
+                        • Remind yourself: "I'm prepared. I have valuable insights."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coming Soon Toast -->
+    <div class="coming-soon-toast" id="comingSoonToast">
+        <div class="icon">🚧</div>
+        <div class="title">Coming Soon</div>
+        <div class="message" id="comingSoonMessage">This feature is not yet available in training mode.</div>
+    </div>
+    
+    <!-- Completion Overlay -->
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-card">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">You're Ready!</div>
+            <div class="completion-message">
+                You've completed all 5 preparation steps. You're well-prepared to deliver a confident, focused contribution to this meeting.
+            </div>
+            
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-item-title">🎯 Clear Objectives</div>
+                    <div class="summary-item-text">You know the meeting purpose, decisions needed, and your contribution.</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-title">👥 Stakeholder Awareness</div>
+                    <div class="summary-item-text">You understand key concerns and can address them proactively.</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-title">💬 Prepared Messages</div>
+                    <div class="summary-item-text">You have 3 clear messages using SITUATION → IMPACT → ASK.</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-title">❓ Question Ready</div>
+                    <div class="summary-item-text">You've anticipated tough questions with thoughtful responses.</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-title">✅ Final Checks Complete</div>
+                    <div class="summary-item-text">Materials ready, tech tested, energy managed.</div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="location.reload()" style="font-size: 16px; padding: 14px 32px;">
+                Practice Another Meeting
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        let completedSteps = new Set();
+        const totalSteps = 5;
+        
+        function completeStep(stepNum) {
+            if (completedSteps.has(stepNum)) return;
+            
+            completedSteps.add(stepNum);
+            document.getElementById(`step${stepNum}`).classList.add('completed');
+            document.getElementById(`step${stepNum}`).classList.remove('active');
+            
+            // Activate next step
+            if (stepNum < totalSteps) {
+                document.getElementById(`step${stepNum + 1}`).classList.add('active');
+            }
+            
+            updateProgress();
+            
+            // Check completion
+            if (completedSteps.size === totalSteps) {
+                setTimeout(() => {
+                    document.getElementById('completionOverlay').classList.add('show');
+                }, 500);
+            }
+        }
+        
+        function updateProgress() {
+            const completed = completedSteps.size;
+            const percentage = (completed / totalSteps) * 100;
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update toggle button
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (document.getElementById('themeToggle')) {
+                document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
+        // Coming Soon popup
+        function showComingSoon(featureName) {
+            const toast = document.getElementById('comingSoonToast');
+            const message = document.getElementById('comingSoonMessage');
+            message.textContent = `${featureName} is not yet available in training mode.`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Initialize theme
+        initTheme();
+    </script>
+</body>
+</html>

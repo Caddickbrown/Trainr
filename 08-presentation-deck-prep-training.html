@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Deck Prep Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --text-primary: #000000 !important;
+            }
+            * { background: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .presentation-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .slide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .slide-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .slide-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .slide-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .slide-item.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .slide-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .slide-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .slide-type {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .slide-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .slide-header {
+            margin-bottom: 32px;
+        }
+        
+        .slide-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .slide-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .slide-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .slide-preview {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 2px solid var(--border);
+        }
+        
+        .slide-preview h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .slide-preview-content {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .framework-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .framework-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .framework-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .framework-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .structure-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .structure-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .structure-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .structure-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .structure-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .structure-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .presentation-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .slide-title-large {
+                font-size: 24px;
+            }
+            
+            .slide-preview {
+                padding: 20px;
+                min-height: 300px;
+            }
+            
+            .framework-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .structure-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .structure-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .structure-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .structure-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            /* Ensure text is readable */
+            .slide-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .slide-preview-content {
+                font-size: 13px;
+                line-height: 1.6;
+            }
+            
+            .framework-step {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>📊 Deck Builder</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="slide-list" id="slideList">
+                <!-- Slides will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/4</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Presentation Deck Prep Training</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="slide-container">
+                    <div class="slide-header">
+                        <div class="slide-badge">Select a slide type to begin</div>
+                        <h1 class="slide-title-large">Build Executive Slide Decks</h1>
+                        <p class="slide-description">
+                            Learn the SITUATION → IMPACT → ASK framework for creating effective executive presentations. Practice structuring transformation updates and status reports.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/4</div>
+                    <div class="completion-stat-label">Slides</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've mastered the SITUATION → IMPACT → ASK framework! Use this structure for all your executive presentations.
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const slides = [
+            {
+                id: 1,
+                title: "Status Update Slide",
+                type: "Progress Report",
+                description: "Create a slide showing SIOP transformation progress for an executive review meeting.",
+                context: "You need to present Q1 transformation progress. The slide should be clear, data-driven, and highlight both wins and risks.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "One sentence: What is the current state? (e.g., 'Q1 SIOP transformation is 75% complete, on track for Q1 milestones.')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "2-3 bullet points with metrics: What has been achieved? What's the business value? (e.g., 'Reduced planning cycle time by 40%', 'Onboarded 2 strategic suppliers')"
+                    },
+                    {
+                        step: 3,
+                        title: "RISKS/BLOCKERS",
+                        content: "Only if action needed: What's blocking progress? What needs attention? (e.g., 'Supplier capacity constraints - monitoring closely')"
+                    },
+                    {
+                        step: 4,
+                        title: "ASK",
+                        content: "What do you need? Decision? Resources? Approval? (e.g., 'No action needed - FYI only' or 'Approval needed for Q2 budget increase')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → IMPACT → ASK",
+                        description: "Clear structure with situation, impact metrics, and ask"
+                    },
+                    {
+                        id: "detailed-process",
+                        title: "Detailed Process Flow",
+                        description: "Shows all steps and process details"
+                    },
+                    {
+                        id: "data-heavy",
+                        title: "Data-Heavy Slide",
+                        description: "Lots of charts and numbers without structure"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "SIOP Transformation - Q1 Progress",
+                    content: `SITUATION
+Q1 SIOP transformation is 75% complete, on track for Q1 milestones.
+
+IMPACT
+• Reduced planning cycle time by 40% (from 6 days to 3.5 days)
+• Integrated demand forecasting with production planning
+• Onboarded 2 strategic suppliers to SIOP process
+
+RISK
+One supplier experiencing capacity constraints - monitoring closely. No impact expected this quarter.
+
+ASK
+No action needed - FYI only.`
+                }
+            },
+            {
+                id: 2,
+                title: "Problem/Issue Slide",
+                type: "Escalation",
+                description: "Present a supply gap issue that needs executive awareness and decision.",
+                context: "A critical supplier is experiencing capacity constraints that could impact Q2 production. You need to escalate this to executives.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "What is the problem? Be specific and factual. (e.g., 'Titanium supplier experiencing 30% capacity shortfall for Q2')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "What happens if not addressed? Quantify the business impact. (e.g., 'Could delay 15% of Q2 Trent engine production', 'Estimated revenue impact: £2M')"
+                    },
+                    {
+                        step: 3,
+                        title: "ROOT CAUSE",
+                        content: "Why is this happening? (e.g., 'Supplier equipment maintenance delays', 'Increased demand from other customers')"
+                    },
+                    {
+                        step: 4,
+                        title: "OPTIONS",
+                        content: "What are the possible solutions? Present 2-3 options with pros/cons. (e.g., 'Option 1: Find alternative supplier', 'Option 2: Adjust production schedule')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What decision is needed? Be specific. (e.g., 'Approve Option 1 - allocate £500K for alternative supplier onboarding')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → IMPACT → OPTIONS → ASK",
+                        description: "Structured escalation with clear decision request"
+                    },
+                    {
+                        id: "problem-only",
+                        title: "Problem Description Only",
+                        description: "Just describes the issue without solutions"
+                    },
+                    {
+                        id: "solution-only",
+                        title: "Solution Without Context",
+                        description: "Jumps to solution without explaining problem"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "Supply Gap Escalation - Titanium Supplier",
+                    content: `SITUATION
+Titanium supplier experiencing 30% capacity shortfall for Q2 due to equipment maintenance delays.
+
+IMPACT
+• Could delay 15% of Q2 Trent engine production
+• Estimated revenue impact: £2M
+• Risk to customer delivery commitments
+
+OPTIONS
+1. Find alternative supplier (recommended) - Cost: £500K, Timeline: 4 weeks
+2. Adjust production schedule - Impact: 2-week delay, no cost
+3. Wait for supplier recovery - Risk: May worsen, timeline uncertain
+
+ASK
+Approve Option 1 - allocate £500K for alternative supplier onboarding.`
+                }
+            },
+            {
+                id: 3,
+                title: "Recommendation Slide",
+                type: "Decision Support",
+                description: "Present a recommendation for improving the SIOP process with supporting data.",
+                context: "You want to recommend investing in a new planning tool that will improve SIOP efficiency. You need executive buy-in.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "Current state and pain points. (e.g., 'Current planning process is manual, takes 6 days, prone to errors')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "What's the cost of the current state? What opportunity exists? (e.g., 'Manual errors cost £500K annually', 'Automation could free 2 FTE')"
+                    },
+                    {
+                        step: 3,
+                        title: "RECOMMENDATION",
+                        content: "What are you proposing? Be specific. (e.g., 'Invest in PlanningPro tool - £200K one-time cost')"
+                    },
+                    {
+                        step: 4,
+                        title: "BENEFITS",
+                        content: "What's the ROI? Quantify benefits. (e.g., 'Reduces planning time by 50%', 'ROI: 18 months', 'Eliminates manual errors')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What approval is needed? (e.g., 'Approve £200K investment for PlanningPro tool')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → IMPACT → RECOMMENDATION → ASK",
+                        description: "Builds case with data, then presents recommendation"
+                    },
+                    {
+                        id: "feature-list",
+                        title: "Feature List",
+                        description: "Lists tool features without business case"
+                    },
+                    {
+                        id: "cost-only",
+                        title: "Cost-Focused",
+                        description: "Focuses only on cost without benefits"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "Recommendation: PlanningPro Tool Investment",
+                    content: `SITUATION
+Current planning process is manual, takes 6 days, prone to errors. Teams spend significant time on data entry and validation.
+
+IMPACT
+• Manual errors cost £500K annually in rework
+• 2 FTE spend 60% of time on manual tasks
+• Planning delays impact production schedules
+
+RECOMMENDATION
+Invest in PlanningPro tool - £200K one-time cost, £20K annual maintenance.
+
+BENEFITS
+• Reduces planning time by 50% (6 days → 3 days)
+• Eliminates manual errors through automation
+• Frees 2 FTE for strategic work
+• ROI: 18 months
+
+ASK
+Approve £200K investment for PlanningPro tool.`
+                }
+            },
+            {
+                id: 4,
+                title: "Transformation Update",
+                type: "Strategic Update",
+                description: "Provide a high-level transformation update showing progress, learnings, and next phase.",
+                context: "You're presenting the SIOP transformation journey so far - what's worked, what you've learned, and what's next.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "Where are we in the transformation? (e.g., 'Completed Phase 1 (process mapping), starting Phase 2 (implementation)')"
+                    },
+                    {
+                        step: 2,
+                        title: "PROGRESS",
+                        content: "Key achievements and milestones reached. (e.g., 'Mapped 5 core processes', 'Trained 20 team members', 'Piloted new process with 2 suppliers')"
+                    },
+                    {
+                        step: 3,
+                        title: "LEARNINGS",
+                        content: "What have you learned? What's working? What needs adjustment? (e.g., 'Data integration takes longer than expected', 'Stakeholder buy-in is critical')"
+                    },
+                    {
+                        step: 4,
+                        title: "NEXT PHASE",
+                        content: "What's coming next? Timeline and key activities. (e.g., 'Phase 2: Full rollout to all suppliers, Q2 2025')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What support/resources needed? (e.g., 'No ask - FYI' or 'Approve Phase 2 budget of £300K')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → PROGRESS → LEARNINGS → NEXT → ASK",
+                        description: "Tells transformation story with clear structure"
+                    },
+                    {
+                        id: "timeline-only",
+                        title: "Timeline Only",
+                        description: "Shows dates without context or learnings"
+                    },
+                    {
+                        id: "achievements-only",
+                        title: "Achievements List",
+                        description: "Lists wins without structure or next steps"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "SIOP Transformation - Phase 1 Complete",
+                    content: `SITUATION
+Completed Phase 1 (process mapping and pilot), starting Phase 2 (full implementation).
+
+PROGRESS
+• Mapped 5 core SIOP processes
+• Trained 20 team members on new workflows
+• Piloted new process with 2 strategic suppliers
+• Reduced planning cycle time by 40%
+
+LEARNINGS
+• Data integration takes 2x longer than estimated
+• Stakeholder buy-in is critical for adoption
+• Weekly check-ins prevent scope creep
+• Supplier onboarding requires hands-on support
+
+NEXT PHASE
+Phase 2: Full rollout to all suppliers, Q2 2025
+• Onboard remaining 8 suppliers
+• Scale training program
+• Implement full data integration
+
+ASK
+Approve Phase 2 budget of £300K.`
+                }
+            },
+            {
+                id: 5,
+                title: "Budget Request Slide",
+                type: "Resource Request",
+                description: "Request additional budget for SIOP transformation initiatives.",
+                context: "You need to request £150K additional budget for Q2 to accelerate supplier onboarding. Current budget is insufficient.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "Current state and why budget is needed. (e.g., 'Current budget covers 4 suppliers, need to onboard 8 to meet Q2 goals')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "What happens without additional budget? What's the opportunity cost? (e.g., 'Will delay transformation by 3 months', 'Miss Q2 supplier integration targets')"
+                    },
+                    {
+                        step: 3,
+                        title: "REQUEST",
+                        content: "What exactly are you requesting? Be specific. (e.g., '£150K additional budget for Q2 supplier onboarding')"
+                    },
+                    {
+                        step: 4,
+                        title: "BENEFITS",
+                        content: "What will this enable? Quantify the value. (e.g., 'Enables 8 supplier onboarding vs 4', 'Accelerates transformation by 3 months', 'ROI: £500K in efficiency gains')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What approval is needed? (e.g., 'Approve £150K additional budget for Q2 supplier onboarding')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → IMPACT → REQUEST → BENEFITS → ASK",
+                        description: "Builds case for budget with clear business value"
+                    },
+                    {
+                        id: "cost-only",
+                        title: "Cost Breakdown Only",
+                        description: "Lists costs without business case or impact"
+                    },
+                    {
+                        id: "benefits-only",
+                        title: "Benefits Without Context",
+                        description: "Shows benefits without explaining why budget is needed"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "Budget Request: Q2 Supplier Onboarding",
+                    content: `SITUATION
+Current budget covers onboarding 4 suppliers in Q2. Need to onboard 8 suppliers to meet transformation goals.
+
+IMPACT WITHOUT BUDGET
+• Will delay transformation by 3 months
+• Miss Q2 supplier integration targets
+• Reduced efficiency gains from delayed integration
+
+REQUEST
+£150K additional budget for Q2 supplier onboarding (training, integration, support).
+
+BENEFITS
+• Enables 8 supplier onboarding vs 4 (100% increase)
+• Accelerates transformation by 3 months
+• ROI: £500K in efficiency gains over 12 months
+• Meets Q2 transformation milestones
+
+ASK
+Approve £150K additional budget for Q2 supplier onboarding.`
+                }
+            },
+            {
+                id: 6,
+                title: "Risk Mitigation Slide",
+                type: "Risk Management",
+                description: "Present a risk that needs attention and proposed mitigation.",
+                context: "You've identified a risk: key supplier dependency could impact production if supplier has issues. You need to present mitigation options.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "What is the risk? Be specific. (e.g., 'Single supplier provides 60% of titanium components - high dependency risk')"
+                    },
+                    {
+                        step: 2,
+                        title: "IMPACT",
+                        content: "What happens if risk materializes? Quantify impact. (e.g., 'Could halt 40% of production', 'Estimated impact: £5M revenue at risk')"
+                    },
+                    {
+                        step: 3,
+                        title: "PROBABILITY",
+                        content: "How likely is this risk? (e.g., 'Medium probability - supplier has had 2 minor issues in past year')"
+                    },
+                    {
+                        step: 4,
+                        title: "MITIGATION OPTIONS",
+                        content: "What can we do? Present 2-3 options. (e.g., 'Option 1: Develop backup supplier', 'Option 2: Increase inventory buffer')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What decision/action is needed? (e.g., 'Approve Option 1 - allocate £200K for backup supplier development')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → IMPACT → PROBABILITY → MITIGATION → ASK",
+                        description: "Structured risk presentation with mitigation options"
+                    },
+                    {
+                        id: "risk-only",
+                        title: "Risk Description Only",
+                        description: "Describes risk without mitigation or ask"
+                    },
+                    {
+                        id: "mitigation-only",
+                        title: "Mitigation Without Context",
+                        description: "Jumps to solutions without explaining the risk"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "Risk: Single Supplier Dependency",
+                    content: `SITUATION
+Single supplier provides 60% of titanium components - high dependency risk.
+
+IMPACT IF RISK MATERIALIZES
+• Could halt 40% of Trent engine production
+• Estimated revenue impact: £5M
+• Customer delivery commitments at risk
+
+PROBABILITY
+Medium - supplier has had 2 minor capacity issues in past year. No major failures, but dependency is concerning.
+
+MITIGATION OPTIONS
+1. Develop backup supplier (recommended)
+   - Cost: £200K, Timeline: 3 months
+   - Reduces dependency to 30%
+2. Increase inventory buffer
+   - Cost: £150K, Ongoing: £50K/year
+   - Provides 2-month buffer
+3. Monitor closely (status quo)
+   - Cost: Minimal
+   - Risk: No reduction in dependency
+
+ASK
+Approve Option 1 - allocate £200K for backup supplier development.`
+                }
+            },
+            {
+                id: 7,
+                title: "Lessons Learned Slide",
+                type: "Retrospective",
+                description: "Share key learnings from a completed project or phase.",
+                context: "You've completed Phase 1 of SIOP transformation. You need to share what worked, what didn't, and what you'll do differently.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "What was completed? (e.g., 'Completed Phase 1: Process mapping and pilot with 2 suppliers')"
+                    },
+                    {
+                        step: 2,
+                        title: "WHAT WORKED",
+                        content: "What went well? What should we keep doing? (e.g., 'Weekly check-ins prevented scope creep', 'Supplier training was effective')"
+                    },
+                    {
+                        step: 3,
+                        title: "WHAT DIDN'T WORK",
+                        content: "What challenges did we face? What needs improvement? (e.g., 'Data integration took 2x longer than estimated', 'Initial training was too technical')"
+                    },
+                    {
+                        step: 4,
+                        title: "WHAT WE'LL DO DIFFERENTLY",
+                        content: "How will we adjust? What changes for next phase? (e.g., 'Add buffer time for data integration', 'Simplify training materials')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What support/resources needed? (e.g., 'No ask - sharing learnings' or 'Approve adjusted timeline for Phase 2')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → WHAT WORKED → WHAT DIDN'T → CHANGES → ASK",
+                        description: "Structured retrospective with actionable learnings"
+                    },
+                    {
+                        id: "complaints-only",
+                        title: "Problems Only",
+                        description: "Focuses only on what went wrong"
+                    },
+                    {
+                        id: "achievements-only",
+                        title: "Achievements Only",
+                        description: "Lists wins without addressing challenges"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "Phase 1 Lessons Learned",
+                    content: `SITUATION
+Completed Phase 1: Process mapping and pilot with 2 suppliers.
+
+WHAT WORKED
+• Weekly check-ins prevented scope creep
+• Supplier training was effective - 90% adoption rate
+• Process mapping revealed 3 key bottlenecks
+• Pilot suppliers saw 30% efficiency improvement
+
+WHAT DIDN'T WORK
+• Data integration took 2x longer than estimated (4 weeks vs 2 weeks)
+• Initial training materials were too technical
+• Supplier onboarding required more hands-on support than planned
+• Change management needed more time
+
+WHAT WE'LL DO DIFFERENTLY
+• Add 50% buffer time for data integration tasks
+• Simplify training materials - more visuals, less text
+• Increase hands-on support allocation (2x resources)
+• Extend change management timeline by 2 weeks
+
+ASK
+Approve adjusted Phase 2 timeline with these learnings incorporated.`
+                }
+            },
+            {
+                id: 8,
+                title: "Quick Update Slide",
+                type: "Status Update",
+                description: "Provide a brief status update in a time-constrained meeting.",
+                context: "You have 3 minutes in a weekly standup to update the team on SIOP transformation progress. Keep it brief and focused.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "SITUATION",
+                        content: "One sentence: Where are we? (e.g., 'On track with Q2 milestones, 60% complete')"
+                    },
+                    {
+                        step: 2,
+                        title: "KEY UPDATE",
+                        content: "One key thing: What's new? What's the headline? (e.g., 'Completed supplier onboarding for 3 suppliers this week')"
+                    },
+                    {
+                        step: 3,
+                        title: "BLOCKER (if any)",
+                        content: "Only if blocking: What's in the way? (e.g., 'Waiting on IT for system access - need by Friday')"
+                    },
+                    {
+                        step: 4,
+                        title: "NEXT",
+                        content: "What's next? One sentence. (e.g., 'Onboarding 2 more suppliers next week')"
+                    },
+                    {
+                        step: 5,
+                        title: "ASK",
+                        content: "What do you need? Keep it brief. (e.g., 'No blockers' or 'Need IT access by Friday')"
+                    }
+                ],
+                structures: [
+                    {
+                        id: "situation-impact-ask",
+                        title: "SITUATION → UPDATE → BLOCKER → NEXT → ASK",
+                        description: "Brief, focused update structure for quick meetings"
+                    },
+                    {
+                        id: "detailed-report",
+                        title: "Detailed Report",
+                        description: "Comprehensive update with all details"
+                    },
+                    {
+                        id: "update-only",
+                        title: "Update Without Structure",
+                        description: "Just shares updates without clear structure"
+                    }
+                ],
+                correct: "situation-impact-ask",
+                sampleSlide: {
+                    title: "SIOP Transformation - Weekly Update",
+                    content: `SITUATION
+On track with Q2 milestones, 60% complete.
+
+KEY UPDATE
+Completed supplier onboarding for 3 suppliers this week. All suppliers now integrated into SIOP process.
+
+BLOCKER
+Waiting on IT for system access for Supplier D - need by Friday to stay on schedule.
+
+NEXT
+Onboarding 2 more suppliers next week. Starting data integration for Phase 2.
+
+ASK
+Need IT access for Supplier D by Friday.`
+                }
+            }
+        ];
+        
+        let currentSlide = null;
+        let completedSlides = [];
+        let correctAnswers = 0;
+        let selectedStructure = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderSlideList();
+            loadTheme();
+        }
+        
+        function renderSlideList() {
+            const list = document.getElementById('slideList');
+            list.innerHTML = slides.map(slide => {
+                const isCompleted = completedSlides.includes(slide.id);
+                return `
+                    <div class="slide-item ${isCompleted ? 'completed' : ''} ${currentSlide?.id === slide.id ? 'active' : ''}" 
+                         onclick="loadSlide(${slide.id})">
+                        <div class="slide-title">${slide.title}</div>
+                        <div class="slide-type">${slide.type}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadSlide(id) {
+            currentSlide = slides.find(s => s.id === id);
+            selectedStructure = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="slide-container">
+                    <div class="slide-header">
+                        <div class="slide-badge">Slide ${id} of ${slides.length}</div>
+                        <h1 class="slide-title-large">${currentSlide.title}</h1>
+                        <p class="slide-description">${currentSlide.description}</p>
+                    </div>
+                    
+                    <div class="slide-preview">
+                        <h3>📋 Context</h3>
+                        <div class="slide-preview-content">
+                            ${currentSlide.context}
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <div class="framework-title">📋 SITUATION → IMPACT → ASK Framework</div>
+                        <div class="framework-steps">
+                            ${currentSlide.framework.map(step => `
+                                <div class="framework-step">
+                                    <div class="step-number">${step.step}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: Choose the Right Structure</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Based on the framework above, which slide structure best fits this scenario?
+                        </p>
+                        <div class="structure-options" id="structureOptions">
+                            ${shuffleArray(currentSlide.structures).map(structure => `
+                                <div class="structure-option" onclick="selectStructure('${structure.id}')" id="structure-${structure.id}">
+                                    <h4>${structure.title}</h4>
+                                    <p>${structure.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div id="sampleSlidePanel" style="display: none; margin-top: 24px;">
+                            <div class="slide-preview">
+                                <h3>${currentSlide.sampleSlide.title}</h3>
+                                <div class="slide-preview-content" style="white-space: pre-line; text-align: left;">
+${currentSlide.sampleSlide.content}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-panel" id="feedbackPanel"></div>
+                    </div>
+                </div>
+            `;
+            
+            renderSlideList();
+        }
+        
+        function selectStructure(structureId) {
+            selectedStructure = structureId;
+            
+            // Update UI
+            document.querySelectorAll('.structure-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`structure-${structureId}`).classList.add('selected');
+            
+            // Show sample slide
+            document.getElementById('sampleSlidePanel').style.display = 'block';
+            
+            // Check answer
+            const isCorrect = structureId === currentSlide.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedSlides.includes(currentSlide.id)) {
+                completedSlides.push(currentSlide.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Perfect Structure!' : 'Consider This Structure'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Excellent!</strong> You've chosen the right structure for this executive presentation.</p>
+                           <p style="margin-top: 12px;">The SITUATION → IMPACT → ASK framework ensures executives get the context, understand the business value, and know what's needed from them.</p>
+                           <p style="margin-top: 12px;">Review the sample slide above to see how this structure works in practice.</p>`
+                        : `<p>The best structure for this scenario is <strong>${currentSlide.structures.find(s => s.id === currentSlide.correct).title}</strong>.</p>
+                           <p style="margin-top: 12px;">Why: ${currentSlide.structures.find(s => s.id === currentSlide.correct).description}</p>
+                           <p style="margin-top: 12px;">Executive slides need clear structure - SITUATION sets context, IMPACT shows value, ASK makes the request clear.</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            renderSlideList();
+            
+            // Check if all slides completed
+            if (completedSlides.length === slides.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 2000);
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('statCompleted').textContent = `${completedSlides.length}/${slides.length}`;
+            const accuracy = completedSlides.length > 0 
+                ? Math.round((correctAnswers / completedSlides.length) * 100) 
+                : 0;
+            document.getElementById('statAccuracy').textContent = `${accuracy}%`;
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / slides.length) * 100);
+            document.getElementById('finalCompleted').textContent = `${completedSlides.length}/${slides.length}`;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalScore').textContent = correctAnswers;
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        init();
+    </script>
+</body>
+</html>

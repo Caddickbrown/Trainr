@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Status Report Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        @media print {
+            :root, [data-theme="light"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+                max-width: 100% !important;
+            }
+            
+            button, script {
+                display: none !important;
+            }
+            
+            .section, .metric-box {
+                border: 1px solid #000 !important;
+                background: none !important;
+                margin: 8px 0 !important;
+                padding: 8px !important;
+            }
+            
+            input, textarea {
+                border: 1px solid #000 !important;
+                background: white !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .theme-toggle {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        
+        .template-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .template-header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .template-header .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            border-radius: 4px;
+        }
+        
+        .info-box strong {
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .metric-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .status-green {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-yellow {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .status-red {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .item-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: start;
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Mobile-friendly header controls */
+            .header-controls {
+                flex-wrap: wrap;
+                gap: 8px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 24px -20px;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .theme-toggle {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 16px;
+            }
+            
+            .header-controls a {
+                min-height: 44px;
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <button onclick="toggleTheme()" id="themeToggle" class="theme-toggle">☀️</button>
+        <a href="index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">← Back to Templates</a>
+    </div>
+    
+    <div class="template-header">
+        <h1>📊 Weekly Status Report</h1>
+        <div class="subtitle">SIOP Transformation Progress Update</div>
+    </div>
+    
+    <div class="info-box">
+        <strong>💡 How to Use This Template</strong>
+        <div style="color: var(--text-secondary); font-size: 14px;">
+            Fill this out weekly (same day each week). Keep it to one page. Focus on outcomes, not activities. Use this for executive updates, team syncs, or your own tracking.
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📅 Report Details</div>
+        <input type="text" class="input-field" placeholder="Week of: [Date]" style="width: 48%; display: inline-block; margin-right: 4%;">
+        <input type="text" class="input-field" placeholder="Report Date: [Date]" style="width: 48%; display: inline-block;">
+        <input type="text" class="input-field" placeholder="Reported by: [Your Name]">
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📈 Key Metrics</div>
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <div class="metric-label">Progress</div>
+                <input type="text" class="metric-value" placeholder="75%" style="border: none; background: none; padding: 0; width: 100%;">
+            </div>
+            <div class="metric-box">
+                <div class="metric-label">On Track?</div>
+                <select class="input-field" style="border: none; background: none; padding: 0;">
+                    <option>🟢 Yes</option>
+                    <option>🟡 At Risk</option>
+                    <option>🔴 Behind</option>
+                </select>
+            </div>
+            <div class="metric-box">
+                <div class="metric-label">Blockers</div>
+                <input type="text" class="metric-value" placeholder="2" style="border: none; background: none; padding: 0; width: 100%;">
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">✅ Progress This Week</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            What was accomplished? Focus on outcomes, not activities.
+        </div>
+        <textarea class="input-field" placeholder="• Completed process mapping for procurement planning cycle&#10;• Integrated demand forecasting with production planning&#10;• Onboarded 2 new strategic suppliers"></textarea>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">🎯 Key Wins / Highlights</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            What went well? What should be celebrated?
+        </div>
+        <textarea class="input-field" placeholder="• Reduced planning cycle time by 40%&#10;• Received positive feedback from stakeholders&#10;• Team collaboration improved significantly"></textarea>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">⚠️ Blockers / Risks</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            What's blocking progress? What risks need attention?
+        </div>
+        <div class="item-row">
+            <div>
+                <input type="text" class="input-field" placeholder="Blocker/Risk description" style="margin-bottom: 8px;">
+                <textarea class="input-field" placeholder="Impact and mitigation plan" style="min-height: 60px;"></textarea>
+            </div>
+            <select class="input-field" style="width: 120px;">
+                <option>🔴 Critical</option>
+                <option>🟡 Medium</option>
+                <option>🟢 Low</option>
+            </select>
+        </div>
+        <div class="item-row">
+            <div>
+                <input type="text" class="input-field" placeholder="Blocker/Risk description" style="margin-bottom: 8px;">
+                <textarea class="input-field" placeholder="Impact and mitigation plan" style="min-height: 60px;"></textarea>
+            </div>
+            <select class="input-field" style="width: 120px;">
+                <option>🔴 Critical</option>
+                <option>🟡 Medium</option>
+                <option>🟢 Low</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">🚀 Next Steps</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            What's planned for next week? Be specific.
+        </div>
+        <textarea class="input-field" placeholder="• Complete data validation phase by [date]&#10;• Schedule executive review meeting&#10;• Begin Q2 planning cycle preparation"></textarea>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">❓ Decisions Needed</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            What decisions are blocking progress? Who needs to decide?
+        </div>
+        <div class="item-row">
+            <input type="text" class="input-field" placeholder="Decision needed: [What]">
+            <input type="text" class="input-field" placeholder="Who?" style="width: 150px;">
+        </div>
+        <div class="item-row">
+            <input type="text" class="input-field" placeholder="Decision needed: [What]">
+            <input type="text" class="input-field" placeholder="Who?" style="width: 150px;">
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📝 Notes</div>
+        <textarea class="input-field" placeholder="Any additional context, learnings, or observations from this week..." style="min-height: 80px;"></textarea>
+    </div>
+    
+    <div style="margin-top: 48px; padding-top: 32px; border-top: 2px solid var(--border); display: flex; gap: 12px; flex-wrap: wrap;">
+        <button onclick="window.print()" style="padding: 14px 28px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            🖨️ Print Report
+        </button>
+        <button onclick="exportToPDF()" style="padding: 14px 28px; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            💾 Save as PDF
+        </button>
+    </div>
+    
+    <script>
+        function exportToPDF() {
+            alert('To save as PDF:\n\n1. Click "Print Report" above\n2. In the print dialog, select "Save as PDF" as your printer\n3. Click Save\n\nThis preserves all your filled-in information!');
+            window.print();
+        }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+</body>
+</html>

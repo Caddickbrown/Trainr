@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - RR Email</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --unread-bg: #eff6ff;
+            --urgent-bg: #fef2f2;
+            --urgent-border: #fecaca;
+            --urgent-hover: #fee2e2;
+            --important-bg: #fffbeb;
+            --important-border: #fed7aa;
+            --important-hover: #fef3c7;
+            --routine-bg: #f0fdf4;
+            --routine-border: #bbf7d0;
+            --routine-hover: #dcfce7;
+            --delegate-bg: #eff6ff;
+            --delegate-border: #bfdbfe;
+            --delegate-hover: #dbeafe;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-hover: #2d2d2d;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --unread-bg: #1e293b;
+            --urgent-bg: #3a1a1a;
+            --urgent-border: #5a2a2a;
+            --urgent-hover: #4a2020;
+            --important-bg: #3a2f1a;
+            --important-border: #5a4a2a;
+            --important-hover: #4a3a20;
+            --routine-bg: #1a3a2a;
+            --routine-border: #2a5a3a;
+            --routine-hover: #204a30;
+            --delegate-bg: #1a2a3a;
+            --delegate-border: #2a3a5a;
+            --delegate-hover: #20304a;
+        }
+        
+        /* Print mode - minimal ink usage */
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-hover: #ffffff !important;
+                --border: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+                --unread-bg: #ffffff !important;
+                --urgent-bg: #ffffff !important;
+                --important-bg: #ffffff !important;
+                --routine-bg: #ffffff !important;
+                --delegate-bg: #ffffff !important;
+            }
+            
+            /* Remove all backgrounds and shadows */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            /* Hide non-essential elements */
+            .sidebar, .top-bar, .email-detail-footer, 
+            .feedback-toast, .completion-overlay,
+            button, .timer-badge, .nav-item, .badge {
+                display: none !important;
+            }
+            
+            /* Simplify borders */
+            .email-item, .training-banner {
+                border: 1px solid #000 !important;
+                margin-bottom: 10px !important;
+            }
+            
+            /* Black text only */
+            h1, h2, h3, h4, h5, h6, p, span, div, label {
+                color: black !important;
+            }
+            
+            /* Minimal spacing */
+            .email-list {
+                padding: 10px !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* Email Client Layout */
+        .email-app {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100vh;
+            background: var(--bg-primary);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 12px;
+        }
+        
+        .sidebar-header {
+            padding: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .sidebar-header .subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        .nav-item {
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--accent-red);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .training-stats {
+            margin-top: auto;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .stat-value.green {
+            color: var(--accent-green);
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Top Bar */
+        .top-bar-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 12px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .top-bar-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--text-secondary);
+        }
+        
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .timer-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .timer-badge .time {
+            color: var(--text-primary);
+        }
+        
+        /* Training Banner */
+        .training-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .training-banner-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .training-banner-content p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar-inline {
+            width: 200px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Email List */
+        .email-list {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+        }
+        
+        .email-item {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .email-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        .email-item.unread {
+            background: var(--unread-bg);
+        }
+        
+        .email-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-blue);
+        }
+        
+        .email-item.triaged {
+            background: var(--bg-secondary);
+            opacity: 0.5;
+            position: relative;
+        }
+        
+        .email-item.triaged::before {
+            content: '✓';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-green);
+        }
+        
+        .email-item.triaged:hover {
+            background: var(--bg-hover);
+            opacity: 0.7;
+        }
+        
+        .email-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .email-sender {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        .email-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .email-subject {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .email-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Email Detail Panel */
+        .email-detail {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 600px;
+            height: 100vh;
+            background: var(--bg-primary);
+            box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .email-detail.active {
+            right: 0;
+        }
+        
+        .email-detail-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .email-detail-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .email-meta {
+            margin-bottom: 24px;
+        }
+        
+        .email-meta-row {
+            display: flex;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .email-meta-label {
+            width: 80px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .email-meta-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .email-detail-subject {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        [data-theme="dark"] .email-detail-subject {
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .email-detail-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        [data-theme="dark"] .email-detail-content {
+            color: #d1d5db;
+        }
+        
+        [data-theme="dark"] .email-detail-subject {
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        [data-theme="dark"] .email-meta-value {
+            color: #ffffff;
+        }
+        
+        .email-detail-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+        
+        .triage-question {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .triage-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .triage-btn {
+            padding: 16px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        
+        .triage-btn:hover {
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .triage-btn.urgent {
+            border-color: var(--urgent-border);
+            background: var(--urgent-bg);
+        }
+        
+        .triage-btn.urgent:hover {
+            border-color: var(--accent-red);
+            background: var(--urgent-hover);
+        }
+        
+        .triage-btn.important {
+            border-color: var(--important-border);
+            background: var(--important-bg);
+        }
+        
+        .triage-btn.important:hover {
+            border-color: var(--accent-orange);
+            background: var(--important-hover);
+        }
+        
+        .triage-btn.routine {
+            border-color: var(--routine-border);
+            background: var(--routine-bg);
+        }
+        
+        .triage-btn.routine:hover {
+            border-color: var(--accent-green);
+            background: var(--routine-hover);
+        }
+        
+        .triage-btn.delegate {
+            border-color: var(--delegate-border);
+            background: var(--delegate-bg);
+        }
+        
+        .triage-btn.delegate:hover {
+            border-color: var(--accent-blue);
+            background: var(--delegate-hover);
+        }
+        
+        .triage-btn-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .triage-btn-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .triage-btn-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Feedback Toast */
+        .feedback-toast {
+            position: fixed;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+            max-width: 500px;
+            border: 2px solid var(--border);
+            transition: bottom 0.4s ease;
+            z-index: 2000;
+        }
+        
+        .feedback-toast.show {
+            bottom: 40px;
+        }
+        
+        .feedback-toast.correct {
+            border-color: var(--accent-green);
+            background: #f0fdf4;
+        }
+        
+        .feedback-toast.incorrect {
+            border-color: var(--accent-red);
+            background: #fef2f2;
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .feedback-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        /* Coming Soon Toast */
+        .coming-soon-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            z-index: 3000;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .coming-soon-toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .coming-soon-toast .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .coming-soon-toast .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .coming-soon-toast .message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Completion Screen */
+        .completion-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-screen.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 24px 96px rgba(0,0,0,0.3);
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat {
+            text-align: center;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .completion-feedback {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+        
+        .completion-feedback h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .completion-feedback p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Help Panel */
+        .help-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .help-panel h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .help-panel ul {
+            margin-left: 20px;
+            color: #78350f;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        
+        @media (max-width: 1024px) {
+            .email-app {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .email-detail {
+                width: 100%;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .top-bar-btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            .timer-badge {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            
+            /* Mobile-friendly email items */
+            .email-item {
+                padding: 16px;
+            }
+            
+            .training-banner {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+            }
+            
+            .progress-bar-inline {
+                width: 100%;
+            }
+            
+            .help-panel {
+                margin: 16px;
+                padding: 12px 16px;
+            }
+            
+            /* Mobile-friendly triage buttons */
+            .triage-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .triage-btn {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .triage-btn-icon {
+                font-size: 18px;
+                margin-bottom: 4px;
+            }
+            
+            .triage-btn-label {
+                font-size: 13px;
+            }
+            
+            .triage-btn-desc {
+                font-size: 11px;
+            }
+            
+            /* Mobile-friendly feedback toast */
+            .feedback-toast {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+                transform: none;
+                bottom: 20px;
+                padding: 16px;
+            }
+            
+            .feedback-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .feedback-title {
+                font-size: 15px;
+            }
+            
+            .feedback-message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly email detail */
+            .email-detail-body {
+                padding: 16px;
+            }
+            
+            .email-detail-subject {
+                font-size: 20px;
+            }
+            
+            .email-detail-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion screen */
+            .completion-screen {
+                padding: 20px;
+            }
+            
+            .completion-content {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            .completion-title {
+                font-size: 24px;
+            }
+            
+            .completion-stats {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            /* Ensure text is readable */
+            .email-item {
+                font-size: 14px;
+            }
+            
+            .email-subject {
+                font-size: 15px;
+            }
+            
+            .email-preview {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>📧 RR Mail</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="nav-item active">
+                <span>📥</span> Inbox
+                <span class="badge" id="inboxCount">18</span>
+            </div>
+            <div class="nav-item" onclick="showComingSoon('Sent')">
+                <span>📤</span> Sent
+            </div>
+            <div class="nav-item" onclick="showComingSoon('Drafts')">
+                <span>📝</span> Drafts
+            </div>
+            <div class="nav-item" onclick="showComingSoon('Important')">
+                <span>⭐</span> Important
+            </div>
+            <div class="nav-item" onclick="showComingSoon('Trash')">
+                <span>🗑️</span> Trash
+            </div>
+            
+            <div class="training-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Triaged</span>
+                    <span class="stat-value" id="statTriaged">0/18</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Correct</span>
+                    <span class="stat-value stat-green" id="statCorrect">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h2>Inbox</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="top-bar-btn" title="Toggle light/dark mode">
+                        🌙
+                    </button>
+                    <button onclick="location.href='index.html'" class="top-bar-btn">
+                        ← Back to Hub
+                    </button>
+                    <div class="timer-badge">
+                        ⏱️ <span class="time" id="timer">00:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Training Banner -->
+            <div class="training-banner">
+                <div class="training-banner-content">
+                    <h3>Email Triage Training</h3>
+                    <p>Click each email to open and categorize it using the ADHD-friendly framework</p>
+                </div>
+                <div>
+                    <div class="progress-bar-inline">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help Panel -->
+            <div class="help-panel" style="margin: 20px 24px;">
+                <h4>💡 Quick Triage Guide</h4>
+                <ul>
+                    <li><strong>🔴 Urgent:</strong> Needs action TODAY - blocks others or critical deadline</li>
+                    <li><strong>🟠 Important:</strong> Significant but can wait 1-2 days - strategic decisions</li>
+                    <li><strong>🟢 Routine:</strong> Can be batched or scheduled - FYI/updates</li>
+                    <li><strong>🔵 Delegate:</strong> Someone else can handle better - forward/assign</li>
+                </ul>
+            </div>
+            
+            <!-- Email List -->
+            <div class="email-list" id="emailList">
+                <!-- Emails will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Email Detail Panel -->
+    <div class="email-detail" id="emailDetail">
+        <div class="email-detail-header">
+            <h3>Email Details</h3>
+            <button class="close-btn" onclick="closeEmail()">×</button>
+        </div>
+        <div class="email-detail-body" id="emailDetailBody">
+            <!-- Email content will be inserted here -->
+        </div>
+        <div class="email-detail-footer">
+            <div class="triage-question">How would you categorize this email?</div>
+            <div class="triage-buttons">
+                <button class="triage-btn urgent" onclick="checkAnswer('urgent')">
+                    <div class="triage-btn-icon">🔴</div>
+                    <div class="triage-btn-label">Urgent</div>
+                    <div class="triage-btn-desc">Today</div>
+                </button>
+                <button class="triage-btn important" onclick="checkAnswer('important')">
+                    <div class="triage-btn-icon">🟠</div>
+                    <div class="triage-btn-label">Important</div>
+                    <div class="triage-btn-desc">1-2 days</div>
+                </button>
+                <button class="triage-btn routine" onclick="checkAnswer('routine')">
+                    <div class="triage-btn-icon">🟢</div>
+                    <div class="triage-btn-label">Routine</div>
+                    <div class="triage-btn-desc">Batch later</div>
+                </button>
+                <button class="triage-btn delegate" onclick="checkAnswer('delegate')">
+                    <div class="triage-btn-icon">🔵</div>
+                    <div class="triage-btn-label">Delegate</div>
+                    <div class="triage-btn-desc">For team</div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feedback Toast -->
+    <div class="feedback-toast" id="feedbackToast">
+        <div class="feedback-header">
+            <div class="feedback-icon" id="feedbackIcon">✅</div>
+            <div class="feedback-title" id="feedbackTitle">Excellent!</div>
+        </div>
+        <div class="feedback-message" id="feedbackMessage"></div>
+    </div>
+    
+    <!-- Coming Soon Toast -->
+    <div class="coming-soon-toast" id="comingSoonToast">
+        <div class="icon">🚧</div>
+        <div class="title">Coming Soon</div>
+        <div class="message" id="comingSoonMessage">This feature is not yet available in training mode.</div>
+    </div>
+    
+    <!-- Completion Screen -->
+    <div class="completion-screen" id="completionScreen">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            
+            <div class="completion-stats">
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="finalCorrect">0</div>
+                    <div class="completion-stat-label">Correct</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="finalTime">0:00</div>
+                    <div class="completion-stat-label">Time</div>
+                </div>
+            </div>
+            
+            <div class="completion-feedback">
+                <h4>💡 Performance Feedback</h4>
+                <p id="performanceFeedback"></p>
+            </div>
+            
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const emails = [
+            {
+                from: "Sarah Chen (Central Planning Team)",
+                subject: "URGENT: Data mismatch in this week's SIOP cycle",
+                time: "8:45 AM",
+                body: "Hi, I've noticed a significant discrepancy between procurement's supply data and production's demand forecast for the Trent engine line. This is blocking our executive review meeting at 2 PM today. Can you verify the numbers in MRP and get back to me by noon?",
+                correct: "urgent",
+                explanation: "This blocks a critical meeting TODAY with executives. Immediate action required - clear deadline of noon."
+            },
+            {
+                from: "James Mitchell (Procurement Director)",
+                subject: "Thoughts on Q2 SIOP Process Improvements",
+                time: "Yesterday",
+                body: "When you have a moment, I'd love to discuss some ideas for improving our demand planning workflows next quarter. I'm thinking we could look at better integration between our teams. No rush, but let me know when you're free for a coffee chat.",
+                correct: "routine",
+                explanation: "Important strategic conversation but no urgency. Can be scheduled for later this week or next. Perfect for batching with other planning discussions."
+            },
+            {
+                from: "IT Service Desk",
+                subject: "Your request: MRP System Access - Awaiting Approval",
+                time: "2 days ago",
+                body: "Your request for enhanced MRP system privileges has been forwarded to your line manager for approval. Reference: REQ-4582. You'll receive an email once approved. Typical processing time is 3-5 business days.",
+                correct: "routine",
+                explanation: "FYI only - no action needed from you. Just monitoring information."
+            },
+            {
+                from: "Lisa Wang (Value Stream - Civil Aerospace)",
+                subject: "SIOP Training Session - Need your expertise",
+                time: "1 hour ago",
+                body: "We're running a SIOP introduction session for our new team members next Friday. Would you be able to run through the procurement planning cycle? It would be about 45 minutes. If you're not available, could you recommend someone from your team?",
+                correct: "delegate",
+                explanation: "While you could do this, someone from your team could handle it equally well. Good delegation opportunity to develop others."
+            },
+            {
+                from: "Mark Stevens (Warehouse Operations)",
+                subject: "RE: Storage constraints affecting load balancing",
+                time: "10 minutes ago",
+                body: "Following up on our discussion yesterday. The warehouse capacity issues are now affecting this month's production schedule. Three suppliers are waiting for storage allocation before they can ship. Can we set up a quick call today to resolve?",
+                correct: "urgent",
+                explanation: "Actively blocking suppliers and production schedule. Needs resolution today to prevent cascade effects."
+            },
+            {
+                from: "Emma Rodriguez (Finance)",
+                subject: "SIOP Financial Review - Input needed by Friday",
+                time: "This morning",
+                body: "Hi! We're compiling the monthly SIOP financial impact report. Could you provide the procurement variance analysis and any cost implications from this month's supply changes? I need this by end of day Friday for the board pack.",
+                correct: "important",
+                explanation: "Significant deadline (Friday) but not immediate. Important for board reporting. Schedule for Wednesday/Thursday to ensure quality."
+            },
+            {
+                from: "Rachel Green (HR Business Partner)",
+                subject: "Quarterly Performance Review - Schedule",
+                time: "Yesterday",
+                body: "It's time for quarterly performance reviews. Please complete your self-assessment in the portal and schedule a meeting with your manager. Deadline for completion is end of next week. Let me know if you have any questions about the process.",
+                correct: "important",
+                explanation: "Important for your development and has a clear deadline (next week), but not urgent. Can be scheduled around other priorities."
+            },
+            {
+                from: "David Kumar (Supplier Management)",
+                subject: "New supplier onboarding - documentation needed",
+                time: "This morning",
+                body: "We're bringing on a new strategic supplier for titanium components. As part of the SIOP integration, they need our demand forecast templates and planning calendar. This is pretty standard stuff. Could someone from your team send them the onboarding pack and walk them through it?",
+                correct: "delegate",
+                explanation: "Standard procedure that your team can handle. Good opportunity to delegate - doesn't require your specific expertise."
+            },
+            {
+                from: "Sophie Taylor (Central Planning)",
+                subject: "SIOP Process Mapping Workshop - Wednesday",
+                time: "3 days ago",
+                body: "Reminder: You signed up for the SIOP process mapping workshop this Wednesday 2-5 PM. Please bring examples of any pain points in the current procurement planning cycle. We'll be documenting the as-is process. Looking forward to your insights!",
+                correct: "important",
+                explanation: "You committed to this workshop and your expertise is specifically needed. It's strategic work for the transformation. Important to attend and prepare."
+            },
+            {
+                from: "Michael Brown (Production Planning)",
+                subject: "FYI: Demand forecast updated for Q4",
+                time: "This morning",
+                body: "Hi all, just a heads up that we've updated the Q4 demand forecast in the system following this month's SIOP review. Changes are mainly in the aftermarket segment (+8% vs previous forecast). The updated forecast is now available in the shared drive. No action needed, just keeping everyone in the loop.",
+                correct: "routine",
+                explanation: "Pure FYI - informational update. Good to be aware of but no action required. Can review when doing routine system checks."
+            },
+            {
+                from: "Tom Anderson (Executive Assistant - VP Operations)",
+                subject: "URGENT: Board presentation prep - need your input",
+                time: "30 minutes ago",
+                body: "The VP needs the SIOP transformation status slide updated for tomorrow's board meeting at 9 AM. Specifically, the procurement integration metrics and any blockers. Can you send the updated numbers and talking points by 5 PM today? This is critical for the presentation.",
+                correct: "urgent",
+                explanation: "Board meeting tomorrow morning - critical deadline today at 5 PM. This directly impacts executive presentation and requires immediate attention."
+            },
+            {
+                from: "Jennifer Park (Quality Assurance)",
+                subject: "Supplier audit findings - action required",
+                time: "Yesterday",
+                body: "We completed the quarterly audit of our top 5 suppliers. Three have minor compliance issues that need addressing. I've attached the full report. Can you review the procurement-related findings and coordinate responses? We need to address these before next month's supplier review meeting.",
+                correct: "important",
+                explanation: "Significant quality/compliance work with a clear deadline (before next month's meeting), but not immediate. Important to schedule this week."
+            },
+            {
+                from: "Robert Chen (IT - Systems Integration)",
+                subject: "MRP system maintenance window - this weekend",
+                time: "2 hours ago",
+                body: "FYI: We're performing scheduled maintenance on the MRP system this Saturday 2 AM - 6 AM. The system will be unavailable during this window. All data will be backed up beforehand. No action needed from your team, just wanted to give you advance notice.",
+                correct: "routine",
+                explanation: "Informational notice about scheduled maintenance. No action required - just good to know for planning purposes."
+            },
+            {
+                from: "Patricia Williams (Supply Chain Risk)",
+                subject: "Geopolitical risk assessment - your input needed",
+                time: "This morning",
+                body: "We're updating our quarterly risk assessment for suppliers in Eastern Europe. Could you provide insights on how potential supply disruptions might impact our SIOP planning? This feeds into our risk mitigation strategy. Deadline is next Friday.",
+                correct: "important",
+                explanation: "Strategic risk assessment work with a clear deadline (next Friday). Important for business continuity planning but not urgent."
+            },
+            {
+                from: "Alex Thompson (Junior Analyst - Your Team)",
+                subject: "Question about demand planning variance calculation",
+                time: "15 minutes ago",
+                body: "Hi, I'm working on this month's variance analysis and I'm not sure about the formula for calculating forecast accuracy. Could you clarify how we handle the rolling 3-month average? I want to make sure I'm doing this correctly before I finalize the report.",
+                correct: "delegate",
+                explanation: "This is a good learning opportunity for your team member. You could answer quickly, but consider delegating to a senior analyst or providing guidance rather than doing it yourself - develops their skills."
+            },
+            {
+                from: "Catherine Lee (Change Management Office)",
+                subject: "SIOP Transformation - Stakeholder feedback session",
+                time: "Yesterday",
+                body: "We're running stakeholder feedback sessions next week to gather input on the SIOP transformation progress. Your procurement team's perspective would be valuable. Would you be available for a 1-hour session Tuesday or Wednesday afternoon? Let me know what works.",
+                correct: "important",
+                explanation: "Strategic transformation work - your input is specifically valuable. Important to attend but can schedule around other priorities."
+            },
+            {
+                from: "System Notification (MRP)",
+                subject: "Automated Report: Weekly Inventory Levels",
+                time: "1 hour ago",
+                body: "Your weekly inventory level report for week 48 is now available. Key highlights: Overall inventory levels within target range. Three SKUs below reorder point flagged for review. Full report attached. This is an automated notification - no action required unless you identify issues.",
+                correct: "routine",
+                explanation: "Automated system report - informational. Review during routine weekly check, but no immediate action needed unless issues are flagged."
+            }
+        ];
+        
+        let currentEmailIndex = -1;
+        let currentEmail = 0;
+        let correctCount = 0;
+        let startTime = Date.now();
+        let timerInterval;
+        
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function renderEmailList() {
+            const emailList = document.getElementById('emailList');
+            
+            // Separate untriaged and triaged emails
+            const untriagedEmails = emails.map((email, index) => ({email, index})).filter(item => !item.email.triaged);
+            const triagedEmails = emails.map((email, index) => ({email, index})).filter(item => item.email.triaged);
+            
+            let html = '';
+            
+            // Render untriaged emails
+            html += untriagedEmails.map(({email, index}) => `
+                <div class="email-item unread" onclick="openEmail(${index})">
+                    <div class="email-item-header">
+                        <div class="email-sender">${email.from}</div>
+                        <div class="email-time">${email.time}</div>
+                    </div>
+                    <div class="email-subject">${email.subject}</div>
+                    <div class="email-preview">${email.body}</div>
+                </div>
+            `).join('');
+            
+            // Add separator if there are triaged emails
+            if (triagedEmails.length > 0) {
+                html += `
+                    <div style="padding: 16px 24px; background: var(--bg-secondary); border-top: 2px solid var(--border); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+                        <span>✓</span> TRIAGED (${triagedEmails.length})
+                    </div>
+                `;
+            }
+            
+            // Render triaged emails at bottom
+            html += triagedEmails.map(({email, index}) => {
+                const categoryBadge = getCategoryBadge(email.category);
+                
+                return `
+                    <div class="email-item triaged" onclick="openEmail(${index})" style="padding-left: 44px;">
+                        <div class="email-item-header">
+                            <div class="email-sender">${email.from}</div>
+                            <div class="email-time">${email.time} ${categoryBadge}</div>
+                        </div>
+                        <div class="email-subject">${email.subject}</div>
+                        <div class="email-preview">${email.body}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            emailList.innerHTML = html;
+        }
+        
+        function getCategoryBadge(category) {
+            const badges = {
+                'urgent': '<span style="display: inline-block; padding: 2px 8px; background: #fecaca; color: #991b1b; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 8px;">🔴 URGENT</span>',
+                'important': '<span style="display: inline-block; padding: 2px 8px; background: #fed7aa; color: #9a3412; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 8px;">🟠 IMPORTANT</span>',
+                'routine': '<span style="display: inline-block; padding: 2px 8px; background: #bbf7d0; color: #166534; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 8px;">🟢 ROUTINE</span>',
+                'delegate': '<span style="display: inline-block; padding: 2px 8px; background: #bfdbfe; color: #1e40af; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 8px;">🔵 DELEGATE</span>'
+            };
+            return badges[category] || '';
+        }
+        
+        function openEmail(index) {
+            currentEmailIndex = index;
+            const email = emails[index];
+            
+            document.getElementById('emailDetailBody').innerHTML = `
+                <div class="email-meta">
+                    <div class="email-meta-row">
+                        <div class="email-meta-label">From:</div>
+                        <div class="email-meta-value">${email.from}</div>
+                    </div>
+                    <div class="email-meta-row">
+                        <div class="email-meta-label">Time:</div>
+                        <div class="email-meta-value">${email.time}</div>
+                    </div>
+                </div>
+                <div class="email-detail-subject">${email.subject}</div>
+                <div class="email-detail-content">${email.body}</div>
+            `;
+            
+            document.getElementById('emailDetail').classList.add('active');
+        }
+        
+        function closeEmail() {
+            document.getElementById('emailDetail').classList.remove('active');
+        }
+        
+        function checkAnswer(answer) {
+            const email = emails[currentEmailIndex];
+            const isCorrect = answer === email.correct;
+            
+            if (isCorrect) {
+                correctCount++;
+            }
+            
+            // Mark this email as triaged
+            emails[currentEmailIndex].triaged = true;
+            emails[currentEmailIndex].category = answer;
+            
+            // Show feedback toast
+            const toast = document.getElementById('feedbackToast');
+            const icon = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const message = document.getElementById('feedbackMessage');
+            
+            if (isCorrect) {
+                toast.className = 'feedback-toast correct show';
+                icon.textContent = '✅';
+                title.textContent = 'Excellent!';
+                message.textContent = email.explanation;
+            } else {
+                toast.className = 'feedback-toast incorrect show';
+                icon.textContent = '❌';
+                title.textContent = 'Not quite';
+                message.innerHTML = `The best choice is <strong>${email.correct.toUpperCase()}</strong>.<br><br>${email.explanation}`;
+            }
+            
+            currentEmail++;
+            updateStats();
+            
+            // Close email panel smoothly after a brief moment (let user see the feedback)
+            setTimeout(() => {
+                closeEmail();
+                renderEmailList();
+            }, 400);
+            
+            // Hide toast after delay
+            setTimeout(() => {
+                toast.classList.remove('show');
+                
+                if (currentEmail >= emails.length) {
+                    setTimeout(showCompletion, 500);
+                }
+            }, 3000);
+        }
+        
+        function updateStats() {
+            document.getElementById('inboxCount').textContent = emails.length - currentEmail;
+            document.getElementById('statTriaged').textContent = `${currentEmail}/${emails.length}`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            const accuracy = currentEmail > 0 ? Math.round((correctCount / currentEmail) * 100) : 0;
+            document.getElementById('statAccuracy').textContent = accuracy + '%';
+            
+            const progress = (currentEmail / emails.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function showCompletion() {
+            clearInterval(timerInterval);
+            const accuracy = Math.round((correctCount / emails.length) * 100);
+            
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalCorrect').textContent = `${correctCount}/${emails.length}`;
+            document.getElementById('finalTime').textContent = document.getElementById('timer').textContent;
+            
+            let feedback = '';
+            if (accuracy >= 90) {
+                feedback = "Outstanding! You have an excellent grasp of email prioritization. You're ready to handle the high-volume communication in your SIOP role.";
+            } else if (accuracy >= 70) {
+                feedback = "Good job! You understand the core principles. With practice, you'll quickly distinguish between urgent, important, and routine communications.";
+            } else {
+                feedback = "Keep practicing! Focus on identifying clear deadlines (urgent), strategic importance (important), and delegation opportunities. You'll get there!";
+            }
+            
+            document.getElementById('performanceFeedback').textContent = feedback;
+            document.getElementById('completionScreen').classList.add('show');
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update toggle button
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Coming Soon popup
+        function showComingSoon(featureName) {
+            const toast = document.getElementById('comingSoonToast');
+            const message = document.getElementById('comingSoonMessage');
+            message.textContent = `${featureName} is not yet available in training mode.`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Initialize
+        initTheme();
+        renderEmailList();
+        updateStats();
+        timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

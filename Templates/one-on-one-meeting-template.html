@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-on-1 Meeting Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        @media print {
+            :root, [data-theme="light"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+                max-width: 100% !important;
+            }
+            
+            button, script {
+                display: none !important;
+            }
+            
+            .section {
+                border: 1px solid #000 !important;
+                background: none !important;
+                margin: 8px 0 !important;
+                padding: 8px !important;
+            }
+            
+            input, textarea {
+                border: 1px solid #000 !important;
+                background: white !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .theme-toggle {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        
+        .template-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .template-header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .template-header .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            border-radius: 4px;
+        }
+        
+        .info-box strong {
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .prompt-list {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .prompt-list li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .prompt-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Mobile-friendly header controls */
+            .header-controls {
+                flex-wrap: wrap;
+                gap: 8px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 24px -20px;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .theme-toggle {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 16px;
+            }
+            
+            .header-controls a {
+                min-height: 44px;
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <button onclick="toggleTheme()" id="themeToggle" class="theme-toggle">☀️</button>
+        <a href="index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">← Back to Templates</a>
+    </div>
+    
+    <div class="template-header">
+        <h1>🤝 1-on-1 Meeting Template</h1>
+        <div class="subtitle">Structure for building cross-functional relationships</div>
+    </div>
+    
+    <div class="info-box">
+        <strong>💡 How to Use This Template</strong>
+        <div style="color: var(--text-secondary); font-size: 14px;">
+            Fill out the pre-meeting prep section 1-2 days before. Use the agenda section during the meeting. Capture action items immediately. Structure prevents awkward silences and ensures you capture important information.
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📅 Meeting Details</div>
+        <div class="two-column">
+            <input type="text" class="input-field" placeholder="Meeting with: [Name]">
+            <input type="text" class="input-field" placeholder="Date: [Date]">
+        </div>
+        <input type="text" class="input-field" placeholder="Meeting purpose/goal: [e.g., Build relationship, discuss SIOP integration, get feedback]">
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📋 Pre-Meeting Prep</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            Fill this out 1-2 days before the meeting:
+        </div>
+        <div>
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">What do I want to learn?</div>
+            <textarea class="input-field" placeholder="• Their priorities and challenges&#10;• How SIOP transformation affects their work&#10;• What support they need from me"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">What do I want to share?</div>
+            <textarea class="input-field" placeholder="• Updates on transformation progress&#10;• How their input has been used&#10;• What's coming next"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">What do I need from them?</div>
+            <textarea class="input-field" placeholder="• Input on [specific topic]&#10;• Support with [specific task]&#10;• Decision on [specific item]"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Relationship building prompts:</div>
+            <div class="prompt-list">
+                <ul>
+                    <li>What's going well in their area?</li>
+                    <li>What challenges are they facing?</li>
+                    <li>How can I support them better?</li>
+                    <li>What do they wish I knew?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📝 Meeting Notes</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            Use this section during the meeting:
+        </div>
+        <div>
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Key Points Discussed:</div>
+            <textarea class="input-field" placeholder="• [Key point 1]&#10;• [Key point 2]&#10;• [Key point 3]"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Insights & Learnings:</div>
+            <textarea class="input-field" placeholder="What did I learn about their priorities, challenges, or perspective?"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Questions/Concerns Raised:</div>
+            <textarea class="input-field" placeholder="What questions or concerns did they raise?"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Follow-Up Topics:</div>
+            <textarea class="input-field" placeholder="What should we discuss next time?"></textarea>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">✅ Action Items</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            Capture action items immediately - who does what by when:
+        </div>
+        <div>
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">My Action Items:</div>
+            <textarea class="input-field" placeholder="• [Action] - Due: [Date]&#10;• [Action] - Due: [Date]"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Their Action Items:</div>
+            <textarea class="input-field" placeholder="• [Action] - Due: [Date]&#10;• [Action] - Due: [Date]"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Shared Action Items:</div>
+            <textarea class="input-field" placeholder="• [Action] - Due: [Date]&#10;• [Action] - Due: [Date]"></textarea>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">💭 Post-Meeting Reflection</div>
+        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+            Fill this out after the meeting:
+        </div>
+        <div>
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">What went well?</div>
+            <textarea class="input-field" placeholder="What made this meeting effective?"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">What could be improved?</div>
+            <textarea class="input-field" placeholder="What would make future meetings better?"></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Relationship Status:</div>
+            <select class="input-field">
+                <option>🟢 Strong - Regular collaboration</option>
+                <option>🟡 Building - Getting to know each other</option>
+                <option>🔴 Needs Work - Some tension or misalignment</option>
+            </select>
+        </div>
+        <div style="margin-top: 16px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Next Meeting:</div>
+            <input type="text" class="input-field" placeholder="Scheduled for: [Date] or [TBD]">
+        </div>
+    </div>
+    
+    <div style="margin-top: 48px; padding-top: 32px; border-top: 2px solid var(--border); display: flex; gap: 12px; flex-wrap: wrap;">
+        <button onclick="window.print()" style="padding: 14px 28px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            🖨️ Print Template
+        </button>
+        <button onclick="exportToPDF()" style="padding: 14px 28px; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            💾 Save as PDF
+        </button>
+    </div>
+    
+    <script>
+        function exportToPDF() {
+            alert('To save as PDF:\n\n1. Click "Print Template" above\n2. In the print dialog, select "Save as PDF" as your printer\n3. Click Save\n\nThis preserves all your filled-in information!');
+            window.print();
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+</body>
+</html>

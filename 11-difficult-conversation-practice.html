@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Difficult Conversation Practice Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --text-primary: #000000 !important;
+            }
+            * { background: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .conversation-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .scenario-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .scenario-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .scenario-item.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .scenario-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .scenario-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .scenario-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .scenario-header {
+            margin-bottom: 32px;
+        }
+        
+        .scenario-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .scenario-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .context-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-orange);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .context-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .context-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .framework-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .framework-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .framework-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .framework-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .approach-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .approach-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .approach-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .approach-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .approach-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .approach-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        /* Coming Soon Toast */
+        .coming-soon-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            z-index: 3000;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .coming-soon-toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .coming-soon-toast .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .coming-soon-toast .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .coming-soon-toast .message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 1024px) {
+            .conversation-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .scenario-title-large {
+                font-size: 24px;
+            }
+            
+            .framework-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .approach-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .approach-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .approach-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .approach-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            /* Ensure text is readable */
+            .scenario-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .context-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .framework-step {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="conversation-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>💬 Difficult Talks</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="scenario-list" id="scenarioList">
+                <!-- Scenarios will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/8</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Difficult Conversation Practice</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Select a scenario to begin</div>
+                        <h1 class="scenario-title-large">Master Difficult Conversations</h1>
+                        <p class="scenario-description">
+                            Practice handling challenging conversations with confidence. Learn frameworks for giving feedback, pushing back on unrealistic requests, and managing conflict professionally.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coming Soon Toast -->
+    <div class="coming-soon-toast" id="comingSoonToast">
+        <div class="icon">🚧</div>
+        <div class="title">Coming Soon</div>
+        <div class="message" id="comingSoonMessage">This feature is not yet available in training mode.</div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/8</div>
+                    <div class="completion-stat-label">Scenarios</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've learned key strategies for handling difficult conversations! Practice these frameworks to build confidence in challenging situations.
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const scenarios = [
+            {
+                id: 1,
+                title: "Pushing Back on Unrealistic Timeline",
+                description: "Say no to an unrealistic deadline request",
+                context: "Your manager asks you to complete a complex SIOP data analysis by Friday (3 days away). This normally takes 2 weeks. You have other urgent priorities. You need to push back professionally without seeming uncooperative.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Acknowledge the Request",
+                        content: "Start by acknowledging their need: 'I understand you need this analysis by Friday.' Shows you're listening, not defensive."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "State the Reality",
+                        content: "Be factual about constraints: 'This analysis typically takes 2 weeks because it requires data validation, stakeholder input, and quality checks.' Use data, not emotion."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Explain the Impact",
+                        content: "Show what would be compromised: 'To do this in 3 days, I'd need to reduce validation steps, which risks inaccurate results that could affect planning decisions.'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Propose Alternatives",
+                        content: "Offer solutions: 'I could deliver a high-level summary by Friday, or a full analysis by next Friday. Alternatively, if this is truly urgent, we could prioritize this over [other task].'"
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Ask for Decision",
+                        content: "Let them choose: 'Which option works best for you?' This shifts from 'no' to 'here are options' - collaborative, not confrontational."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "acknowledge-propose",
+                        title: "Acknowledge, State Reality, Propose Alternatives",
+                        description: "Acknowledge their need, explain constraints factually, then offer alternative solutions"
+                    },
+                    {
+                        id: "just-say-no",
+                        title: "Just Say No",
+                        description: "Simply refuse without explanation or alternatives"
+                    },
+                    {
+                        id: "agree-unrealistic",
+                        title: "Agree and Try to Do It",
+                        description: "Accept the unrealistic timeline and work extra hours to try to meet it"
+                    }
+                ],
+                correct: "acknowledge-propose",
+                explanation: "Pushing back requires acknowledging their need (shows respect), stating facts (not emotions), and proposing alternatives (shows problem-solving). This maintains relationships while protecting your work quality and boundaries."
+            },
+            {
+                id: 2,
+                title: "Giving Constructive Feedback",
+                description: "Provide feedback to a colleague about their work",
+                context: "A colleague on another team consistently provides incomplete data for SIOP planning, causing delays. You need to address this constructively. They're generally good at their job, but this specific issue is problematic.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Set the Context",
+                        content: "Start positively and set context: 'I wanted to talk about how we can improve our SIOP planning collaboration. You're great at [specific strength], and I think we can make our data handoff even smoother.'"
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Be Specific & Factual",
+                        content: "State the issue clearly: 'The last 3 planning cycles, the data submissions were missing inventory levels and lead times. This caused delays because I had to follow up.' Use facts, not judgments."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Explain Impact",
+                        content: "Show why it matters: 'When data is incomplete, it delays the planning cycle by 2-3 days, which affects downstream teams.' Connect to business impact."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Assume Positive Intent",
+                        content: "Frame generously: 'I know you're busy and this might be a system limitation or process issue, not intentional.' Reduces defensiveness."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Collaborate on Solution",
+                        content: "Work together: 'What would help ensure complete data? Could we create a checklist, or is there a system issue we should address?' Make it collaborative, not accusatory."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "constructive-feedback",
+                        title: "Set Context, Be Specific, Collaborate",
+                        description: "Start positive, state issue factually, assume positive intent, collaborate on solution"
+                    },
+                    {
+                        id: "aggressive",
+                        title: "Be Direct and Critical",
+                        description: "Tell them directly they're causing problems and need to fix it"
+                    },
+                    {
+                        id: "avoid",
+                        title: "Avoid the Conversation",
+                        description: "Don't address it and hope it improves on its own"
+                    }
+                ],
+                correct: "constructive-feedback",
+                explanation: "Constructive feedback requires setting positive context, being specific about the issue, assuming positive intent, and collaborating on solutions. This maintains relationships while solving the problem."
+            },
+            {
+                id: 3,
+                title: "Escalating a Problem",
+                description: "Escalate an issue to your manager",
+                context: "A supplier is consistently late with deliveries, affecting production. You've tried to resolve it directly with the supplier multiple times, but the problem persists. You need to escalate to your manager, but you're worried about seeming like you can't handle it yourself.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Show You've Tried",
+                        content: "Demonstrate effort: 'I've contacted Supplier X three times about late deliveries. I've documented the issues and proposed solutions, but the problem persists.' Shows you're not escalating prematurely."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "State the Business Impact",
+                        content: "Quantify the problem: 'This is affecting 15% of our Q2 production schedule. Estimated impact: £500K in potential delays.' Makes escalation justified."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Explain Why You Need Help",
+                        content: "Be clear about limits: 'I don't have authority to change supplier contracts or apply penalties. This needs management-level intervention.' Shows you know your boundaries."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Bring Options",
+                        content: "Propose solutions: 'I see three options: 1) Escalate to supplier management, 2) Find alternative supplier, 3) Adjust production schedule. I recommend option 1.' Shows problem-solving."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Request Specific Action",
+                        content: "Be clear: 'I need your decision on how to proceed and authority to execute.' Makes it actionable."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "structured-escalation",
+                        title: "Show Effort, State Impact, Bring Options",
+                        description: "Demonstrate you've tried, quantify business impact, explain why you need help, propose options, request action"
+                    },
+                    {
+                        id: "complain",
+                        title: "Complain About the Problem",
+                        description: "Just describe the problem and complain without showing effort or proposing solutions"
+                    },
+                    {
+                        id: "solve-alone",
+                        title: "Keep Trying to Solve Alone",
+                        description: "Continue trying to solve it yourself without escalating, even though you lack authority"
+                    }
+                ],
+                correct: "structured-escalation",
+                explanation: "Effective escalation shows you've tried (builds credibility), states business impact (justifies escalation), explains why you need help (shows self-awareness), and brings options (shows problem-solving). This demonstrates competence, not weakness."
+            },
+            {
+                id: 4,
+                title: "Saying No to Additional Work",
+                description: "Decline extra work when you're at capacity",
+                context: "A stakeholder asks you to take on an additional project while you're already handling three urgent SIOP initiatives. You're at capacity. You need to say no without damaging the relationship or seeming unhelpful.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Acknowledge the Request",
+                        content: "Show you value it: 'This project sounds important and aligns with our SIOP goals. I appreciate you thinking of me.' Validates their request."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Be Transparent About Capacity",
+                        content: "State your current commitments: 'I'm currently focused on three urgent SIOP initiatives: [list them]. Each requires significant time.' Shows you're not just saying no."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Explain the Trade-off",
+                        content: "Show what would suffer: 'If I take this on, I'd need to deprioritize [specific initiative], which would delay [specific outcome].' Makes the cost visible."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Offer Alternatives",
+                        content: "Provide options: 'Could we delay this until Q2? Or could [colleague] take the lead with my support? Or could we reduce scope to make it manageable?'"
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Let Them Decide",
+                        content: "Empower them: 'What's the priority here? If this is more urgent than my current work, we should discuss reprioritizing.' Makes it collaborative."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "transparent-alternatives",
+                        title: "Acknowledge, Show Capacity, Offer Alternatives",
+                        description: "Acknowledge request, be transparent about current commitments, explain trade-offs, offer alternatives"
+                    },
+                    {
+                        id: "just-decline",
+                        title: "Just Decline",
+                        description: "Simply say no without explanation or alternatives"
+                    },
+                    {
+                        id: "overcommit",
+                        title: "Agree and Overcommit",
+                        description: "Accept the work even though you're at capacity, risking quality on all projects"
+                    }
+                ],
+                correct: "transparent-alternatives",
+                explanation: "Saying no professionally requires acknowledging the request (shows respect), being transparent about capacity (builds understanding), explaining trade-offs (makes costs visible), and offering alternatives (shows problem-solving). This protects your boundaries while maintaining relationships."
+            },
+            {
+                id: 5,
+                title: "Addressing Performance Issues",
+                description: "Discuss performance concerns with a team member",
+                context: "A team member consistently misses deadlines for SIOP data submissions. This affects your work and downstream planning. You need to address this, but you're not their direct manager. You want to be supportive but clear.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Choose the Right Setting",
+                        content: "Have the conversation privately, one-on-one, not in front of others. Shows respect and reduces defensiveness."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Start with Observations",
+                        content: "State facts: 'I've noticed the last three data submissions were 2-3 days late. This is affecting our planning cycle.' Focus on behavior, not character."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Ask for Their Perspective",
+                        content: "Listen first: 'I wanted to understand what's happening. Are there challenges I should know about?' They might have valid reasons."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Explain Impact",
+                        content: "Show consequences: 'When submissions are late, it delays our planning by 2-3 days, which affects production scheduling.' Connects to business impact."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Collaborate on Solution",
+                        content: "Work together: 'What would help? Do you need different deadlines, more support, or process changes?' Make it collaborative, not punitive."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Set Clear Expectations",
+                        content: "Be specific: 'Going forward, can we commit to [specific deadline]? If you see challenges, let's discuss early rather than missing the deadline.'"
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "supportive-direct",
+                        title: "Private Conversation, Listen, Collaborate",
+                        description: "Have private conversation, state observations, ask for their perspective, explain impact, collaborate on solution"
+                    },
+                    {
+                        id: "public-criticism",
+                        title: "Call It Out Publicly",
+                        description: "Address the issue in a team meeting or group setting"
+                    },
+                    {
+                        id: "ignore",
+                        title: "Work Around It",
+                        description: "Adjust your own workflow to accommodate the delays without confrontation"
+                    }
+                ],
+                correct: "supportive-direct",
+                explanation: "Addressing performance issues requires a private setting (respectful), stating observations (factual), listening to their perspective (understanding), explaining impact (business-focused), and collaborating on solutions (supportive). This maintains relationships while improving performance."
+            },
+            {
+                id: 6,
+                title: "Challenging a Decision",
+                description: "Question a decision you disagree with",
+                context: "Your manager makes a decision about SIOP process changes that you think will cause problems. You've seen similar changes fail before. You want to voice your concerns without seeming insubordinate or negative.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Acknowledge the Decision",
+                        content: "Show respect: 'I understand the decision to [decision]. I can see the reasoning behind it.' Validates their authority and shows you're not just being difficult."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Share Your Concern",
+                        content: "State your worry: 'I'm concerned about [specific risk] based on what happened with [similar situation].' Use data/experience, not just opinion."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Explain the Risk",
+                        content: "Quantify concerns: 'When we tried [similar approach] last year, it caused [specific problem] that took 3 months to resolve.' Shows you're thinking ahead."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Propose Mitigation",
+                        content: "Offer solutions: 'Could we add [specific safeguard] to prevent this? Or pilot it with one supplier first?' Shows problem-solving, not just criticism."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Accept the Decision",
+                        content: "Respect final call: 'If you still want to proceed, I'll support it and help implement it. I just wanted to flag the risk.' Shows you're a team player."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "respectful-challenge",
+                        title: "Acknowledge, Share Concern, Propose Mitigation",
+                        description: "Acknowledge decision, share concern with data, explain risk, propose mitigation, accept final decision"
+                    },
+                    {
+                        id: "argue",
+                        title: "Argue Against the Decision",
+                        description: "Strongly argue that the decision is wrong and shouldn't be made"
+                    },
+                    {
+                        id: "silent-agree",
+                        title: "Stay Silent and Agree",
+                        description: "Don't voice concerns even though you see risks"
+                    }
+                ],
+                correct: "respectful-challenge",
+                explanation: "Challenging decisions requires acknowledging the decision (shows respect), sharing concerns with data (shows thoughtfulness), explaining risks (shows foresight), proposing mitigation (shows problem-solving), and accepting the final decision (shows you're a team player). This demonstrates leadership without insubordination."
+            },
+            {
+                id: 7,
+                title: "Managing Conflict Between Teams",
+                description: "Resolve conflict between two teams you work with",
+                context: "Procurement and Production Planning teams are in conflict. Procurement says Production's demand forecasts are unrealistic. Production says Procurement isn't securing enough supply. Both are blaming each other and escalating to you. You need to facilitate resolution.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Bring Both Sides Together",
+                        content: "Facilitate a meeting with both teams present. Don't try to solve it by talking to each separately - they need to hear each other."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Set Ground Rules",
+                        content: "Establish: 'We're here to solve the problem, not assign blame. Let's focus on facts and solutions.' Creates safe space."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Have Each Side Explain",
+                        content: "Let each team explain their perspective: 'Procurement, help Production understand your constraints. Production, help Procurement understand your needs.' Builds empathy."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Find Common Ground",
+                        content: "Identify shared goals: 'We all want reliable supply to meet production needs, right? Let's focus on that shared objective.' Unites them."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Collaborate on Solution",
+                        content: "Work together: 'What would help? Could Production share forecast assumptions earlier? Could Procurement provide supply constraints data?' Makes it collaborative."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Create Action Plan",
+                        content: "Document agreement: 'Going forward: Production shares forecasts by [date], Procurement provides supply constraints by [date], we meet weekly to align.' Makes it concrete."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "facilitate-resolution",
+                        title: "Facilitate Meeting, Find Common Ground, Collaborate",
+                        description: "Bring teams together, set ground rules, have each explain, find common ground, collaborate on solution, create action plan"
+                    },
+                    {
+                        id: "pick-side",
+                        title: "Pick a Side",
+                        description: "Choose which team is right and side with them"
+                    },
+                    {
+                        id: "avoid-conflict",
+                        title: "Avoid the Conflict",
+                        description: "Stay out of it and let them resolve it themselves"
+                    }
+                ],
+                correct: "facilitate-resolution",
+                explanation: "Managing conflict requires bringing both sides together (they need to hear each other), setting ground rules (creates safety), finding common ground (unites them), and facilitating collaborative solutions (builds relationships). This resolves conflict while strengthening team dynamics."
+            },
+            {
+                id: 8,
+                title: "Delivering Bad News",
+                description: "Communicate negative news to stakeholders",
+                context: "A critical supplier has informed you they can't meet Q2 commitments due to capacity issues. This will delay 20% of Q2 production. You need to communicate this to stakeholders (Production, Sales, Executives) without causing panic. You want to be transparent but also show you're managing it.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Be Direct and Transparent",
+                        content: "Don't sugarcoat: 'I need to share some challenging news. Supplier X has informed us they can't meet 40% of Q2 commitments due to capacity constraints.' Honesty builds trust."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "Quantify the Impact",
+                        content: "Be specific: 'This affects 20% of Q2 production. Estimated impact: £2M in potential delays. Affected products: [list].' Gives clear picture."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Show You're Managing It",
+                        content: "Demonstrate action: 'I've already contacted 3 alternative suppliers. Two can provide partial capacity. I'm working on a mitigation plan.' Shows you're on it."
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Present Options",
+                        content: "Offer solutions: 'We have three options: 1) Find alternative suppliers (recommended), 2) Adjust production schedule, 3) Negotiate with current supplier. I recommend option 1.' Shows problem-solving."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Request What You Need",
+                        content: "Be clear: 'I need [specific support]: approval to onboard alternative suppliers, or help prioritizing which products to protect.' Makes it actionable."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Set Next Steps",
+                        content: "Provide timeline: 'I'll have a full mitigation plan by [date] and will update you daily until resolved.' Shows you're managing it."
+                    }
+                ],
+                approaches: [
+                    {
+                        id: "transparent-managing",
+                        title: "Be Direct, Show Management, Present Options",
+                        description: "Be transparent about bad news, quantify impact, show you're managing it, present options, request support, set next steps"
+                    },
+                    {
+                        id: "minimize",
+                        title: "Minimize the Problem",
+                        description: "Downplay the issue and hope it resolves itself"
+                    },
+                    {
+                        id: "panic",
+                        title: "Panic and Escalate Everything",
+                        description: "Communicate the problem in a way that causes panic without showing management or options"
+                    }
+                ],
+                correct: "transparent-managing",
+                explanation: "Delivering bad news requires being direct (builds trust), quantifying impact (gives clarity), showing you're managing it (builds confidence), presenting options (shows problem-solving), and setting next steps (shows leadership). This maintains trust while being transparent."
+            }
+        ];
+        
+        let currentScenario = null;
+        let completedScenarios = [];
+        let correctAnswers = 0;
+        let selectedApproach = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderScenarioList();
+            loadTheme();
+        }
+        
+        function renderScenarioList() {
+            const list = document.getElementById('scenarioList');
+            list.innerHTML = scenarios.map(scenario => {
+                const isCompleted = completedScenarios.includes(scenario.id);
+                return `
+                    <div class="scenario-item ${isCompleted ? 'completed' : ''} ${currentScenario?.id === scenario.id ? 'active' : ''}" 
+                         onclick="loadScenario(${scenario.id})">
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-desc">${scenario.description}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadScenario(id) {
+            currentScenario = scenarios.find(s => s.id === id);
+            selectedApproach = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Scenario ${id} of ${scenarios.length}</div>
+                        <h1 class="scenario-title-large">${currentScenario.title}</h1>
+                        <p class="scenario-description">${currentScenario.description}</p>
+                    </div>
+                    
+                    <div class="context-box">
+                        <h3>📋 Context</h3>
+                        <p>${currentScenario.context}</p>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <div class="framework-title">💬 Difficult Conversation Framework</div>
+                        <div class="framework-steps">
+                            ${currentScenario.framework.map(step => `
+                                <div class="framework-step">
+                                    <div class="step-icon">${step.icon}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: Choose the Best Approach</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Based on the framework above, which approach best fits this scenario?
+                        </p>
+                        <div class="approach-options" id="approachOptions">
+                            ${shuffleArray(currentScenario.approaches).map(approach => `
+                                <div class="approach-option" onclick="selectApproach('${approach.id}')" id="approach-${approach.id}">
+                                    <h4>${approach.title}</h4>
+                                    <p>${approach.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="feedback-panel" id="feedbackPanel"></div>
+                    </div>
+                </div>
+            `;
+            
+            renderScenarioList();
+        }
+        
+        function selectApproach(approachId) {
+            selectedApproach = approachId;
+            
+            // Update UI
+            document.querySelectorAll('.approach-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`approach-${approachId}`).classList.add('selected');
+            
+            // Check answer
+            const isCorrect = approachId === currentScenario.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedScenarios.includes(currentScenario.id)) {
+                completedScenarios.push(currentScenario.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Excellent Choice!' : 'Consider This Approach'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Perfect!</strong> You've chosen the right approach for this difficult conversation.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                        : `<p>The best approach is <strong>${currentScenario.approaches.find(a => a.id === currentScenario.correct).title}</strong>.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            
+            // Check completion
+            if (completedScenarios.length === scenarios.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 1000);
+            }
+        }
+        
+        function updateStats() {
+            const completed = completedScenarios.length;
+            document.getElementById('statCompleted').textContent = `${completed}/${scenarios.length}`;
+            const accuracy = completed > 0 ? Math.round((correctAnswers / completed) * 100) : 0;
+            document.getElementById('statAccuracy').textContent = accuracy + '%';
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
+            
+            document.getElementById('finalCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalScore').textContent = correctAnswers;
+            
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        // Coming Soon popup
+        function showComingSoon(featureName) {
+            const toast = document.getElementById('comingSoonToast');
+            const message = document.getElementById('comingSoonMessage');
+            message.textContent = `${featureName} is not yet available in training mode.`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize
+        init();
+    </script>
+</body>
+</html>

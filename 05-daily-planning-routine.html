@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Planning Routine</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        /* Print mode - minimal ink usage */
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-tertiary: #ffffff !important;
+                --bg-hover: #ffffff !important;
+                --border: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+            }
+            
+            /* Remove all backgrounds and shadows */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            /* Hide non-essential elements */
+            .sidebar, button, .btn, .routine-tabs,
+            .completion-banner, .progress-widget,
+            .nav-item, .energy-tracker {
+                display: none !important;
+            }
+            
+            /* Full width for content */
+            .planner-app {
+                display: block !important;
+            }
+            
+            .main-content {
+                padding: 20px !important;
+            }
+            
+            /* Simplify boxes */
+            .step-block, .checklist-item, .info-banner, .tip-box {
+                border: 1px solid #000 !important;
+                margin: 10px 0 !important;
+                padding: 8px !important;
+            }
+            
+            /* Black text only */
+            h1, h2, h3, h4, h5, h6, p, span, div, label {
+                color: black !important;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .planner-app {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly main content */
+            .main-content {
+                padding: 20px 16px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .routine-tabs {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            
+            .tab {
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+            
+            .step-block {
+                padding: 16px;
+            }
+            
+            .step-title {
+                font-size: 16px;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly step content */
+            .step-content {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .step-description {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly inputs */
+            input[type="text"],
+            textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+            }
+            
+            /* Mobile-friendly energy tracker */
+            .energy-tracker {
+                padding: 16px;
+            }
+            
+            .energy-buttons {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .energy-btn {
+                min-width: 60px;
+                min-height: 44px;
+                padding: 10px 16px;
+            }
+            
+            /* Mobile-friendly nav items */
+            .nav-item {
+                padding: 12px 16px;
+                min-height: 44px;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .planner-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .date-display {
+            background: var(--bg-tertiary);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .date-day {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .nav-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-item {
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .progress-widget {
+            margin: 20px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+        
+        .progress-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* Main Content */
+        .main-content {
+            overflow-y: auto;
+            padding: 32px 48px;
+        }
+        
+        .content-header {
+            margin-bottom: 32px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        
+        .routine-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: var(--text-primary);
+        }
+        
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent-blue);
+        }
+        
+        .routine-content {
+            display: none;
+        }
+        
+        .routine-content.active {
+            display: block;
+        }
+        
+        .info-banner {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .info-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .info-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .step-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-block.completed {
+            border-color: var(--accent-green);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .step-title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+        
+        .step-block.completed .step-number {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .step-time {
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .step-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .checklist {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .checklist-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .checklist-item.checked {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--accent-green);
+        }
+        
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .checklist-item.checked .checkbox {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+        
+        .checklist-item.checked .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .checklist-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .checklist-item.checked .checklist-text {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        
+        .input-field {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 12px;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--bg-secondary);
+        }
+        
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .tip-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .energy-tracker {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .energy-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .energy-btn:hover {
+            border-color: var(--accent-blue);
+            transform: scale(1.05);
+        }
+        
+        .energy-btn.selected {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue);
+            transform: scale(1.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+        
+        .completion-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 32px;
+            text-align: center;
+        }
+        
+        .completion-banner.show {
+            display: block;
+        }
+        
+        .completion-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .completion-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .completion-text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        
+        .priority-inputs {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="planner-app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="app-header">
+                <div class="app-title-section">
+                    <div class="app-icon">📔</div>
+                    <div class="app-title">Daily Planner</div>
+                </div>
+                <div class="date-display">
+                    <div class="date-day">Thursday</div>
+                    <div>December 25, 2025</div>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Routines</div>
+                <div class="nav-item active" onclick="switchRoutine('morning')">
+                    <span>🌅</span>
+                    <span>Morning Routine</span>
+                </div>
+                <div class="nav-item" onclick="switchRoutine('evening')">
+                    <span>🌙</span>
+                    <span>Evening Routine</span>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Quick Links</div>
+                <div class="nav-item" onclick="toggleTheme()" id="themeToggle">
+                    <span>🌙</span>
+                    <span>Toggle Theme</span>
+                </div>
+                <div class="nav-item" onclick="location.href='index.html'">
+                    <span>←</span>
+                    <span>Back to Hub</span>
+                </div>
+                <div class="nav-item" onclick="location.href='Templates/index.html'">
+                    <span>📋</span>
+                    <span>Templates</span>
+                </div>
+            </div>
+            
+            <div class="progress-widget">
+                <div class="progress-title">Today's Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="sidebarProgress"></div>
+                </div>
+                <div class="progress-text"><span id="sidebarProgressText">0/4</span> steps complete</div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="page-title">Daily Planning Routine</div>
+                <div class="page-subtitle">Build consistent habits for starting and ending your workday</div>
+            </div>
+            
+            <div class="routine-tabs">
+                <button class="tab active" onclick="switchTab('morning')">🌅 Morning Routine</button>
+                <button class="tab" onclick="switchTab('evening')">🌙 Evening Routine</button>
+            </div>
+            
+            <!-- Morning Routine -->
+            <div class="routine-content active" id="morning-routine">
+                <div class="info-banner">
+                    <div class="info-icon">💡</div>
+                    <div class="info-title">Why Morning Planning Matters for ADHD</div>
+                    <div class="info-text">
+                        Without structure, your day gets hijacked by whatever screams loudest. A 15-minute morning routine gives you control and reduces decision fatigue all day. This is your time to set intentions before the chaos begins.
+                    </div>
+                </div>
+                
+                <!-- Step 1 -->
+                <div class="step-block" id="morning-step-1">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Brain Dump & Review</div>
+                        </div>
+                        <div class="step-time">⏱️ 3-5 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Before looking at email or calendar, capture everything on your mind. Then review what's on your plate today. This clears mental clutter and gives you the full picture.
+                    </div>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Write down everything bouncing in your head (2 min)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Review yesterday's incomplete tasks</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Check calendar for meetings & deadlines today</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Scan email subject lines for urgencies (don't read yet!)</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('morning', 1)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-block" id="morning-step-2">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Identify Your Top 3</div>
+                        </div>
+                        <div class="step-time">⏱️ 3-5 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Pick the 3 most important things to accomplish today. Not 5, not 10 - just 3. If you do nothing else, these are your wins. This prevents overwhelm and gives you clear focus.
+                    </div>
+                    
+                    <label class="input-label">Your Top 3 Priorities Today:</label>
+                    
+                    <div class="priority-inputs">
+                        <input type="text" class="input-field" placeholder="1. Most important task (e.g., Finalize exec SIOP slides)">
+                        <input type="text" class="input-field" placeholder="2. Second most important">
+                        <input type="text" class="input-field" placeholder="3. Third most important">
+                    </div>
+                    
+                    <div class="tip-box">
+                        <div class="tip-title">✋ If everything feels equally urgent</div>
+                        <div class="tip-text">Ask: "What would make today a success?" or "What has the closest deadline?" Start there. Done is better than perfect.</div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('morning', 2)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-block" id="morning-step-3">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Time Block Your Day</div>
+                        </div>
+                        <div class="step-time">⏱️ 4-5 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Block time for your Top 3 on your calendar. If it's not blocked, it won't happen. Be realistic about your energy levels throughout the day.
+                    </div>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Block time for Priority #1 (ideally in peak energy window)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Block time for Priority #2</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Block time for Priority #3</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Block 30 min for email/admin (not first thing!)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Include buffer time between meetings (15 min minimum)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <div class="tip-title">🧠 ADHD Energy Tip</div>
+                        <div class="tip-text">Do your hardest cognitive work during your peak energy time (often 9-11 AM). Save routine tasks for energy dips in the afternoon.</div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('morning', 3)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="step-block" id="morning-step-4">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Prep Your Environment</div>
+                        </div>
+                        <div class="step-time">⏱️ 2-3 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Set up your physical and digital space to minimize distractions and support focus. A clean, organized workspace = clearer thinking.
+                    </div>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Close unnecessary browser tabs and apps</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Have water/coffee within reach</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Set phone to Do Not Disturb for first focus block</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Open only the files/tools needed for Priority #1</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Set a timer for your first work block</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('morning', 4)">✓ Complete Step</button>
+                </div>
+                
+                <div class="completion-banner" id="morning-completion">
+                    <div class="completion-icon">🎉</div>
+                    <div class="completion-title">Morning Routine Complete!</div>
+                    <div class="completion-text">
+                        You've set yourself up for a focused, productive day. Your priorities are clear, your time is blocked, and your environment is ready. Now dive into Priority #1!
+                    </div>
+                    <button class="btn btn-primary" onclick="switchTab('evening')">
+                        Preview Evening Routine →
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Evening Routine -->
+            <div class="routine-content" id="evening-routine">
+                <div class="info-banner">
+                    <div class="info-icon">💡</div>
+                    <div class="info-title">Why Evening Wrap-Up Matters for ADHD</div>
+                    <div class="info-text">
+                        An evening routine prevents the "Sunday scaries" from happening every night. It creates closure, reduces anxiety about tomorrow, and helps your brain shift from work mode to rest mode. This is your time to acknowledge what you did and set yourself up for success.
+                    </div>
+                </div>
+                
+                <!-- Step 1 -->
+                <div class="step-block" id="evening-step-1">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Review What Got Done</div>
+                        </div>
+                        <div class="step-time">⏱️ 3-4 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Celebrate wins (even small ones!) and acknowledge what didn't happen without judgment. Your ADHD brain focuses on what didn't get done - actively noting completions helps rewire this negativity bias.
+                    </div>
+                    
+                    <label class="input-label">What did you accomplish today?</label>
+                    <textarea class="input-field" rows="4" placeholder="List everything you completed, no matter how small. Include meetings attended, decisions made, emails handled, etc."></textarea>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Checked off completed tasks</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Noted any "wins" or progress made</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Identified tasks that moved to tomorrow (without guilt)</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('evening', 1)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-block" id="evening-step-2">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Capture Tomorrow's Priorities</div>
+                        </div>
+                        <div class="step-time">⏱️ 3-4 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Get tomorrow's tasks out of your head and onto paper. This creates mental closure for tonight and prevents 2 AM "Oh no, I forgot..." moments.
+                    </div>
+                    
+                    <label class="input-label">What are tomorrow's Top 3 priorities?</label>
+                    
+                    <div class="priority-inputs">
+                        <input type="text" class="input-field" placeholder="1. Tomorrow's most important task">
+                        <input type="text" class="input-field" placeholder="2. Second priority">
+                        <input type="text" class="input-field" placeholder="3. Third priority">
+                    </div>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Checked tomorrow's calendar for meetings</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Noted any deadlines coming up this week</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Identified any prep needed for tomorrow's meetings</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('evening', 2)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-block" id="evening-step-3">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Clear Your Workspace</div>
+                        </div>
+                        <div class="step-time">⏱️ 2-3 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Reset your physical and digital space. A clean slate tomorrow morning = easier start. You're giving tomorrow-you a gift.
+                    </div>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Close all unnecessary browser tabs</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Close apps/documents you're done with</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Clear desk of papers/clutter</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Put away materials not needed tomorrow</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div class="checklist-text">Set out anything needed for tomorrow morning</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('evening', 3)">✓ Complete Step</button>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="step-block" id="evening-step-4">
+                    <div class="step-header">
+                        <div class="step-title-section">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Energy Check & Reflection</div>
+                        </div>
+                        <div class="step-time">⏱️ 2 min</div>
+                    </div>
+                    
+                    <div class="step-description">
+                        Quick reflection on your energy and any patterns worth noting. This helps you learn what conditions help you thrive.
+                    </div>
+                    
+                    <label class="input-label">How was your energy today?</label>
+                    <div class="energy-tracker">
+                        <button class="energy-btn" onclick="selectEnergy(this)" title="Exhausted">😫</button>
+                        <button class="energy-btn" onclick="selectEnergy(this)" title="Low">😴</button>
+                        <button class="energy-btn" onclick="selectEnergy(this)" title="Okay">😐</button>
+                        <button class="energy-btn" onclick="selectEnergy(this)" title="Good">🙂</button>
+                        <button class="energy-btn" onclick="selectEnergy(this)" title="Excellent">🚀</button>
+                    </div>
+                    
+                    <label class="input-label">One thing you learned today (optional):</label>
+                    <textarea class="input-field" rows="3" placeholder="About the work, about yourself, about how you focus best..."></textarea>
+                    
+                    <button class="btn btn-primary" onclick="completeStep('evening', 4)">✓ Complete Step</button>
+                </div>
+                
+                <div class="completion-banner" id="evening-completion">
+                    <div class="completion-icon">🌙</div>
+                    <div class="completion-title">Evening Routine Complete!</div>
+                    <div class="completion-text">
+                        You've created closure for today and set yourself up for tomorrow's success. You acknowledged your wins, planned for tomorrow, and reset your space. Time to truly disconnect and recharge!
+                    </div>
+                    <button class="btn btn-primary" onclick="location.reload()">
+                        🔄 Practice Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let completedSteps = {
+            morning: new Set(),
+            evening: new Set()
+        };
+        
+        let currentRoutine = 'morning';
+        
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+        }
+        
+        function selectEnergy(button) {
+            document.querySelectorAll('.energy-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
+        }
+        
+        function completeStep(routine, stepNum) {
+            if (completedSteps[routine].has(stepNum)) return;
+            
+            completedSteps[routine].add(stepNum);
+            document.getElementById(`${routine}-step-${stepNum}`).classList.add('completed');
+            
+            updateProgress();
+            
+            // Check if all steps complete
+            if (completedSteps[routine].size === 4) {
+                document.getElementById(`${routine}-completion`).classList.add('show');
+                document.getElementById(`${routine}-completion`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        function switchTab(routine) {
+            currentRoutine = routine;
+            
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.routine-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${routine}-routine`).classList.add('active');
+            
+            // Update sidebar nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            updateProgress();
+        }
+        
+        function switchRoutine(routine) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs[routine === 'morning' ? 0 : 1].click();
+        }
+        
+        function updateProgress() {
+            const completed = completedSteps[currentRoutine].size;
+            const percentage = (completed / 4) * 100;
+            
+            document.getElementById('sidebarProgress').style.width = percentage + '%';
+            document.getElementById('sidebarProgressText').textContent = `${completed}/4`;
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update toggle button
+            const toggle = document.getElementById('themeToggle');
+            if (toggle) {
+                toggle.querySelector('span').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const toggle = document.getElementById('themeToggle');
+            if (toggle) {
+                toggle.querySelector('span').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
+        // Initialize
+        initTheme();
+        updateProgress();
+    </script>
+</body>
+</html>

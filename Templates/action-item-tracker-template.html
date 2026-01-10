@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Item Tracker Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        @media print {
+            :root, [data-theme="light"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+                max-width: 100% !important;
+            }
+            
+            button, script {
+                display: none !important;
+            }
+            
+            table {
+                border: 1px solid #000 !important;
+            }
+            
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 8px !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .theme-toggle {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        
+        .template-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .template-header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .template-header .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            border-radius: 4px;
+        }
+        
+        .info-box strong {
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        
+        th {
+            background: var(--bg-secondary);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        
+        .status-select {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .status-in-progress {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .status-complete {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-blocked {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+            
+            /* Mobile-friendly header controls */
+            .header-controls {
+                flex-wrap: wrap;
+                gap: 8px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 24px -20px;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .theme-toggle {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 16px;
+            }
+            
+            .header-controls a {
+                min-height: 44px;
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <button onclick="toggleTheme()" id="themeToggle" class="theme-toggle">☀️</button>
+        <a href="index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">← Back to Templates</a>
+    </div>
+    
+    <div class="template-header">
+        <h1>✅ Action Item Tracker</h1>
+        <div class="subtitle">Track commitments, follow-ups, and meeting decisions</div>
+    </div>
+    
+    <div class="info-box">
+        <strong>💡 How to Use This Template</strong>
+        <div style="color: var(--text-secondary); font-size: 14px;">
+            Update this weekly (or after each important meeting). Use it to track action items from meetings, commitments you've made, and follow-ups needed. Visual status prevents things from falling through the cracks.
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📊 Summary</div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="totalItems">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="pendingItems">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="inProgressItems">0</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="completeItems">0</div>
+                <div class="stat-label">Complete</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📋 Action Items</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">#</th>
+                    <th style="width: 20%;">Who</th>
+                    <th style="width: 35%;">What</th>
+                    <th style="width: 12%;">Due Date</th>
+                    <th style="width: 13%;">Status</th>
+                    <th style="width: 15%;">Notes</th>
+                </tr>
+            </thead>
+            <tbody id="actionItemsTable">
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><input type="text" class="input-field" placeholder="[Name]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="text" class="input-field" placeholder="[Action item description]" style="border: none; background: none; padding: 0;"></td>
+                    <td><input type="date" class="input-field" style="border: none; background: none; padding: 0;"></td>
+                    <td>
+                        <select class="status-select" onchange="updateStats()">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="in-progress">🔵 In Progress</option>
+                            <option value="complete">🟢 Complete</option>
+                            <option value="blocked">🔴 Blocked</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="input-field" placeholder="Notes" style="border: none; background: none; padding: 0; font-size: 12px;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📝 Follow-Up Notes</div>
+        <textarea class="input-field" placeholder="Notes about follow-ups needed, blockers, or additional context..." style="min-height: 100px; background: var(--bg-secondary);"></textarea>
+    </div>
+    
+    <div style="margin-top: 48px; padding-top: 32px; border-top: 2px solid var(--border); display: flex; gap: 12px; flex-wrap: wrap;">
+        <button onclick="window.print()" style="padding: 14px 28px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            🖨️ Print Tracker
+        </button>
+        <button onclick="exportToPDF()" style="padding: 14px 28px; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;">
+            💾 Save as PDF
+        </button>
+    </div>
+    
+    <script>
+        function exportToPDF() {
+            alert('To save as PDF:\n\n1. Click "Print Tracker" above\n2. In the print dialog, select "Save as PDF" as your printer\n3. Click Save\n\nThis preserves all your filled-in information!');
+            window.print();
+        }
+        function updateStats() {
+            const selects = document.querySelectorAll('.status-select');
+            let total = selects.length;
+            let pending = 0;
+            let inProgress = 0;
+            let complete = 0;
+            
+            selects.forEach(select => {
+                const value = select.value;
+                if (value === 'pending') pending++;
+                else if (value === 'in-progress') inProgress++;
+                else if (value === 'complete') complete++;
+            });
+            
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('pendingItems').textContent = pending;
+            document.getElementById('inProgressItems').textContent = inProgress;
+            document.getElementById('completeItems').textContent = complete;
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+        // Initialize stats
+        updateStats();
+    </script>
+</body>
+</html>

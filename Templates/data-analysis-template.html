@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIOP Data Analysis Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            /* Remove all backgrounds and colors */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            /* Hide buttons */
+            button, script {
+                display: none !important;
+            }
+            
+            /* Simplify all sections */
+            .step-section, .insights-section {
+                border: 1px solid #000 !important;
+                margin: 8px 0 !important;
+                padding: 8px !important;
+            }
+            
+            input, textarea, table {
+                border: 1px solid #000 !important;
+                background: white !important;
+            }
+            
+            .template-header {
+                border-bottom: 2px solid #000 !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .template-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .template-header h1 {
+            font-size: 28px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .template-header input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #3b82f6;
+            padding: 8px 0;
+            font-size: 16px;
+            font-family: inherit;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+        
+        .step-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .step-header {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .step-header h2 {
+            color: #1e40af;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .step-header .time {
+            color: #3b82f6;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .framework-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .framework-box h4 {
+            color: #92400e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .framework-item {
+            margin-bottom: 8px;
+            padding-left: 16px;
+            color: #78350f;
+            font-size: 14px;
+        }
+        
+        .checkbox-list {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .checkbox:checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .input-field, .textarea-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        
+        .input-field:focus, .textarea-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .textarea-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .insight-template {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .insight-template h4 {
+            color: #047857;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .insight-line {
+            margin-bottom: 12px;
+        }
+        
+        .insight-label {
+            font-weight: 600;
+            color: #065f46;
+            display: inline-block;
+            width: 120px;
+        }
+        
+        .tip {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+            color: #1e40af;
+            border-radius: 4px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+            
+            .step-section {
+                page-break-after: always;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Mobile-friendly header controls */
+            div[style*="margin-bottom: 20px"] {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 20px -20px;
+                border-bottom: 1px solid var(--border);
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            button[onclick="toggleTheme()"],
+            button[onclick*="location.href"] {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 16px;
+                flex: 1 1 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button onclick="toggleTheme()" id="themeToggle" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            🌙
+        </button>
+        <button onclick="location.href='index.html'" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            ← Back to Templates
+        </button>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+    
+    <div class="template-header">
+        <h1>📊 SIOP Data Analysis Template</h1>
+        <input type="text" placeholder="Analysis Topic (e.g., Monthly Supply Gap Analysis - Jan 2026)">
+    </div>
+    
+    <!-- STEP 1 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>1️⃣ Define the Analysis Question</h2>
+            <div class="time">⏱️ Time-box: 5 minutes</div>
+        </div>
+        
+        <div class="tip">
+            <strong>💡 Start with the decision:</strong> What decision will this analysis inform? Who needs what by when?
+        </div>
+        
+        <label class="label">Who is the decision maker?</label>
+        <input type="text" class="input-field" placeholder="e.g., SIOP Leadership Team">
+        
+        <label class="label">What is the core question to answer?</label>
+        <textarea class="textarea-field" placeholder="e.g., Are there supply gaps that will impact next month's production schedule? Which suppliers are at risk?"></textarea>
+        
+        <label class="label">What is the deadline for this analysis?</label>
+        <input type="text" class="input-field" placeholder="e.g., Friday EOD for Monday's review meeting">
+        
+        <label class="label">2-3 key metrics that matter most:</label>
+        <textarea class="textarea-field" placeholder="e.g., Supply gap quantities, supplier risk levels, production impact"></textarea>
+    </div>
+    
+    <!-- STEP 2 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>2️⃣ Gather & Validate Data</h2>
+            <div class="time">⏱️ Time-box: 15 minutes</div>
+        </div>
+        
+        <div class="tip">
+            <strong>⏰ Set a timer!</strong> Gather obvious sources first. You can always come back.
+        </div>
+        
+        <div class="checkbox-list">
+            <h4 style="margin-bottom: 12px; color: #374151;">Data Sources:</h4>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>MRP System data extracted</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>APS forecast data pulled</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Supplier performance metrics checked</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Production schedule reviewed</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Data currency verified (last refresh date)</label>
+            </div>
+        </div>
+        
+        <label class="label">Notes on data quality/gaps:</label>
+        <textarea class="textarea-field" placeholder="Any missing data, incomplete records, or quality concerns..."></textarea>
+    </div>
+    
+    <!-- STEP 3 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>3️⃣ Initial Data Exploration</h2>
+            <div class="time">⏱️ Time-box: 10-15 minutes</div>
+        </div>
+        
+        <div class="tip">
+            <strong>👀 Look for patterns:</strong> Outliers, trends, gaps, red flags. Jot down initial observations.
+        </div>
+        
+        <div class="checkbox-list">
+            <h4 style="margin-bottom: 12px; color: #374151;">Quick Checks:</h4>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Calculated totals/aggregates</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Identified top/bottom performers</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Spotted obvious outliers</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Looked for patterns by category</label>
+            </div>
+        </div>
+        
+        <label class="label">Initial Observations (bullets):</label>
+        <textarea class="textarea-field" placeholder="• Largest gap is...&#10;• Highest risk area is...&#10;• Pattern noticed..."></textarea>
+    </div>
+    
+    <!-- STEP 4 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>4️⃣ Deep Dive Analysis</h2>
+            <div class="time">⏱️ Time-box: 20 minutes</div>
+        </div>
+        
+        <div class="tip">
+            <strong>⏰ Strict time limit!</strong> After 20 min, move to synthesis even if you want to explore more.
+        </div>
+        
+        <div class="checkbox-list">
+            <h4 style="margin-bottom: 12px; color: #374151;">Deep Dive Checklist:</h4>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Investigated root causes of top 3 issues</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Quantified business impact</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Identified 2-3 potential solutions per issue</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Estimated financial/operational impact</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Checked for dependencies/cascade effects</label>
+            </div>
+        </div>
+        
+        <label class="label">Key Findings:</label>
+        <textarea class="textarea-field" placeholder="Document detailed findings, root causes, impacts..."></textarea>
+    </div>
+    
+    <!-- STEP 5 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>5️⃣ Synthesize Insights</h2>
+            <div class="time">⏱️ Time-box: 15 minutes</div>
+        </div>
+        
+        <div class="framework-box">
+            <h4>WHAT → SO WHAT → NOW WHAT Framework:</h4>
+            <div class="framework-item"><strong>WHAT:</strong> The data finding</div>
+            <div class="framework-item"><strong>SO WHAT:</strong> The business impact / why it matters</div>
+            <div class="framework-item"><strong>NOW WHAT:</strong> The recommended action</div>
+        </div>
+        
+        <div class="insight-template">
+            <h4>Insight #1:</h4>
+            <div class="insight-line">
+                <span class="insight-label">WHAT:</span>
+                <input type="text" class="input-field" placeholder="The data finding...">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">SO WHAT:</span>
+                <input type="text" class="input-field" placeholder="The business impact...">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">NOW WHAT:</span>
+                <input type="text" class="input-field" placeholder="Recommended action...">
+            </div>
+        </div>
+        
+        <div class="insight-template">
+            <h4>Insight #2:</h4>
+            <div class="insight-line">
+                <span class="insight-label">WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">SO WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">NOW WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+        </div>
+        
+        <div class="insight-template">
+            <h4>Insight #3:</h4>
+            <div class="insight-line">
+                <span class="insight-label">WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">SO WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+            <div class="insight-line">
+                <span class="insight-label">NOW WHAT:</span>
+                <input type="text" class="input-field">
+            </div>
+        </div>
+    </div>
+    
+    <!-- STEP 6 -->
+    <div class="step-section">
+        <div class="step-header">
+            <h2>6️⃣ Prepare Communication</h2>
+            <div class="time">⏱️ Time-box: 10 minutes</div>
+        </div>
+        
+        <div class="tip">
+            <strong>🎯 Executive Summary First!</strong> Start with the answer. Details come later.
+        </div>
+        
+        <label class="label">Executive Summary (3-4 sentences):</label>
+        <textarea class="textarea-field" placeholder="The answer, the impact, and the ask..."></textarea>
+        
+        <div class="checkbox-list">
+            <h4 style="margin-bottom: 12px; color: #374151;">Communication Checklist:</h4>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Executive summary drafted</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Key visual (chart/table) created for main insight</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Clear action items listed with owners</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Prepared for 2-3 likely questions</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Detailed analysis saved to shared drive/appendix</label>
+            </div>
+        </div>
+        
+        <label class="label">Action Items with Owners:</label>
+        <textarea class="textarea-field" placeholder="• [Owner] - [Action] - [By When]&#10;• [Owner] - [Action] - [By When]"></textarea>
+        
+        <label class="label">Anticipated Questions & Answers:</label>
+        <textarea class="textarea-field" placeholder="Q: ...&#10;A: ..."></textarea>
+        
+        <label class="label">Assumptions/Caveats:</label>
+        <textarea class="textarea-field" placeholder="Any important assumptions or limitations to note..."></textarea>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Template</button>
+        <button class="btn btn-secondary" onclick="saveAsHTML()">💾 Save as PDF</button>
+    </div>
+    
+    <script>
+        function saveAsHTML() {
+            alert('To save as PDF:\n\n1. Click Print\n2. Select "Save as PDF" as your printer\n3. Click Save');
+            window.print();
+        }
+    </script>
+</body>
+</html>

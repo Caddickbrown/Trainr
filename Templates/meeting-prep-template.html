@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Preparation Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            /* Remove all backgrounds and colors */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+                max-width: 100% !important;
+            }
+            
+            /* Hide buttons */
+            button, script {
+                display: none !important;
+            }
+            
+            /* Simplify boxes */
+            .info-box, .section, .stakeholder-row {
+                border: 1px solid #000 !important;
+                background: none !important;
+                margin: 8px 0 !important;
+                padding: 8px !important;
+            }
+            
+            /* Minimal borders */
+            input, textarea, .template-header {
+                border: 1px solid #000 !important;
+                background: white !important;
+            }
+            
+            .template-header {
+                border-bottom: 2px solid #000 !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .template-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .template-header h1 {
+            font-size: 28px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .template-header .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            border-radius: 4px;
+        }
+        
+        .info-box strong {
+            color: #1e40af;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-list {
+            margin: 16px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        
+        .checkbox:checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .stakeholder-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .stakeholder-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background: #f9fafb;
+        }
+        
+        .stakeholder-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        .framework-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .framework-box h4 {
+            color: #92400e;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .framework-item {
+            margin-bottom: 8px;
+            color: #78350f;
+            font-size: 14px;
+        }
+        
+        .message-box {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: white;
+        }
+        
+        .message-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+            
+            .info-box {
+                background: white;
+                border: 1px solid #3b82f6;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Mobile-friendly header controls */
+            div[style*="margin-bottom: 20px"] {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 20px -20px;
+                border-bottom: 1px solid var(--border);
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            button[onclick="toggleTheme()"],
+            button[onclick*="location.href"] {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 16px;
+                flex: 1 1 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button onclick="toggleTheme()" id="themeToggle" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            🌙
+        </button>
+        <button onclick="location.href='index.html'" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            ← Back to Templates
+        </button>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+    
+    <div class="template-header">
+        <h1>📅 Meeting Preparation Template</h1>
+        <div class="subtitle">Complete this template before important meetings to stay organized and confident</div>
+    </div>
+    
+    <div class="info-box">
+        <strong>💡 How to Use This Template:</strong>
+        Fill this out 1-2 days before your meeting. Spend 15-20 minutes working through each section. Print or save as PDF for reference during the meeting.
+    </div>
+    
+    <!-- Meeting Details -->
+    <div class="section">
+        <div class="section-title">📋 Meeting Details</div>
+        
+        <label class="label">Meeting Title:</label>
+        <input type="text" class="input-field" placeholder="e.g., Monthly SIOP Cross-Functional Review">
+        
+        <label class="label">Date & Time:</label>
+        <input type="text" class="input-field" placeholder="e.g., Tuesday, Jan 15, 2:00 PM - 3:00 PM">
+        
+        <label class="label">Your Role:</label>
+        <input type="text" class="input-field" placeholder="e.g., Present procurement supply status and risks">
+    </div>
+    
+    <!-- Objectives -->
+    <div class="section">
+        <div class="section-title">🎯 Meeting Objectives</div>
+        
+        <label class="label">What is the meeting's main purpose?</label>
+        <textarea class="input-field" placeholder="e.g., Review current supply status and identify risks to production schedule"></textarea>
+        
+        <label class="label">What decisions need to be made?</label>
+        <textarea class="input-field" placeholder="e.g., Approve use of alternative supplier; Agree on revised timeline"></textarea>
+        
+        <label class="label">What is YOUR specific contribution?</label>
+        <textarea class="input-field" placeholder="e.g., Present procurement analysis, highlight gaps, recommend mitigation"></textarea>
+    </div>
+    
+    <!-- Stakeholders -->
+    <div class="section">
+        <div class="section-title">👥 Key Stakeholders</div>
+        
+        <div class="stakeholder-grid">
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Stakeholder 1:</div>
+                <label class="label">Name & Role:</label>
+                <input type="text" class="input-field" placeholder="e.g., Sarah Chen - Central Planning Lead">
+                <label class="label">Their Priority/Interest:</label>
+                <input type="text" class="input-field" placeholder="e.g., Overall schedule integrity">
+                <label class="label">Likely Concern:</label>
+                <input type="text" class="input-field" placeholder="e.g., Supply gaps affecting builds">
+            </div>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Stakeholder 2:</div>
+                <label class="label">Name & Role:</label>
+                <input type="text" class="input-field">
+                <label class="label">Their Priority/Interest:</label>
+                <input type="text" class="input-field">
+                <label class="label">Likely Concern:</label>
+                <input type="text" class="input-field">
+            </div>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Stakeholder 3:</div>
+                <label class="label">Name & Role:</label>
+                <input type="text" class="input-field">
+                <label class="label">Their Priority/Interest:</label>
+                <input type="text" class="input-field">
+                <label class="label">Likely Concern:</label>
+                <input type="text" class="input-field">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Key Messages -->
+    <div class="section">
+        <div class="section-title">💬 Key Messages (Max 3)</div>
+        
+        <div class="framework-box">
+            <h4>Message Structure:</h4>
+            <div class="framework-item"><strong>SITUATION:</strong> Current state in one sentence</div>
+            <div class="framework-item"><strong>IMPACT:</strong> Why it matters / consequences</div>
+            <div class="framework-item"><strong>ASK:</strong> What you need from them</div>
+        </div>
+        
+        <div class="message-box">
+            <div class="message-label">Message #1:</div>
+            <textarea class="input-field" placeholder="SITUATION: ...&#10;IMPACT: ...&#10;ASK: ..."></textarea>
+        </div>
+        
+        <div class="message-box">
+            <div class="message-label">Message #2:</div>
+            <textarea class="input-field" placeholder="SITUATION: ...&#10;IMPACT: ...&#10;ASK: ..."></textarea>
+        </div>
+        
+        <div class="message-box">
+            <div class="message-label">Message #3:</div>
+            <textarea class="input-field" placeholder="SITUATION: ...&#10;IMPACT: ...&#10;ASK: ..."></textarea>
+        </div>
+    </div>
+    
+    <!-- Anticipated Questions -->
+    <div class="section">
+        <div class="section-title">❓ Anticipated Questions & Answers</div>
+        
+        <div class="message-box">
+            <label class="label">Question 1:</label>
+            <input type="text" class="input-field" placeholder="What question might they ask?">
+            <label class="label">Your Answer:</label>
+            <textarea class="input-field" style="min-height: 60px;" placeholder="Your prepared response..."></textarea>
+        </div>
+        
+        <div class="message-box">
+            <label class="label">Question 2:</label>
+            <input type="text" class="input-field">
+            <label class="label">Your Answer:</label>
+            <textarea class="input-field" style="min-height: 60px;"></textarea>
+        </div>
+        
+        <div class="message-box">
+            <label class="label">Question 3:</label>
+            <input type="text" class="input-field">
+            <label class="label">Your Answer:</label>
+            <textarea class="input-field" style="min-height: 60px;"></textarea>
+        </div>
+    </div>
+    
+    <!-- Pre-Meeting Checklist -->
+    <div class="section">
+        <div class="section-title">✅ Pre-Meeting Checklist</div>
+        
+        <div class="checkbox-list">
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Materials prepared (data, slides, or handouts ready)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Key messages memorized (can state all 3 without notes)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Supporting data accessible (know where to find details if asked)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Calendar reviewed (no conflicts, arrival time noted)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Tech check done (if virtual, camera/mic tested)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Notepad ready (place to capture actions/decisions)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" class="checkbox">
+                <label>Energy managed (not rushing from another meeting, have water)</label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Template</button>
+        <button class="btn btn-secondary" onclick="saveAsHTML()">💾 Save as PDF</button>
+    </div>
+    
+    <script>
+        function saveAsHTML() {
+            alert('To save as PDF:\n\n1. Click Print\n2. Select "Save as PDF" as your printer\n3. Click Save\n\nThis preserves all your filled-in information!');
+            window.print();
+        }
+    </script>
+</body>
+</html>

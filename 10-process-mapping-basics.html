@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Mapping Basics Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --text-primary: #000000 !important;
+            }
+            * { background: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .process-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .scenario-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .scenario-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .scenario-item.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .scenario-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .scenario-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .scenario-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .scenario-header {
+            margin-bottom: 32px;
+        }
+        
+        .scenario-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .scenario-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .context-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-orange);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .context-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .context-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .framework-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .framework-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .framework-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .framework-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .mapping-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .mapping-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mapping-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .mapping-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .mapping-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .mapping-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        /* Coming Soon Toast */
+        .coming-soon-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            z-index: 3000;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .coming-soon-toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .coming-soon-toast .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .coming-soon-toast .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .coming-soon-toast .message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 1024px) {
+            .process-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .scenario-title-large {
+                font-size: 24px;
+            }
+            
+            .framework-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .mapping-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .mapping-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .mapping-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .mapping-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            /* Ensure text is readable */
+            .scenario-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .context-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .framework-step {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="process-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>🗺️ Process Mapper</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="scenario-list" id="scenarioList">
+                <!-- Scenarios will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/8</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Process Mapping Basics</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Select a scenario to begin</div>
+                        <h1 class="scenario-title-large">Learn Process Mapping</h1>
+                        <p class="scenario-description">
+                            Master the art of visual process documentation. Learn to map SIOP workflows, identify bottlenecks, and communicate processes clearly to stakeholders.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coming Soon Toast -->
+    <div class="coming-soon-toast" id="comingSoonToast">
+        <div class="icon">🚧</div>
+        <div class="title">Coming Soon</div>
+        <div class="message" id="comingSoonMessage">This feature is not yet available in training mode.</div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/8</div>
+                    <div class="completion-stat-label">Scenarios</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've learned the fundamentals of process mapping! Use these techniques to document SIOP workflows and identify improvement opportunities.
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const scenarios = [
+            {
+                id: 1,
+                title: "Supplier Onboarding Process",
+                description: "Map the end-to-end supplier onboarding workflow",
+                context: "You need to document the current supplier onboarding process for SIOP transformation. The process involves multiple teams: Procurement, Quality, IT, and Planning. You want to create a visual map that shows the flow, decision points, and handoffs.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Define where the process begins (supplier identified) and ends (supplier fully integrated into SIOP). Be specific about what 'complete' means."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Write down every step in order. Don't worry about format yet - just capture: 'Supplier submits application', 'Quality review', 'IT system setup', 'Planning integration', etc."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Mark steps where decisions are made: 'Does supplier meet quality standards?', 'Is IT access approved?', 'Can they meet capacity requirements?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show who does what: 'Procurement → Quality', 'Quality → IT', 'IT → Planning'. This reveals dependencies and bottlenecks."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Time Estimates",
+                        content: "Note how long each step takes: 'Quality review: 5 days', 'IT setup: 3 days'. This helps identify delays."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: steps that take longest, steps with most handoffs, steps that block others. These are improvement opportunities."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "structured-flow",
+                        title: "Structured Flow with Decision Points",
+                        description: "Linear flow showing steps, decision points (diamonds), and handoffs between teams"
+                    },
+                    {
+                        id: "simple-list",
+                        title: "Simple Sequential List",
+                        description: "Just a numbered list of steps without decision points or handoffs"
+                    },
+                    {
+                        id: "complex-detailed",
+                        title: "Detailed Technical Map",
+                        description: "Includes all system interactions and technical specifications for complete documentation"
+                    }
+                ],
+                correct: "structured-flow",
+                explanation: "Process maps need to show flow, decisions, and handoffs. A structured flow diagram with decision points (diamonds) and clear handoffs between teams makes bottlenecks visible and helps stakeholders understand dependencies."
+            },
+            {
+                id: 2,
+                title: "Demand Planning Cycle",
+                description: "Map the monthly demand planning workflow",
+                context: "You're documenting the monthly demand planning cycle for SIOP. The process involves data collection, validation, forecasting, review meetings, and finalization. You need to show the cycle clearly.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Month begins / Previous cycle ends. End: Forecast finalized and loaded into system."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture steps: 'Collect sales data', 'Validate data quality', 'Run forecasting model', 'Stakeholder review', 'Adjust forecast', 'Finalize and load'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Mark decisions: 'Is data quality acceptable?', 'Does forecast align with business targets?', 'Are adjustments needed?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show transitions: 'Sales → Planning', 'Planning → Analytics', 'Analytics → Review Meeting', 'Review → Planning'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Time Estimates",
+                        content: "Note durations: 'Data collection: 3 days', 'Validation: 2 days', 'Forecasting: 1 day', 'Review: 1 day'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for delays: 'Data validation takes longest', 'Review meetings cause delays', 'Multiple handoffs slow process'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "cycle-with-loops",
+                        title: "Cycle Diagram with Feedback Loops",
+                        description: "Shows the cyclical nature with feedback loops for adjustments and iterations"
+                    },
+                    {
+                        id: "linear-only",
+                        title: "Linear Process Only",
+                        description: "Shows steps in a straight line without showing it's a repeating cycle"
+                    },
+                    {
+                        id: "too-simple",
+                        title: "High-Level Overview",
+                        description: "Shows 'Input → Process → Output' focusing on the big picture"
+                    }
+                ],
+                correct: "cycle-with-loops",
+                explanation: "Demand planning is a recurring cycle with feedback loops. A cycle diagram with clear feedback paths shows how adjustments flow back into the process, making it clear this repeats monthly and how iterations work."
+            },
+            {
+                id: 3,
+                title: "Issue Escalation Process",
+                description: "Map when and how to escalate problems",
+                context: "You need to document the escalation process for SIOP issues. When should problems be escalated? Who gets involved? What's the decision tree? This helps team members know when to escalate vs. solve.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Issue identified. End: Issue resolved or escalated to appropriate level."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Assess issue impact', 'Try to solve', 'Document attempt', 'Decide: solve or escalate', 'Escalate to manager', 'Manager decides', 'Issue resolved'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'Can I solve this?', 'Do I have authority?', 'Is impact high enough?', 'Should this go to executive level?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show escalation path: 'You → Manager', 'Manager → Director', 'Director → Executive'. Also show when issue stays with you."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Criteria",
+                        content: "Define when to escalate: 'Impact > £100K', 'Affects customer delivery', 'Requires budget approval', 'Outside my authority'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'Unclear escalation criteria', 'Too many decision points', 'Escalation takes too long'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "decision-tree",
+                        title: "Decision Tree with Clear Criteria",
+                        description: "Shows decision points with clear criteria (impact, authority, urgency) leading to appropriate escalation path"
+                    },
+                    {
+                        id: "escalate-all",
+                        title: "Escalate Everything",
+                        description: "Shows escalating all issues without decision criteria"
+                    },
+                    {
+                        id: "no-escalation",
+                        title: "No Escalation Path",
+                        description: "Shows only solving issues yourself, no escalation option"
+                    }
+                ],
+                correct: "decision-tree",
+                explanation: "Escalation processes need clear decision criteria. A decision tree with specific criteria (impact, authority, urgency) helps people know exactly when to escalate and to whom. This prevents both over-escalation and under-escalation."
+            },
+            {
+                id: 4,
+                title: "Data Validation Workflow",
+                description: "Map the data quality validation process",
+                context: "You're documenting how SIOP data gets validated before use in planning. The process involves automated checks, manual review, error correction, and approval. You want to show the validation gates.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Raw data received. End: Validated data approved for use in planning."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Receive data', 'Automated validation checks', 'Flag errors', 'Manual review', 'Correct errors', 'Re-validate', 'Approve for use'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'Does data pass automated checks?', 'Are errors critical?', 'Can errors be corrected?', 'Is data quality acceptable?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show flow: 'System → Automated checks', 'Automated → Manual review (if errors)', 'Manual review → Data correction', 'Correction → Re-validation'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Validation Criteria",
+                        content: "Define checks: 'Completeness (all fields filled)', 'Accuracy (values within range)', 'Consistency (matches related data)', 'Timeliness (data is current)'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'Manual review takes too long', 'Error correction loops', 'Unclear validation criteria', 'Too many validation gates'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "gates-with-criteria",
+                        title: "Validation Gates with Clear Criteria",
+                        description: "Shows validation checkpoints (gates) with specific criteria that must be met to proceed"
+                    },
+                    {
+                        id: "no-validation",
+                        title: "No Validation Steps",
+                        description: "Shows data going straight to use without any validation"
+                    },
+                    {
+                        id: "too-many-gates",
+                        title: "Multi-Gate Validation Process",
+                        description: "Shows comprehensive validation steps at each stage to ensure data quality"
+                    }
+                ],
+                correct: "gates-with-criteria",
+                explanation: "Data validation needs clear gates with specific criteria. A process map showing validation checkpoints with defined criteria (completeness, accuracy, consistency) ensures data quality while making it clear what must pass to proceed."
+            },
+            {
+                id: 5,
+                title: "Supplier Performance Review",
+                description: "Map the quarterly supplier performance review process",
+                context: "You need to document how supplier performance gets reviewed quarterly. The process involves data collection, performance scoring, review meetings, action planning, and follow-up. You want to show the review cycle.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Quarter ends. End: Performance review completed, action items assigned, follow-up scheduled."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Collect performance data', 'Calculate KPIs', 'Score performance', 'Schedule review meeting', 'Conduct review', 'Identify issues', 'Create action plan', 'Assign owners', 'Schedule follow-up'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'Is performance acceptable?', 'Are improvements needed?', 'Should supplier be retained?', 'What actions are required?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show flow: 'Data team → Performance scoring', 'Scoring → Review meeting', 'Meeting → Action planning', 'Planning → Supplier communication', 'Communication → Follow-up tracking'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Performance Criteria",
+                        content: "Define metrics: 'On-time delivery %', 'Quality score', 'Cost performance', 'Responsiveness score'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'Data collection delays', 'Meeting scheduling conflicts', 'Action plan not followed up', 'No clear ownership'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "review-cycle",
+                        title: "Review Cycle with Action Tracking",
+                        description: "Shows quarterly cycle with performance scoring, review meeting, action planning, and follow-up loop"
+                    },
+                    {
+                        id: "one-time-only",
+                        title: "One-Time Review",
+                        description: "Shows review happening once without showing it's a recurring quarterly cycle"
+                    },
+                    {
+                        id: "no-followup",
+                        title: "Review Without Follow-Up",
+                        description: "Shows review meeting but no action planning or follow-up tracking"
+                    }
+                ],
+                correct: "review-cycle",
+                explanation: "Supplier performance reviews are recurring cycles that need action tracking. A cycle diagram showing the quarterly review with clear action planning and follow-up ensures continuous improvement and accountability."
+            },
+            {
+                id: 6,
+                title: "Change Request Process",
+                description: "Map how SIOP process changes get requested and approved",
+                context: "You're documenting how teams request changes to SIOP processes. The process involves request submission, impact assessment, approval decision, implementation, and communication. You want to show the change management flow.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Change request submitted. End: Change implemented and communicated to stakeholders."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Submit change request', 'Assess impact', 'Review with stakeholders', 'Approve/reject decision', 'Plan implementation', 'Implement change', 'Test change', 'Communicate to teams', 'Monitor results'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'Is change needed?', 'What's the impact?', 'Do stakeholders agree?', 'Should change be approved?', 'Is implementation successful?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show flow: 'Requester → Impact assessment', 'Assessment → Review meeting', 'Review → Approval decision', 'Approval → Implementation team', 'Implementation → Testing', 'Testing → Communication'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Approval Criteria",
+                        content: "Define criteria: 'Business value', 'Implementation complexity', 'Stakeholder impact', 'Resource requirements'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'Approval takes too long', 'Unclear impact assessment', 'No stakeholder input', 'Poor communication of changes'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "structured-approval",
+                        title: "Structured Approval Process",
+                        description: "Shows clear steps: request → impact assessment → stakeholder review → approval decision → implementation → communication"
+                    },
+                    {
+                        id: "no-approval",
+                        title: "No Approval Process",
+                        description: "Shows changes happening without any review or approval"
+                    },
+                    {
+                        id: "too-complex",
+                        title: "Multi-Layer Approval Process",
+                        description: "Shows multiple approval layers and stakeholder review points to ensure thorough evaluation"
+                    }
+                ],
+                correct: "structured-approval",
+                explanation: "Change requests need structured approval to balance agility with control. A clear process showing impact assessment, stakeholder review, and approval decision ensures changes are evaluated properly while maintaining reasonable speed."
+            },
+            {
+                id: 7,
+                title: "Cross-Functional Meeting Flow",
+                description: "Map how cross-functional SIOP meetings work",
+                context: "You're documenting the flow of cross-functional SIOP meetings. The process involves agenda setting, data preparation, meeting execution, decision-making, action item assignment, and follow-up. You want to show the meeting cycle.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Meeting scheduled. End: Action items completed and next meeting scheduled."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Set agenda', 'Prepare data/reports', 'Send pre-read', 'Conduct meeting', 'Make decisions', 'Assign action items', 'Send meeting notes', 'Track action items', 'Follow up before next meeting'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'What's on agenda?', 'What data is needed?', 'What decisions are made?', 'Who owns action items?', 'Are action items complete?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show flow: 'Meeting owner → Agenda', 'Data team → Pre-read', 'Meeting → Decisions', 'Decisions → Action items', 'Action items → Owners', 'Owners → Completion tracking'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Meeting Elements",
+                        content: "Define components: 'Pre-read materials', 'Decision log', 'Action item tracker', 'Follow-up mechanism'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'No pre-read preparation', 'Decisions not documented', 'Action items not tracked', 'No follow-up between meetings'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "meeting-cycle",
+                        title: "Meeting Cycle with Pre/Post Steps",
+                        description: "Shows complete cycle: pre-meeting prep → meeting → decisions → action items → follow-up → next meeting"
+                    },
+                    {
+                        id: "meeting-only",
+                        title: "Just the Meeting",
+                        description: "Shows only the meeting itself without prep, follow-up, or action tracking"
+                    },
+                    {
+                        id: "no-structure",
+                        title: "Unstructured Flow",
+                        description: "Shows meetings happening without clear agenda, decisions, or action items"
+                    }
+                ],
+                correct: "meeting-cycle",
+                explanation: "Effective meetings need structure before, during, and after. A cycle showing pre-meeting prep, the meeting itself with decision-making, action item assignment, and follow-up ensures meetings drive results rather than just being discussions."
+            },
+            {
+                id: 8,
+                title: "SIOP Data Integration Flow",
+                description: "Map how data flows from multiple sources into SIOP planning",
+                context: "You're documenting how data from different systems (MRP, APS, supplier portals) gets integrated into SIOP planning. The process involves data extraction, transformation, validation, and loading. You want to show the data pipeline.",
+                framework: [
+                    {
+                        icon: "1️⃣",
+                        title: "Identify Start & End Points",
+                        content: "Start: Data in source systems. End: Integrated data available for SIOP planning."
+                    },
+                    {
+                        icon: "2️⃣",
+                        title: "List All Steps",
+                        content: "Capture: 'Extract from MRP', 'Extract from APS', 'Extract from supplier portals', 'Transform data formats', 'Validate data quality', 'Resolve conflicts', 'Load into SIOP system', 'Verify integration'."
+                    },
+                    {
+                        icon: "3️⃣",
+                        title: "Identify Decision Points",
+                        content: "Key decisions: 'Is data extraction successful?', 'Are data formats compatible?', 'Does data pass validation?', 'How to resolve data conflicts?', 'Is integration complete?'"
+                    },
+                    {
+                        icon: "4️⃣",
+                        title: "Map Handoffs",
+                        content: "Show flow: 'Source systems → Extraction', 'Extraction → Transformation', 'Transformation → Validation', 'Validation → Conflict resolution', 'Resolution → Loading', 'Loading → Verification'."
+                    },
+                    {
+                        icon: "5️⃣",
+                        title: "Add Data Sources",
+                        content: "Identify sources: 'MRP system (inventory)', 'APS system (production)', 'Supplier portals (supply)', 'Sales system (demand)'."
+                    },
+                    {
+                        icon: "6️⃣",
+                        title: "Identify Bottlenecks",
+                        content: "Look for: 'Data extraction failures', 'Format incompatibilities', 'Validation errors', 'Data conflicts', 'Slow loading times'."
+                    }
+                ],
+                mappings: [
+                    {
+                        id: "data-pipeline",
+                        title: "Data Pipeline with Transformation Steps",
+                        description: "Shows data flowing from multiple sources through extraction, transformation, validation, and loading stages"
+                    },
+                    {
+                        id: "direct-load",
+                        title: "Direct Load Without Processing",
+                        description: "Shows data going directly from sources to SIOP system without transformation or validation"
+                    },
+                    {
+                        id: "manual-only",
+                        title: "Manual Process Only",
+                        description: "Shows all data integration happening manually without any automation"
+                    }
+                ],
+                correct: "data-pipeline",
+                explanation: "Data integration needs a clear pipeline showing extraction, transformation, validation, and loading. A pipeline diagram with multiple source systems feeding into transformation and validation stages makes the data flow visible and helps identify where issues occur."
+            }
+        ];
+        
+        let currentScenario = null;
+        let completedScenarios = [];
+        let correctAnswers = 0;
+        let selectedMapping = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderScenarioList();
+            loadTheme();
+        }
+        
+        function renderScenarioList() {
+            const list = document.getElementById('scenarioList');
+            list.innerHTML = scenarios.map(scenario => {
+                const isCompleted = completedScenarios.includes(scenario.id);
+                return `
+                    <div class="scenario-item ${isCompleted ? 'completed' : ''} ${currentScenario?.id === scenario.id ? 'active' : ''}" 
+                         onclick="loadScenario(${scenario.id})">
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-desc">${scenario.description}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadScenario(id) {
+            currentScenario = scenarios.find(s => s.id === id);
+            selectedMapping = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Scenario ${id} of ${scenarios.length}</div>
+                        <h1 class="scenario-title-large">${currentScenario.title}</h1>
+                        <p class="scenario-description">${currentScenario.description}</p>
+                    </div>
+                    
+                    <div class="context-box">
+                        <h3>📋 Context</h3>
+                        <p>${currentScenario.context}</p>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <div class="framework-title">🗺️ Process Mapping Framework</div>
+                        <div class="framework-steps">
+                            ${currentScenario.framework.map(step => `
+                                <div class="framework-step">
+                                    <div class="step-icon">${step.icon}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: Choose the Best Mapping Approach</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Based on the framework above, which mapping approach best fits this scenario?
+                        </p>
+                        <div class="mapping-options" id="mappingOptions">
+                            ${shuffleArray(currentScenario.mappings).map(mapping => `
+                                <div class="mapping-option" onclick="selectMapping('${mapping.id}')" id="mapping-${mapping.id}">
+                                    <h4>${mapping.title}</h4>
+                                    <p>${mapping.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="feedback-panel" id="feedbackPanel"></div>
+                    </div>
+                </div>
+            `;
+            
+            renderScenarioList();
+        }
+        
+        function selectMapping(mappingId) {
+            selectedMapping = mappingId;
+            
+            // Update UI
+            document.querySelectorAll('.mapping-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`mapping-${mappingId}`).classList.add('selected');
+            
+            // Check answer
+            const isCorrect = mappingId === currentScenario.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedScenarios.includes(currentScenario.id)) {
+                completedScenarios.push(currentScenario.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Excellent Choice!' : 'Consider This Approach'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Perfect!</strong> You've chosen the right mapping approach for this scenario.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                        : `<p>The best approach is <strong>${currentScenario.mappings.find(m => m.id === currentScenario.correct).title}</strong>.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            
+            // Check completion
+            if (completedScenarios.length === scenarios.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 1000);
+            }
+        }
+        
+        function updateStats() {
+            const completed = completedScenarios.length;
+            document.getElementById('statCompleted').textContent = `${completed}/${scenarios.length}`;
+            const accuracy = completed > 0 ? Math.round((correctAnswers / completed) * 100) : 0;
+            document.getElementById('statAccuracy').textContent = accuracy + '%';
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
+            
+            document.getElementById('finalCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalScore').textContent = correctAnswers;
+            
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        // Coming Soon popup
+        function showComingSoon(featureName) {
+            const toast = document.getElementById('comingSoonToast');
+            const message = document.getElementById('comingSoonMessage');
+            message.textContent = `${featureName} is not yet available in training mode.`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIOP Templates Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #0f0f12;
+            --bg-card: #242424;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --bg-card: #ffffff !important;
+                --border: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --text-muted: #666666 !important;
+            }
+            
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            button, a[href*="javascript"] {
+                display: none !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        
+        .header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        
+        .header .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .intro-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .intro-box h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .intro-box p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        
+        .intro-box ul {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-left: 24px;
+            margin-top: 12px;
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .template-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .template-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+        }
+        
+        .template-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+        
+        .template-card.meeting { --accent-color: #8b5cf6; }
+        .template-card.daily { --accent-color: #06b6d4; }
+        .template-card.data { --accent-color: #3b82f6; }
+        .template-card.reference { --accent-color: #10b981; }
+        
+        .template-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .template-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .template-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+        
+        .template-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-badge {
+            padding: 4px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.03);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+        
+        .tips-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .tips-section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 16px;
+        }
+        
+        .tips-section ul {
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.9;
+            margin-left: 20px;
+        }
+        
+        .tips-section li {
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 32px;
+        }
+        
+        .back-link a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-actions {
+                flex-direction: column;
+            }
+            
+            /* Mobile-friendly header controls */
+            div[style*="margin-bottom: 24px"] {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -48px -24px 24px -24px;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            button[onclick="toggleTheme()"] {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+            
+            a[href="../index.html"] {
+                min-height: 44px;
+                padding: 12px 16px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="margin-bottom: 24px; display: flex; gap: 12px;">
+            <button onclick="toggleTheme()" id="themeToggle" style="padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; font-family: inherit;">
+                ☀️
+            </button>
+            <a href="../index.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+                ← Back to Training Hub
+            </a>
+        </div>
+        
+        <div class="header">
+            <h1>📋 SIOP Templates Library</h1>
+            <p class="subtitle">Printable, fill-in templates for your real work</p>
+            <div class="badge">✓ Ready to use • Print-friendly • Save as PDF</div>
+        </div>
+        
+        <div class="intro-box">
+            <h2>💼 How to Use These Templates</h2>
+            <p>
+                Each template is designed to be <strong>printed and used at work</strong>. They're the practical, fill-in-the-blank versions of the training modules you've practiced with.
+            </p>
+            <p><strong>Recommended workflow:</strong></p>
+            <ul>
+                <li>Click "Open Template" to view it in your browser</li>
+                <li>Fill in the fields directly on the page</li>
+                <li>Click "Print" and select "Save as PDF" to save your completed template</li>
+                <li>Alternatively, print blank copies to fill in by hand</li>
+                <li>Keep digital copies in your work folder for easy reference</li>
+            </ul>
+        </div>
+        
+        <div class="templates-grid">
+            <!-- Meeting Prep Template -->
+            <div class="template-card meeting">
+                <div class="template-icon">🤝</div>
+                <div class="template-title">Meeting Preparation</div>
+                <div class="template-description">
+                    Complete 5-step framework for preparing for important stakeholder meetings. Includes stakeholder mapping, key messages, and Q&A prep.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">15-20 min</span>
+                    <span class="feature-badge">Fillable</span>
+                    <span class="feature-badge">Print-ready</span>
+                </div>
+                <div class="template-actions">
+                    <a href="meeting-prep-template.html" class="btn btn-primary">Open Template</a>
+                </div>
+            </div>
+            
+            <!-- Daily Planning Template -->
+            <div class="template-card daily">
+                <div class="template-icon">🌅</div>
+                <div class="template-title">Daily Planning</div>
+                <div class="template-description">
+                    Morning and evening routines in one template. Set your Top 3 priorities, plan your day, and create closure each evening.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">15 min/day</span>
+                    <span class="feature-badge">Daily use</span>
+                    <span class="feature-badge">Fillable</span>
+                </div>
+                <div class="template-actions">
+                    <a href="daily-planning-template.html" class="btn btn-primary">Open Template</a>
+                </div>
+            </div>
+            
+            <!-- Data Analysis Template -->
+            <div class="template-card data">
+                <div class="template-icon">📊</div>
+                <div class="template-title">Data Analysis Workflow</div>
+                <div class="template-description">
+                    6-step structured approach to SIOP data analysis. From defining the question to presenting insights using the WHAT/SO WHAT/NOW WHAT framework.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">60-90 min</span>
+                    <span class="feature-badge">Structured</span>
+                    <span class="feature-badge">Multi-page</span>
+                </div>
+                <div class="template-actions">
+                    <a href="data-analysis-template.html" class="btn btn-primary">Open Template</a>
+                </div>
+            </div>
+            
+            <!-- Quick Reference Guide -->
+            <div class="template-card reference">
+                <div class="template-icon">⚡</div>
+                <div class="template-title">Quick Reference Guide</div>
+                <div class="template-description">
+                    One-page cheat sheet with email triage framework, priority matrix, and workflow summaries. Perfect for posting near your desk.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">Reference</span>
+                    <span class="feature-badge">One-pager</span>
+                    <span class="feature-badge">Essential</span>
+                </div>
+                <div class="template-actions">
+                    <a href="quick-reference-guide.html" class="btn btn-primary">Open Guide</a>
+                </div>
+            </div>
+            
+            <!-- Weekly Status Report -->
+            <div class="template-card data">
+                <div class="template-icon">📊</div>
+                <div class="template-title">Weekly Status Report</div>
+                <div class="template-description">
+                    One-page weekly progress update template. Track transformation progress, key metrics, blockers, and decisions needed. Perfect for executive updates.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">Weekly</span>
+                    <span class="feature-badge">One-page</span>
+                    <span class="feature-badge">Executive</span>
+                </div>
+                <div class="template-actions">
+                    <a href="weekly-status-report-template.html" class="btn btn-primary">Open Template</a>
+                </div>
+            </div>
+            
+            <!-- Stakeholder Email Template -->
+            <div class="template-card meeting">
+                <div class="template-icon">💬</div>
+                <div class="template-title">Stakeholder Update Email</div>
+                <div class="template-description">
+                    Pre-structured email templates for different scenarios: good news, blockers, decision requests, and FYI updates. Reduces decision fatigue.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">4 Templates</span>
+                    <span class="feature-badge">Fillable</span>
+                    <span class="feature-badge">Copy/Paste</span>
+                </div>
+                <div class="template-actions">
+                    <a href="stakeholder-email-template.html" class="btn btn-primary">Open Templates</a>
+                </div>
+            </div>
+            
+            <!-- Action Item Tracker -->
+            <div class="template-card daily">
+                <div class="template-icon">✅</div>
+                <div class="template-title">Action Item Tracker</div>
+                <div class="template-description">
+                    Track commitments, follow-ups, and meeting decisions. Visual status indicators prevent things from falling through the cracks. ADHD-friendly.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">Visual</span>
+                    <span class="feature-badge">Trackable</span>
+                    <span class="feature-badge">Weekly</span>
+                </div>
+                <div class="template-actions">
+                    <a href="action-item-tracker-template.html" class="btn btn-primary">Open Tracker</a>
+                </div>
+            </div>
+            
+            <!-- 1-on-1 Meeting Template -->
+            <div class="template-card meeting">
+                <div class="template-icon">🤝</div>
+                <div class="template-title">1-on-1 Meeting</div>
+                <div class="template-description">
+                    Structure for building cross-functional relationships. Includes pre-meeting prep, agenda, notes, action items, and post-meeting reflection.
+                </div>
+                <div class="template-features">
+                    <span class="feature-badge">Relationship</span>
+                    <span class="feature-badge">Structured</span>
+                    <span class="feature-badge">Fillable</span>
+                </div>
+                <div class="template-actions">
+                    <a href="one-on-one-meeting-template.html" class="btn btn-primary">Open Template</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h2>💡 Tips for Using Templates Effectively</h2>
+            <ul>
+                <li><strong>Start with the Quick Reference Guide:</strong> Print it and keep it visible. It's your daily decision-making aid.</li>
+                <li><strong>Use Daily Planning every workday:</strong> Consistency is key for ADHD. Same routine = less decision fatigue.</li>
+                <li><strong>Fill out Meeting Prep 1-2 days before important meetings:</strong> Not the morning of - give yourself time to prepare properly.</li>
+                <li><strong>Keep a "Templates" folder in your work drive:</strong> Store completed PDFs for easy reference and patterns over time.</li>
+                <li><strong>Don't aim for perfection:</strong> A 70% complete template that you use is better than a perfect one you abandon.</li>
+                <li><strong>Adapt as needed:</strong> These are starting points. Modify them to fit your team's specific needs and culture.</li>
+                <li><strong>Share with colleagues:</strong> If others find them useful, share! Good systems benefit everyone.</li>
+            </ul>
+        </div>
+        
+        <div class="intro-box" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #3b82f6;">
+            <h2 style="color: #1e40af;">🔄 Template + Training = Mastery</h2>
+            <p style="color: #1e3a8a;">
+                <strong>Best practice:</strong> Use the interactive training modules to learn the concepts, then use these templates in your real work. The training modules help you practice; the templates help you apply.
+            </p>
+            <p style="color: #1e3a8a; margin-bottom: 0;">
+                Each template corresponds to a training module in the main hub. When you need a refresher on the "why" behind each template, revisit the corresponding training module.
+            </p>
+        </div>
+        
+        <div class="back-link">
+            <a href="../index.html">← Back to Training Hub</a>
+        </div>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme - default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+</body>
+</html>

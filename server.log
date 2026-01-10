@@ -1,0 +1,1946 @@
+
+============================================================
+🚀 SIOP Training Hub Server Starting...
+============================================================
+📁 Serving directory: /home/dcb/Documents/RRPrep
+🌐 Server running at:
+   Local:   http://localhost:3000
+   Local:   http://127.0.0.1:3000
+   Network: http://192.168.4.186:3000
+============================================================
+📋 Access the training hub at: http://localhost:3000/index.html
+📋 Access templates at: http://localhost:3000/Templates/index.html
+============================================================
+
+💡 Press Ctrl+C to stop the server
+
+[2025-12-26 10:53:32] "GET /index.html HTTP/1.1" 200 -
+[2025-12-26 10:54:10] "GET /10-process-mapping-basics.html HTTP/1.1" 200 -
+[2025-12-26 10:54:32] "GET /index.html HTTP/1.1" 200 -
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60696)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60697)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60698)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60699)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60700)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60701)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60702)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60703)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60704)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60705)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60706)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:54:33] code 404, message File not found
+[2025-12-26 10:54:33] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 60707)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 10:55:07] "GET /09-issue-crisis-management-training.html HTTP/1.1" 200 -
+[2025-12-26 11:01:38] "GET /index.html HTTP/1.1" 200 -
+[2025-12-26 11:02:16] "GET /07-context-switching-management.html HTTP/1.1" 200 -
+[2025-12-26 11:06:28] "GET /07-context-switching-management.html HTTP/1.1" 200 -
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51254)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51255)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51256)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51257)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51258)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51259)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51260)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51261)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51262)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51263)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51264)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 11:06:28] code 404, message File not found
+[2025-12-26 11:06:28] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.115.34.108', 51265)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63236)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63237)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63238)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63239)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63240)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63241)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63242)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63243)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63244)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63245)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63246)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:50] code 404, message File not found
+[2025-12-26 12:21:50] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 63247)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:21:53] "GET /07-context-switching-management.html HTTP/1.1" 200 -
+[2025-12-26 12:21:58] "GET /index.html HTTP/1.1" 200 -
+[2025-12-26 12:22:11] "GET /index.html HTTP/1.1" 200 -
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62619)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62620)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62621)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62628)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62629)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62630)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62631)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62632)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62633)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62634)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62635)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------
+[2025-12-26 12:22:11] code 404, message File not found
+[2025-12-26 12:22:11] "GET /favicon.ico HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('100.85.180.67', 62636)
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 27, in __init__
+    super().__init__(*args, directory=str(DIRECTORY), **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 436, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/http/server.py", line 424, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 122, in do_GET
+    self.send_error(404, "File not found")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/http/server.py", line 488, in send_error
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "/home/dcb/Documents/RRPrep/server.py", line 61, in end_headers
+    if not self._headers_sent_by_us:
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute '_headers_sent_by_us'
+----------------------------------------

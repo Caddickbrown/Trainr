@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIOP Quick Reference Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #3a3a3a;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #000000 !important;
+                --border: #000000 !important;
+            }
+            
+            /* Remove all backgrounds and colors */
+            * {
+                background: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                color: black !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            /* Hide buttons */
+            button, script {
+                display: none !important;
+            }
+            
+            /* Simplify all sections */
+            .framework-box, .tip-box, .checklist-box {
+                border: 1px solid #000 !important;
+                margin: 8px 0 !important;
+                padding: 8px !important;
+            }
+            
+            .header {
+                border-bottom: 2px solid #000 !important;
+                padding-bottom: 10px !important;
+            }
+            
+            /* Grid layouts for print */
+            .two-column {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .reference-section {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .framework-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .card-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        
+        .card-desc {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .framework-card.urgent {
+            border-color: #fecaca;
+            background: #fef2f2;
+        }
+        
+        .framework-card.important {
+            border-color: #fed7aa;
+            background: #fffbeb;
+        }
+        
+        .framework-card.routine {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+        }
+        
+        .framework-card.delegate {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+        }
+        
+        .matrix {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+        
+        .matrix-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .matrix-cell {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .matrix-cell h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .matrix-cell p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        
+        .matrix-cell ul {
+            font-size: 12px;
+            color: #374151;
+            margin-left: 20px;
+            line-height: 1.7;
+        }
+        
+        .matrix-cell.do-now {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .matrix-cell.schedule {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .matrix-cell.delegate {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .matrix-cell.eliminate {
+            background: #f9fafb;
+            border-left: 4px solid #9ca3af;
+        }
+        
+        .tips-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .tips-box h4 {
+            color: #92400e;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .tips-box ul {
+            color: #78350f;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-left: 20px;
+        }
+        
+        .workflow-list {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .workflow-step:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .workflow-number {
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .workflow-content {
+            flex: 1;
+        }
+        
+        .workflow-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        
+        .workflow-desc {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+            
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .framework-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .matrix-row {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Mobile-friendly header controls */
+            div[style*="margin-bottom: 20px"] {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                padding: 12px;
+                margin: -40px -20px 20px -20px;
+                border-bottom: 1px solid var(--border);
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            button[onclick="toggleTheme()"],
+            button[onclick*="location.href"] {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 16px;
+                flex: 1 1 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button onclick="toggleTheme()" id="themeToggle" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            🌙
+        </button>
+        <button onclick="location.href='index.html'" style="padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;">
+            ← Back to Templates
+        </button>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
+    
+    <div class="header">
+        <h1>📋 SIOP Quick Reference Guide</h1>
+        <div class="subtitle">Keep this handy for daily decision-making • Print and post near your desk</div>
+    </div>
+    
+    <!-- EMAIL TRIAGE -->
+    <div class="reference-section">
+        <div class="section-title">📧 Email Triage Framework</div>
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">
+            Use this 4-category system to rapidly prioritize incoming emails and prevent inbox overwhelm.
+        </p>
+        
+        <div class="framework-grid">
+            <div class="framework-card urgent">
+                <div class="card-icon">🔴</div>
+                <div class="card-title">Urgent</div>
+                <div class="card-subtitle">Action needed TODAY</div>
+                <div class="card-desc">
+                    <strong>When to use:</strong><br>
+                    • Deadline is today<br>
+                    • Blocking someone else's work<br>
+                    • Critical meeting/decision today<br>
+                    • Emergency situation
+                </div>
+            </div>
+            
+            <div class="framework-card important">
+                <div class="card-icon">🟠</div>
+                <div class="card-title">Important</div>
+                <div class="card-subtitle">Significant, can wait 1-2 days</div>
+                <div class="card-desc">
+                    <strong>When to use:</strong><br>
+                    • Deadline this week<br>
+                    • Strategic decision<br>
+                    • Requires your expertise<br>
+                    • Board/exec reporting
+                </div>
+            </div>
+            
+            <div class="framework-card routine">
+                <div class="card-icon">🟢</div>
+                <div class="card-title">Routine</div>
+                <div class="card-subtitle">FYI or batch later</div>
+                <div class="card-desc">
+                    <strong>When to use:</strong><br>
+                    • No specific deadline<br>
+                    • Informational updates<br>
+                    • Standard procedures<br>
+                    • Can be batched
+                </div>
+            </div>
+            
+            <div class="framework-card delegate">
+                <div class="card-icon">🔵</div>
+                <div class="card-title">Delegate</div>
+                <div class="card-subtitle">For your team</div>
+                <div class="card-desc">
+                    <strong>When to use:</strong><br>
+                    • Standard request<br>
+                    • Team can handle it<br>
+                    • Development opportunity<br>
+                    • Not your core expertise
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PRIORITY MANAGEMENT -->
+    <div class="reference-section">
+        <div class="section-title">🎯 Priority Management Matrix</div>
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">
+            When overwhelmed by competing demands, use this framework to decide what to tackle first.
+        </p>
+        
+        <div class="matrix">
+            <div class="matrix-row">
+                <div class="matrix-cell do-now">
+                    <h4>🔴 DO NOW</h4>
+                    <p><strong>Criteria:</strong> Deadline today OR blocks someone else</p>
+                    <ul>
+                        <li>Executive meeting prep (meeting today)</li>
+                        <li>Data blocking colleague's analysis</li>
+                        <li>Final deadline expiring</li>
+                        <li>Production-blocking issue</li>
+                    </ul>
+                </div>
+                
+                <div class="matrix-cell schedule">
+                    <h4>🟠 SCHEDULE</h4>
+                    <p><strong>Criteria:</strong> Important but can wait 1-2 days</p>
+                    <ul>
+                        <li>Strategic analysis due Friday</li>
+                        <li>Performance review (due next week)</li>
+                        <li>Process improvement work</li>
+                        <li>Training preparation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="matrix-row">
+                <div class="matrix-cell delegate">
+                    <h4>🔵 DELEGATE</h4>
+                    <p><strong>Criteria:</strong> Someone else can do it equally well</p>
+                    <ul>
+                        <li>Standard supplier requests</li>
+                        <li>Template/document sharing</li>
+                        <li>Routine data extracts</li>
+                        <li>Training session (team can run)</li>
+                    </ul>
+                </div>
+                
+                <div class="matrix-cell eliminate">
+                    <h4>⚪ ELIMINATE</h4>
+                    <p><strong>Criteria:</strong> Low impact if not done</p>
+                    <ul>
+                        <li>Optional meetings/events</li>
+                        <li>Nice-to-have reading</li>
+                        <li>Low-priority reports</li>
+                        <li>Informal catch-ups</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-box">
+            <h4>💡 Decision-Making Tips:</h4>
+            <ul>
+                <li><strong>If in doubt, ask:</strong> "What happens if this doesn't get done today?"</li>
+                <li><strong>Time-box decisions:</strong> Max 5 minutes to prioritize - imperfect action beats perfect planning</li>
+                <li><strong>Check dependencies:</strong> Is anyone waiting on you? That's likely DO NOW</li>
+                <li><strong>Consider energy:</strong> Match hard tasks to your peak energy time (usually mornings)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- DATA ANALYSIS WORKFLOW -->
+    <div class="reference-section">
+        <div class="section-title">📊 Data Analysis 6-Step Workflow</div>
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">
+            Follow this structured approach to prevent analysis paralysis and deliver actionable insights.
+        </p>
+        
+        <div class="workflow-list">
+            <div class="workflow-step">
+                <div class="workflow-number">1</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Define the Question</div>
+                    <div class="workflow-desc">What decision needs to be made? Who needs what by when? (5 min)</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">2</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Gather & Validate Data</div>
+                    <div class="workflow-desc">Time-box to 15 min. Get obvious sources first. (15 min)</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">3</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Explore Data</div>
+                    <div class="workflow-desc">Look for patterns, outliers, trends. Quick observations. (10-15 min)</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">4</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Deep Dive</div>
+                    <div class="workflow-desc">Time-box to 20 min! Investigate root causes and impacts. (20 min)</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">5</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Synthesize Insights</div>
+                    <div class="workflow-desc">Use WHAT → SO WHAT → NOW WHAT framework. (15 min)</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">6</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Present & Communicate</div>
+                    <div class="workflow-desc">Executive summary first. Details in appendix. (10 min)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-box">
+            <h4>💡 Analysis Tips for ADHD:</h4>
+            <ul>
+                <li><strong>Always time-box:</strong> Set timers for each step to prevent rabbit holes</li>
+                <li><strong>Document as you go:</strong> Don't wait until the end to write insights</li>
+                <li><strong>Use templates:</strong> Same structure every time = less decision fatigue</li>
+                <li><strong>Present at 70%:</strong> Get feedback early rather than perfecting to 100%</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- MEETING PREP -->
+    <div class="reference-section">
+        <div class="section-title">🤝 Meeting Prep Essentials</div>
+        <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">
+            Complete these 5 steps before important meetings (15-20 minutes total).
+        </p>
+        
+        <div class="workflow-list">
+            <div class="workflow-step">
+                <div class="workflow-number">1</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Clarify Objectives</div>
+                    <div class="workflow-desc">Meeting purpose, decisions needed, your role</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">2</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Map Stakeholders</div>
+                    <div class="workflow-desc">What does each person care about? Their likely concerns?</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">3</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Prepare 3 Key Messages</div>
+                    <div class="workflow-desc">SITUATION → IMPACT → ASK for each message</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">4</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Anticipate Questions</div>
+                    <div class="workflow-desc">Prepare answers for 3-5 likely questions</div>
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="workflow-number">5</div>
+                <div class="workflow-content">
+                    <div class="workflow-title">Final Checklist</div>
+                    <div class="workflow-desc">Materials, tech check, notepad, key messages memorized</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Reference Guide</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue/Crisis Management Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hover: #e5e7eb;
+            --border: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #333333;
+            --border: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+        }
+        
+        @media print {
+            :root, [data-theme="dark"] {
+                --bg-primary: #ffffff !important;
+                --text-primary: #000000 !important;
+            }
+            * { background: none !important; }
+            .sidebar, button, .completion-overlay { display: none !important; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .crisis-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .app-header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .scenario-item {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .scenario-item:hover {
+            border-color: var(--accent-red);
+        }
+        
+        .scenario-item.active {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .scenario-item.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .scenario-item.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .scenario-type {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .progress-stats {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+        }
+        
+        .top-bar h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .scenario-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .scenario-header {
+            margin-bottom: 32px;
+        }
+        
+        .scenario-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .scenario-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .crisis-box {
+            background: #fef2f2;
+            border-left: 4px solid var(--accent-red);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+        
+        [data-theme="dark"] .crisis-box {
+            background: #3a1a1a;
+        }
+        
+        .crisis-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent-red);
+        }
+        
+        .crisis-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .framework-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .framework-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .framework-steps {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .framework-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .practice-area {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .decision-options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .decision-option {
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .decision-option:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .decision-option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .decision-option h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .decision-option p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .feedback-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .feedback-panel.show {
+            display: block;
+        }
+        
+        .feedback-panel.correct {
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .feedback-panel.incorrect {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-icon {
+            font-size: 24px;
+        }
+        
+        .feedback-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .feedback-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .completion-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completion-overlay.show {
+            display: flex;
+        }
+        
+        .completion-content {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: 24px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .completion-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .completion-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .completion-stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .crisis-app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile-friendly top bar */
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+                flex: 1 1 100%;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly content area */
+            .content-area {
+                padding: 20px 16px;
+            }
+            
+            .scenario-title-large {
+                font-size: 24px;
+            }
+            
+            .framework-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .decision-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .decision-option {
+                padding: 16px;
+                min-height: 60px;
+                font-size: 14px;
+            }
+            
+            .decision-option h4 {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .decision-option p {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly coming soon popup */
+            .coming-soon-toast {
+                max-width: 90%;
+                padding: 20px 24px;
+                left: 5%;
+                transform: translateY(-50%);
+            }
+            
+            .coming-soon-toast .icon {
+                font-size: 36px;
+            }
+            
+            .coming-soon-toast .title {
+                font-size: 18px;
+            }
+            
+            .coming-soon-toast .message {
+                font-size: 13px;
+            }
+            
+            /* Mobile-friendly feedback panel */
+            .feedback-panel {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            
+            .feedback-title {
+                font-size: 16px;
+            }
+            
+            .feedback-content {
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly completion overlay */
+            .completion-overlay {
+                padding: 20px;
+            }
+            
+            .completion-card {
+                padding: 24px;
+                max-width: 100%;
+            }
+            
+            /* Ensure text is readable */
+            .scenario-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .crisis-box {
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .framework-step {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="crisis-app">
+        <div class="sidebar">
+            <div class="app-header">
+                <h1>🚨 Crisis Manager</h1>
+                <div class="subtitle">Training Mode</div>
+            </div>
+            
+            <div class="scenario-list" id="scenarioList">
+                <!-- Scenarios will be inserted here -->
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="statCompleted">0/4</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="statAccuracy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h2>Issue/Crisis Management Training</h2>
+                <div class="top-bar-actions">
+                    <button onclick="toggleTheme()" id="themeToggle" class="btn">🌙</button>
+                    <button onclick="location.href='index.html'" class="btn">← Back to Hub</button>
+                </div>
+            </div>
+            
+            <div class="content-area" id="contentArea">
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Select a scenario to begin</div>
+                        <h1 class="scenario-title-large">Manage Issues & Crises</h1>
+                        <p class="scenario-description">
+                            Practice quick decision-making under pressure. Learn when to escalate vs. solve yourself, and how to communicate during crisis situations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="completion-overlay" id="completionOverlay">
+        <div class="completion-content">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Training Complete!</div>
+            <div class="completion-stats">
+                <div>
+                    <div class="completion-stat-value" id="finalCompleted">0/4</div>
+                    <div class="completion-stat-label">Scenarios</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalAccuracy">0%</div>
+                    <div class="completion-stat-label">Accuracy</div>
+                </div>
+                <div>
+                    <div class="completion-stat-value" id="finalScore">0</div>
+                    <div class="completion-stat-label">Score</div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                You've practiced handling supply gaps, deadline slips, and crisis situations. You're ready to make quick decisions under pressure!
+            </p>
+            <button class="restart-btn" onclick="location.reload()">Practice Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const scenarios = [
+            {
+                id: 1,
+                title: "Supply Gap Crisis",
+                type: "Urgent",
+                description: "A critical supplier announces they can't meet Q2 commitments due to equipment failure.",
+                crisis: "You receive an email at 8 AM: 'Titanium supplier experiencing equipment failure. Cannot meet 40% of Q2 commitments. Need alternative solution immediately.' Production is scheduled to start in 3 weeks.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the impact? How urgent? Who's affected? (e.g., '40% of Q2 production at risk, 3 weeks until production starts, affects Trent engine line')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you solve this? Do you have authority/resources? If impact is high and you lack authority → ESCALATE. If you can solve quickly → SOLVE."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Contact alternative suppliers, check inventory, adjust schedule. If escalating: Brief manager with facts, impact, options, recommendation."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Update stakeholders immediately. Be transparent about impact and timeline. Don't hide bad news - it gets worse."
+                    },
+                    {
+                        step: 5,
+                        title: "MONITOR",
+                        content: "Set up daily check-ins. Track progress. Adjust plan as new information emerges."
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "escalate",
+                        title: "Escalate to Manager Immediately",
+                        description: "Brief manager with impact assessment and request decision/authority"
+                    },
+                    {
+                        id: "solve",
+                        title: "Solve Yourself",
+                        description: "Start contacting alternative suppliers and adjusting schedules on your own"
+                    },
+                    {
+                        id: "wait",
+                        title: "Wait and See",
+                        description: "Monitor the situation and hope supplier resolves it"
+                    }
+                ],
+                correct: "escalate",
+                explanation: "This is a high-impact crisis affecting 40% of Q2 production. You likely don't have authority to commit to alternative suppliers or major schedule changes. Escalate immediately with impact assessment and options - this gives leadership visibility and decision-making power."
+            },
+            {
+                id: 2,
+                title: "Deadline Slip",
+                type: "Important",
+                description: "A key deliverable deadline is slipping due to data quality issues.",
+                crisis: "The Q1 SIOP review data analysis is due Friday, but data quality issues mean you'll be 3 days late. The review meeting is scheduled for next Monday. You discovered this Wednesday morning.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the impact? Can the meeting be moved? What's causing the delay? (e.g., '3-day delay, meeting Monday, data validation issues')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you solve this? Do you need help/resources? If you can solve with extra effort → SOLVE. If you need resources/authority → ESCALATE."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Prioritize critical data, work extra hours, get team help. If escalating: Request resources, propose timeline adjustment, get approval."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify stakeholders early. Propose solutions. Don't wait until Friday to say you're late."
+                    },
+                    {
+                        step: 5,
+                        title: "MONITOR",
+                        content: "Daily progress updates. Adjust plan if needed. Learn from this to prevent future slips."
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "communicate-solve",
+                        title: "Communicate Early & Solve",
+                        description: "Notify stakeholders Wednesday, propose moving meeting, work extra hours to catch up"
+                    },
+                    {
+                        id: "silent-solve",
+                        title: "Solve Silently",
+                        description: "Work extra hours without telling anyone, hope to catch up"
+                    },
+                    {
+                        id: "escalate",
+                        title: "Escalate Immediately",
+                        description: "Tell manager you can't meet deadline, request help"
+                    }
+                ],
+                correct: "communicate-solve",
+                explanation: "You discovered this early (Wednesday), so you have time to solve it. But you MUST communicate early - stakeholders need to know the meeting might move. This gives them time to adjust and shows transparency. Escalating immediately might be overkill if you can solve it."
+            },
+            {
+                id: 3,
+                title: "Data Quality Issue",
+                type: "Operational",
+                description: "You discover systematic errors in supplier data that affects planning accuracy.",
+                crisis: "During routine data validation, you discover that Supplier A has been reporting incorrect inventory levels for the past 2 months. This affects Q1 and Q2 planning accuracy. The error is systematic, not a one-off.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the impact? How far back does it go? What decisions were made based on bad data? (e.g., '2 months of bad data, affects Q1/Q2 plans, may have caused ordering errors')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you fix this? Do you need supplier cooperation? If you can fix data and work with supplier → SOLVE. If this affects major decisions → ESCALATE."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Correct historical data, contact supplier to fix process, update plans. If escalating: Brief manager on impact, get approval for supplier conversation."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify affected teams. Explain impact. Share corrected data. Update stakeholders on resolution."
+                    },
+                    {
+                        step: 5,
+                        title: "PREVENT",
+                        content: "Put controls in place. Add validation checks. Review other suppliers. Document process improvements."
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "solve-communicate",
+                        title: "Solve & Communicate",
+                        description: "Correct the data, contact supplier, update plans, notify affected teams"
+                    },
+                    {
+                        id: "escalate",
+                        title: "Escalate Immediately",
+                        description: "Tell manager about the data quality issue and request guidance"
+                    },
+                    {
+                        id: "ignore",
+                        title: "Focus on Future Data",
+                        description: "Ensure future data is accurate without spending time correcting historical data"
+                    }
+                ],
+                correct: "solve-communicate",
+                explanation: "This is operational - you can solve it by correcting data and working with the supplier. But you MUST communicate to affected teams because bad data may have influenced their decisions. Escalating might be overkill unless this affects major strategic decisions."
+            },
+            {
+                id: 4,
+                title: "Stakeholder Conflict",
+                type: "Relationship",
+                description: "Two stakeholders have conflicting priorities and both are demanding your time.",
+                crisis: "Procurement Director wants you to focus on supplier negotiations. Production Planning Manager wants you to prioritize demand forecasting. Both are urgent, both are your responsibility. They're both escalating to your manager.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What are the real priorities? What's the business impact of each? What's the deadline for each? (e.g., 'Both urgent, both affect Q2, both need your expertise')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you negotiate a solution? Do you need manager to prioritize? If you can facilitate discussion → SOLVE. If they won't compromise → ESCALATE."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Facilitate meeting, find compromise, propose timeline. If escalating: Brief manager with both perspectives, request prioritization decision."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Be transparent with both stakeholders. Explain the conflict. Share the resolution. Don't play them against each other."
+                    },
+                    {
+                        step: 5,
+                        title: "FOLLOW UP",
+                        content: "Ensure both feel heard. Deliver on commitments. Build relationships to prevent future conflicts."
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "facilitate",
+                        title: "Facilitate Discussion",
+                        description: "Bring both stakeholders together, find compromise, propose solution"
+                    },
+                    {
+                        id: "escalate",
+                        title: "Escalate to Manager",
+                        description: "Ask manager to prioritize and make the decision"
+                    },
+                    {
+                        id: "choose",
+                        title: "Choose One Yourself",
+                        description: "Pick the one you think is more important and focus on that"
+                    }
+                ],
+                correct: "facilitate",
+                explanation: "This is a relationship/priority conflict. You should try to facilitate a discussion first - often stakeholders don't realize the full picture. If you can help them see each other's perspectives and find a compromise, you solve it yourself. Escalate only if they won't compromise or if the decision requires higher authority."
+            },
+            {
+                id: 5,
+                title: "System Failure",
+                type: "Technical Crisis",
+                description: "Critical planning system goes down during peak planning cycle.",
+                crisis: "The MRP system crashes at 9 AM on Monday - the busiest planning day of the month. No one can access planning data. IT estimates 4-6 hour recovery time. Your team has deadlines today.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the impact? Who's affected? What's the timeline? (e.g., 'MRP system down, affects all planning teams, IT estimates 4-6 hours, deadlines today')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you work around this? Do you have backups? If you have workarounds → SOLVE. If this blocks everything → ESCALATE."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Use backup data sources, manual processes, prioritize critical work. If escalating: Brief manager on impact, request deadline extensions, coordinate with IT."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify all affected teams immediately. Share workarounds if available. Update on recovery timeline. Don't let people discover it themselves."
+                    },
+                    {
+                        step: 5,
+                        title: "MONITOR",
+                        content: "Track system recovery. Adjust workarounds as needed. Learn from this - what backups do we need?"
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "workaround-communicate",
+                        title: "Implement Workarounds & Communicate",
+                        description: "Use backup data, manual processes, notify teams, request deadline extensions"
+                    },
+                    {
+                        id: "wait",
+                        title: "Wait for System Recovery",
+                        description: "Do nothing and wait for IT to fix the system"
+                    },
+                    {
+                        id: "panic",
+                        title: "Panic and Escalate Everything",
+                        description: "Escalate every single task without trying workarounds"
+                    }
+                ],
+                correct: "workaround-communicate",
+                explanation: "System failures happen. You need to have workarounds (backup data, manual processes) and communicate early. Waiting wastes time. Panicking without trying solutions isn't helpful. Show resilience and problem-solving."
+            },
+            {
+                id: 6,
+                title: "Supplier Quality Issue",
+                type: "Quality Crisis",
+                description: "Discover quality defects in delivered components.",
+                crisis: "Quality inspection reveals that Supplier B's titanium components have defects - 15% failure rate. These components are already in production inventory. Some may have been used in engines currently in assembly.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the scope? How many affected? What's the risk? (e.g., '15% failure rate, components in inventory and possibly in assembly', 'Risk: engine failures')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Do you have authority to stop production? Can you quarantine inventory? If you can contain it → SOLVE. If this affects production/safety → ESCALATE immediately."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Quarantine inventory, contact supplier, initiate quality review. If escalating: Brief manager immediately, involve quality team, consider production halt."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify production, quality, and supplier immediately. Be transparent about scope. Don't hide quality issues - they escalate."
+                    },
+                    {
+                        step: 5,
+                        title: "RESOLVE",
+                        content: "Work with supplier on root cause. Replace defective components. Put controls in place. Document lessons learned."
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "contain-escalate",
+                        title: "Contain & Escalate Immediately",
+                        description: "Quarantine inventory, stop affected production, escalate to manager and quality team immediately"
+                    },
+                    {
+                        id: "solve-alone",
+                        title: "Solve Yourself",
+                        description: "Handle quality issue without involving others"
+                    },
+                    {
+                        id: "minimize",
+                        title: "Minimize the Issue",
+                        description: "Downplay the defects and hope they don't cause problems"
+                    }
+                ],
+                correct: "contain-escalate",
+                explanation: "Quality issues affecting production are serious. You must contain the problem (quarantine inventory) and escalate immediately - this affects safety and customer commitments. Don't try to solve quality crises alone."
+            },
+            {
+                id: 7,
+                title: "Budget Overrun",
+                type: "Financial",
+                description: "Project is exceeding budget with more work remaining.",
+                crisis: "You're 75% through the SIOP transformation project but have spent 90% of the budget. Supplier onboarding is taking longer and costing more than estimated. You still need to complete data integration and training.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the variance? Why is it happening? What's remaining? (e.g., '15% over budget, supplier onboarding more complex, data integration and training remaining')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you reduce scope? Can you find savings? If you can adjust → SOLVE. If you need more budget → ESCALATE early."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Reduce scope, find efficiencies, prioritize critical work. If escalating: Present options (reduce scope vs. increase budget), show impact, request decision."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify finance and stakeholders early. Be transparent about variance and options. Don't wait until budget is exhausted."
+                    },
+                    {
+                        step: 5,
+                        title: "PREVENT",
+                        content: "Put controls in place. Review remaining work estimates. Learn from this - why were estimates off?"
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "communicate-options",
+                        title: "Communicate Early with Options",
+                        description: "Notify stakeholders, present options (reduce scope vs. increase budget), request decision"
+                    },
+                    {
+                        id: "hide",
+                        title: "Hide the Overrun",
+                        description: "Don't tell anyone, hope to find savings later"
+                    },
+                    {
+                        id: "demand-budget",
+                        title: "Demand More Budget",
+                        description: "Request additional budget without showing options or impact"
+                    }
+                ],
+                correct: "communicate-options",
+                explanation: "Budget overruns must be communicated early. Presenting options (reduce scope vs. increase budget) gives stakeholders choices. Hiding overruns destroys trust. Demanding without options doesn't help decision-making."
+            },
+            {
+                id: 8,
+                title: "Team Member Crisis",
+                type: "People",
+                description: "Key team member has personal crisis affecting work.",
+                crisis: "Your lead analyst who handles all supplier data integration has a family emergency and will be unavailable for 2 weeks. This person is critical to the Q2 planning cycle starting next week. No one else has their expertise.",
+                framework: [
+                    {
+                        step: 1,
+                        title: "ASSESS",
+                        content: "What's the impact? What work is affected? What's the timeline? (e.g., 'Lead analyst unavailable 2 weeks, affects Q2 planning cycle starting next week', 'Critical expertise gap')"
+                    },
+                    {
+                        step: 2,
+                        title: "DECIDE: Solve vs. Escalate",
+                        content: "Can you redistribute work? Can you get temporary help? If you can cover → SOLVE. If this blocks critical work → ESCALATE for resources."
+                    },
+                    {
+                        step: 3,
+                        title: "ACT",
+                        content: "If solving: Redistribute work, document processes, get team member to brief others. If escalating: Request temporary resource, adjust timeline, get approval."
+                    },
+                    {
+                        step: 4,
+                        title: "COMMUNICATE",
+                        content: "Notify affected stakeholders. Be supportive of team member. Don't share personal details - just impact and mitigation."
+                    },
+                    {
+                        step: 5,
+                        title: "SUPPORT",
+                        content: "Support your team member. Ensure work coverage. Learn from this - what knowledge gaps exist?"
+                    }
+                ],
+                decisions: [
+                    {
+                        id: "redistribute-escalate",
+                        title: "Redistribute Work & Escalate for Support",
+                        description: "Document processes, redistribute work, request temporary resource if needed, adjust timeline"
+                    },
+                    {
+                        id: "pressure",
+                        title: "Pressure Team Member",
+                        description: "Ask team member to work despite personal crisis"
+                    },
+                    {
+                        id: "wait",
+                        title: "Wait for Return",
+                        description: "Do nothing and wait for team member to return"
+                    }
+                ],
+                correct: "redistribute-escalate",
+                explanation: "People crises require empathy and support. Redistribute work and escalate for resources if needed. Pressuring someone in crisis is wrong and won't help. Waiting blocks critical work. Show leadership by covering the gap."
+            }
+        ];
+        
+        let currentScenario = null;
+        let completedScenarios = [];
+        let correctAnswers = 0;
+        let selectedDecision = null;
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function init() {
+            renderScenarioList();
+            loadTheme();
+        }
+        
+        function renderScenarioList() {
+            const list = document.getElementById('scenarioList');
+            list.innerHTML = scenarios.map(scenario => {
+                const isCompleted = completedScenarios.includes(scenario.id);
+                return `
+                    <div class="scenario-item ${isCompleted ? 'completed' : ''} ${currentScenario?.id === scenario.id ? 'active' : ''}" 
+                         onclick="loadScenario(${scenario.id})">
+                        <div class="scenario-title">${scenario.title}</div>
+                        <div class="scenario-type">${scenario.type}</div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function loadScenario(id) {
+            currentScenario = scenarios.find(s => s.id === id);
+            selectedDecision = null;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="scenario-container">
+                    <div class="scenario-header">
+                        <div class="scenario-badge">Scenario ${id} of ${scenarios.length}</div>
+                        <h1 class="scenario-title-large">${currentScenario.title}</h1>
+                        <p class="scenario-description">${currentScenario.description}</p>
+                    </div>
+                    
+                    <div class="crisis-box">
+                        <h3>🚨 Crisis Situation</h3>
+                        <p>${currentScenario.crisis}</p>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <div class="framework-title">🛠️ Crisis Management Framework</div>
+                        <div class="framework-steps">
+                            ${currentScenario.framework.map(step => `
+                                <div class="framework-step">
+                                    <div class="step-number">${step.step}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.content}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="practice-area">
+                        <div class="practice-title">🎯 Practice: What's Your Decision?</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Based on the framework above, what's the best approach for this crisis?
+                        </p>
+                        <div class="decision-options" id="decisionOptions">
+                            ${shuffleArray(currentScenario.decisions).map(decision => `
+                                <div class="decision-option" onclick="selectDecision('${decision.id}')" id="decision-${decision.id}">
+                                    <h4>${decision.title}</h4>
+                                    <p>${decision.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="feedback-panel" id="feedbackPanel"></div>
+                    </div>
+                </div>
+            `;
+            
+            renderScenarioList();
+        }
+        
+        function selectDecision(decisionId) {
+            selectedDecision = decisionId;
+            
+            // Update UI
+            document.querySelectorAll('.decision-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`decision-${decisionId}`).classList.add('selected');
+            
+            // Check answer
+            const isCorrect = decisionId === currentScenario.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+            }
+            
+            if (!completedScenarios.includes(currentScenario.id)) {
+                completedScenarios.push(currentScenario.id);
+            }
+            
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.className = `feedback-panel show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackPanel.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+                    <div class="feedback-title">${isCorrect ? 'Excellent Decision!' : 'Consider This Approach'}</div>
+                </div>
+                <div class="feedback-content">
+                    ${isCorrect 
+                        ? `<p><strong>Perfect!</strong> You've made the right decision for this crisis situation.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                        : `<p>The best approach for this scenario is <strong>${currentScenario.decisions.find(d => d.id === currentScenario.correct).title}</strong>.</p>
+                           <p style="margin-top: 12px;">${currentScenario.explanation}</p>`
+                    }
+                </div>
+            `;
+            
+            updateStats();
+            renderScenarioList();
+            
+            // Check if all scenarios completed
+            if (completedScenarios.length === scenarios.length) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 2000);
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('statCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            const accuracy = completedScenarios.length > 0 
+                ? Math.round((correctAnswers / completedScenarios.length) * 100) 
+                : 0;
+            document.getElementById('statAccuracy').textContent = `${accuracy}%`;
+        }
+        
+        function showCompletion() {
+            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
+            document.getElementById('finalCompleted').textContent = `${completedScenarios.length}/${scenarios.length}`;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalScore').textContent = correctAnswers;
+            document.getElementById('completionOverlay').classList.add('show');
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        init();
+    </script>
+</body>
+</html>

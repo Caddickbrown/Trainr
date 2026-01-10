@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIOP Training Hub - Rolls-Royce Preparation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f12;
+            --bg-secondary: #18181c;
+            --bg-card: #1e1e24;
+            --bg-elevated: #26262e;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(255, 255, 255, 0.1);
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-orange: #f97316;
+            --accent-green: #10b981;
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-card: #ffffff;
+            --bg-elevated: #f3f4f6;
+            --border-subtle: #e5e7eb;
+            --border-accent: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Subtle grid pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 80px 24px 60px;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .header h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Intro Card */
+        .intro-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 48px;
+            transition: all 0.3s ease;
+        }
+        
+        .intro-card:hover {
+            border-color: var(--border-accent);
+        }
+        
+        .intro-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .intro-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        
+        .intro-card ul {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.9;
+            margin-left: 24px;
+        }
+        
+        .intro-card li {
+            margin-bottom: 10px;
+        }
+        
+        /* Module Grid */
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 48px 0 24px 0;
+            text-align: center;
+        }
+        
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .module-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+            opacity: 0.8;
+        }
+        
+        .module-card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        
+        .module-card.email { --accent-color: #667eea; }
+        .module-card.data { --accent-color: #3b82f6; }
+        .module-card.meeting { --accent-color: #8b5cf6; }
+        .module-card.priority { --accent-color: #ec4899; }
+        .module-card.daily { --accent-color: #06b6d4; }
+        
+        .module-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .module-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .module-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            min-height: 84px;
+        }
+        
+        .module-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-badge {
+            padding: 6px 12px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        /* Style Essential badge */
+        .meta-badge.essential {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+        
+        /* Style Beneficial badge */
+        .meta-badge.beneficial {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: var(--accent-purple);
+        }
+        
+        [data-theme="dark"] .meta-badge.essential {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+        
+        [data-theme="dark"] .meta-badge.beneficial {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #a78bfa;
+        }
+        
+        .module-link {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .module-link:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-accent);
+            transform: scale(1.02);
+        }
+        
+        /* Tips Section */
+        .tips-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 48px;
+        }
+        
+        .tips-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .tip-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            padding: 24px;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+        
+        .tip-card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+        }
+        
+        .tip-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .tip-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Usage Guide */
+        .usage-guide {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 48px;
+        }
+        
+        .usage-guide h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .usage-phase {
+            margin-bottom: 32px;
+        }
+        
+        .usage-phase:last-child {
+            margin-bottom: 0;
+        }
+        
+        .usage-phase h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+        }
+        
+        .usage-phase ul {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.9;
+            margin-left: 24px;
+        }
+        
+        .usage-phase li {
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            /* Ensure theme toggle is accessible on mobile */
+            button[onclick="toggleTheme()"] {
+                position: fixed !important;
+                top: 16px !important;
+                right: 16px !important;
+                z-index: 1000 !important;
+                min-width: 44px !important;
+                min-height: 44px !important;
+                padding: 12px 16px !important;
+                font-size: 18px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="position: fixed; top: 24px; right: 24px; z-index: 1000;">
+            <button onclick="toggleTheme()" id="themeToggle" style="padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; font-family: inherit;">
+                ☀️
+            </button>
+        </div>
+        
+        <div class="header">
+            <h1>🎯 SIOP Training Hub</h1>
+            <p class="subtitle">Rolls-Royce Planning & Delivery Lead Preparation</p>
+            <div class="badge">🧠 ADHD-Optimized • Interactive Training</div>
+        </div>
+        
+        <div class="intro-card">
+            <h2>👋 Welcome to Your Training Center</h2>
+            <p>
+                Congratulations on your upcoming Rolls-Royce offer! This training hub features <strong>interactive, realistic simulations</strong> of the tools and situations you'll encounter in your SIOP Transformation role.
+            </p>
+            <p>
+                Each module is designed to look and feel like the actual applications you'll use:
+            </p>
+            <ul>
+                <li>📧 <strong>Email Triage</strong> - Practice in a realistic email client interface</li>
+                <li>📊 <strong>Data Analysis</strong> - Work with an analytics dashboard like the real thing</li>
+                <li>🤝 <strong>Meeting Prep</strong> - Calendar-style meeting preparation</li>
+                <li>🎯 <strong>Priority Management</strong> - Task board for rapid decision-making</li>
+                <li>🌅 <strong>Daily Planning</strong> - Digital planner interface for routines</li>
+            </ul>
+            <p style="margin-top: 20px;">
+                <strong>Practice as many times as you need.</strong> These aren't just training modules—they're tools you can return to any time you need structure, clarity, or a reset.
+            </p>
+        </div>
+        
+        <div class="section-title">⭐ Essential Training Modules</div>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px; font-size: 14px;">
+            Complete these before starting your role. These are core skills you'll use daily.
+        </p>
+        
+        <div class="modules-grid">
+            <div class="module-card email">
+                <div class="module-icon">📧</div>
+                <div class="module-title">Email Triage Training</div>
+                <div class="module-description">
+                    Practice rapid email prioritization in a realistic email client. Learn the 4-category ADHD-friendly system with 18 real SIOP scenarios.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 10-15 min</span>
+                    <span class="meta-badge">🎮 Interactive</span>
+                    <span class="meta-badge essential">⭐ Essential</span>
+                </div>
+                <a href="01-email-triage-training.html" class="module-link">Launch Email Client →</a>
+            </div>
+            
+            <div class="module-card data">
+                <div class="module-icon">📊</div>
+                <div class="module-title">Data Analysis Workflow</div>
+                <div class="module-description">
+                    Step through a professional analytics dashboard. Structured 6-step process for SIOP data analysis that prevents analysis paralysis.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 15-20 min</span>
+                    <span class="meta-badge">📝 Guided</span>
+                    <span class="meta-badge essential">⭐ Essential</span>
+                </div>
+                <a href="02-data-analysis-workflow.html" class="module-link">Open Analytics Dashboard →</a>
+            </div>
+            
+            <div class="module-card meeting">
+                <div class="module-icon">🤝</div>
+                <div class="module-title">Meeting Preparation</div>
+                <div class="module-description">
+                    Master stakeholder meetings with a 5-step preparation system. Calendar-integrated prep that builds confidence and reduces anxiety.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 12-15 min</span>
+                    <span class="meta-badge">🎯 Practical</span>
+                    <span class="meta-badge essential">⭐ Essential</span>
+                </div>
+                <a href="03-meeting-preparation.html" class="module-link">Open Meeting Planner →</a>
+            </div>
+            
+            <div class="module-card priority">
+                <div class="module-icon">🎯</div>
+                <div class="module-title">Priority Management</div>
+                <div class="module-description">
+                    Task board simulation with 12 competing demands. Practice the DO / SCHEDULE / DELEGATE / ELIMINATE framework in action.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 10-15 min</span>
+                    <span class="meta-badge">🎮 Game-like</span>
+                    <span class="meta-badge essential">⭐ Essential</span>
+                </div>
+                <a href="04-priority-management.html" class="module-link">Open Task Board →</a>
+            </div>
+            
+            <div class="module-card daily">
+                <div class="module-icon">🌅</div>
+                <div class="module-title">Daily Planning Routine</div>
+                <div class="module-description">
+                    Digital planner for morning and evening routines. 15-minute rituals that set you up for daily success and reduce overwhelm.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 15 min</span>
+                    <span class="meta-badge">🔄 Repeatable</span>
+                    <span class="meta-badge essential">⭐ Essential</span>
+                </div>
+                <a href="05-daily-planning-routine.html" class="module-link">Open Digital Planner →</a>
+            </div>
+        </div>
+        
+        <div class="section-title" style="margin-top: 64px;">✨ Beneficial Training Modules</div>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px; font-size: 14px;">
+            These are helpful skills you can learn as needed. Great for building expertise and handling specific situations.
+        </p>
+        
+        <div class="modules-grid">
+            <div class="module-card meeting">
+                <div class="module-icon">💬</div>
+                <div class="module-title">Stakeholder Communication</div>
+                <div class="module-description">
+                    Master communicating with executives, teams, and peers. Practice delivering status updates, difficult news, and decision requests with confidence.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 20-25 min</span>
+                    <span class="meta-badge">📝 Practice</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="06-stakeholder-communication-training.html" class="module-link">Start Communication Training →</a>
+            </div>
+            
+            <div class="module-card priority">
+                <div class="module-icon">🔄</div>
+                <div class="module-title">Context Switching Management</div>
+                <div class="module-description">
+                    Learn strategies to handle interruptions, switch tasks efficiently, and get back into deep work quickly. Essential for ADHD success.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 15-20 min</span>
+                    <span class="meta-badge">🧠 ADHD-Focused</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="07-context-switching-management.html" class="module-link">Learn Context Switching →</a>
+            </div>
+            
+            <div class="module-card data">
+                <div class="module-icon">📊</div>
+                <div class="module-title">Presentation Deck Prep</div>
+                <div class="module-description">
+                    Master the SITUATION → IMPACT → ASK framework for executive slide decks. Practice structuring transformation updates and status reports.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 20-25 min</span>
+                    <span class="meta-badge">📈 Executive</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="08-presentation-deck-prep-training.html" class="module-link">Build Slide Decks →</a>
+            </div>
+            
+            <div class="module-card email">
+                <div class="module-icon">🚨</div>
+                <div class="module-title">Issue/Crisis Management</div>
+                <div class="module-description">
+                    Practice quick decision-making under pressure. Learn when to escalate vs. solve yourself, and how to communicate during crisis situations.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 20-25 min</span>
+                    <span class="meta-badge">⚡ Crisis</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="09-issue-crisis-management-training.html" class="module-link">Manage Crises →</a>
+            </div>
+            
+            <div class="module-card data">
+                <div class="module-icon">🗺️</div>
+                <div class="module-title">Process Mapping Basics</div>
+                <div class="module-description">
+                    Learn to visually document SIOP workflows, identify bottlenecks, and communicate processes clearly. Essential for transformation work.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 25-30 min</span>
+                    <span class="meta-badge">📐 Visual</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="10-process-mapping-basics.html" class="module-link">Learn Process Mapping →</a>
+            </div>
+            
+            <div class="module-card meeting">
+                <div class="module-icon">💬</div>
+                <div class="module-title">Difficult Conversation Practice</div>
+                <div class="module-description">
+                    Master challenging conversations with confidence. Practice giving feedback, pushing back on unrealistic requests, and managing conflict professionally.
+                </div>
+                <div class="module-meta">
+                    <span class="meta-badge">⏱️ 25-30 min</span>
+                    <span class="meta-badge">🎯 Practical</span>
+                    <span class="meta-badge beneficial">✨ Beneficial</span>
+                </div>
+                <a href="11-difficult-conversation-practice.html" class="module-link">Practice Conversations →</a>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h2>💡 ADHD Success Strategies for Your Role</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h3>🧠 External Memory Systems</h3>
+                    <p>Don't trust your brain to remember. Write everything down immediately. Use calendar blocks, task lists, and visual boards religiously.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>⏰ Time Blocking</h3>
+                    <p>Block time for focused work BEFORE accepting meetings. Protect your peak energy hours (usually mornings) for complex analysis.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>🎯 The Power of Three</h3>
+                    <p>Each day, identify only 3 must-do priorities. More than that leads to decision paralysis. Three is achievable and clarifying.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>📱 Manage Interruptions</h3>
+                    <p>Use Do Not Disturb liberally. Check email on YOUR schedule (2-3x daily), not constantly. Batch similar tasks together.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>🔄 Build in Buffer Time</h3>
+                    <p>Always add 25% more time than you think tasks will take. Leave 15 min between meetings. Your brain needs transition time.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>✅ Templates Reduce Fatigue</h3>
+                    <p>Create templates for recurring tasks (email responses, analysis formats, meeting prep). Consistency reduces mental load.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="usage-guide">
+            <h2>🎓 How to Use This Training Hub</h2>
+            
+            <div class="usage-phase">
+                <h3>📅 Before Starting the Role (Weeks 1-2)</h3>
+                <ul>
+                    <li>Complete each module at least once to familiarize yourself with the workflows</li>
+                    <li>Focus on Daily Planning Routine - practice it every day to build the habit</li>
+                    <li>Get comfortable with the Email Triage framework (you'll use this daily)</li>
+                    <li>Run through Meeting Prep to understand the structure</li>
+                </ul>
+            </div>
+            
+            <div class="usage-phase">
+                <h3>🚀 First Weeks on the Job (Weeks 3-4)</h3>
+                <ul>
+                    <li>Revisit modules as specific situations arise in your real work</li>
+                    <li>Use Meeting Prep module before each important stakeholder meeting</li>
+                    <li>Practice Priority Management when feeling overwhelmed with competing demands</li>
+                    <li>Continue your daily morning and evening routines</li>
+                </ul>
+            </div>
+            
+            <div class="usage-phase">
+                <h3>🔄 Ongoing Usage</h3>
+                <ul>
+                    <li>Return to modules whenever you need a reset or refresh</li>
+                    <li>Use them as reference guides for the core workflows</li>
+                    <li>Adapt the frameworks to your specific team's needs and culture</li>
+                    <li>Share approaches with colleagues who might benefit</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 20px; padding: 40px; text-align: center; margin-bottom: 48px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+            <h2 style="color: var(--text-primary); font-size: 24px; margin-bottom: 16px;">Ready-to-Use Templates</h2>
+            <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; line-height: 1.7;">
+                Want printable, fill-in templates for your real work? We've got you covered with meeting prep, daily planning, data analysis templates, and quick reference guides.
+            </p>
+            <a href="Templates/index.html" style="display: inline-block; padding: 14px 32px; background: var(--accent-green); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 16px; transition: all 0.2s;">
+                Browse Templates Library →
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p><strong>🚀 You've got this!</strong></p>
+            <p>These contextual training modules are designed to make practice feel real.</p>
+            <p style="margin-top: 16px; opacity: 0.7;">Built with care for ADHD success in strategic roles 💜</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme - default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+    </script>
+</body>
+</html>
