@@ -930,7 +930,8 @@
             
             /* Mobile-friendly triage buttons */
             .triage-buttons {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
             
             .triage-btn {
@@ -957,8 +958,12 @@
                 right: 16px;
                 max-width: none;
                 transform: none;
-                bottom: 20px;
+                bottom: -200px;
                 padding: 16px;
+            }
+
+            .feedback-toast.show {
+                bottom: 20px;
             }
             
             .feedback-header {
